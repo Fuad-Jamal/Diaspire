@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       < Navbar />
-      <p className='b' >anif</p>
+    
     </>
   )
 }
