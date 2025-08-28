@@ -56,7 +56,7 @@ const Home = ()=>{
                     </p>
                 </div>
                 <div>
-                    <img className='pt-24 w-[345px]' src="./src/assets/facetime.png" alt="" />
+                    <img className='pt-24 w-[345px] ml-[200px]' src="./src/assets/facetime.png" alt=""/>
                 </div>
             </div>
         
@@ -222,7 +222,7 @@ const Home = ()=>{
                         </div>
                     </div>
                 </div>
-                <img src="./src/assets/business.png" className='w-[500px] h-[500px] ml-[300px]' alt="" />
+                <img src="./src/assets/business.png" className='w-[500px] h-[500px] ml-[200px]' alt="" />
             </div>
 
         </div>
