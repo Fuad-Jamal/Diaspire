@@ -222,7 +222,7 @@ const Home = ()=>{
                         </div>
                     </div>
                 </div>
-                <img src="./src/assets/business.png" alt="" />
+                <img src="./src/assets/business.png" className='w-[500px] h-[500px] ml-[300px]' alt="" />
             </div>
 
         </div>
