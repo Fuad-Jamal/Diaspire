@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Navbar from '../components/navbar';
 
 
 
@@ -21,6 +22,7 @@ import { useState } from 'react';
 const Home = ()=>{
     return(
         <>
+        <Navbar/>
         {/* first upper part */}
             <div className='bg-[url("./src/assets/home.png")] w-full'>
                 <div className='lg:pt-24 lg:ml-[440px] pb-48 font-medium'>

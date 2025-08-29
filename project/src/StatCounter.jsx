@@ -43,8 +43,10 @@ const StatCounter = ({ target, label, suffix = "+" }) => {
         {isNaN(count) ? "0" : count}{suffix}
       </div>
       <p className="mt-2 text-lg text-gray-700">{label}</p>
+  
       
     </div>
+    
   );
 };
 export default StatCounter;

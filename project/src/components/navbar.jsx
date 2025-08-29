@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import React from 'react'
 
 /**
@@ -14,6 +15,7 @@ import React from 'react'
  */
 const Navbar = ({ onNavigate, currentPage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate()
 
   // Function to toggle the mobile menu's open/close state
   const toggleMobileMenu = () => {
@@ -61,16 +63,18 @@ const Navbar = ({ onNavigate, currentPage }) => {
           >
             Find Mentors
           </a>
-          <a
-            href="#events"
-            onClick={() => onNavigate('events')}
-            className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'events' ? 'font-semibold text-blue-600' : ''}`}
-          >
-            Events
-          </a>
+          <Link to={"/about"}>
+            <a
+              href="#events"
+              onClick={() => onNavigate('events')}
+              className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'events' ? 'font-semibold text-blue-600' : ''}`}
+            >
+              Events
+            </a>
+          </Link>
           <a
             href="#jobs"
-            onClick={() => onNavigate('jobs')}
+            onClick={navigate('/jobs') }
             className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'jobs' ? 'font-semibold text-blue-600' : ''}`}
           >
             Jobs
