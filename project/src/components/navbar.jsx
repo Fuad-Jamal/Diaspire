@@ -24,8 +24,8 @@ const Navbar = ({ onNavigate, currentPage }) => {
 
   return (
     <>
-    <header className="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-40 rounded-xl">
-      <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
+    <header className="bg-white backdrop-blur-lg shadow-sm sticky top-0 z-40 rounded-b-xl">
+      <nav className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo and Mobile Menu Button */}
         <a href="#home" onClick={() => onNavigate('home')} className="flex items-center">
           <img className="w-[150px] lg:w-[234px] rounded" src="./src/assets/logo.webp" alt="" />
