@@ -48,3 +48,4 @@ const StatCounter = ({ target, label, suffix = "+" }) => {
   );
 };
 export default StatCounter;
+
