@@ -25,7 +25,7 @@ const Home = ()=>{
         <>
         <Navbar/>
         {/* first upper part */}
-            <div className='bg-[url("./src/assets/home.png")] w-full'>
+            <div className='bg-[url("./src/assets/home.png")] w-full bg-no-repeat'>
                 <div className='lg:pt-24 lg:ml-[440px] pb-48 font-medium'>
                     <p className='lg:font-bold lg:text-3xl lg:w-[523px] lg:text-center '>Unlock Your Potential: Connect With Global Rwandan Expertise </p>
                     <p className=' lg:w-[503px] lg:pt-24 lg:text-[16px] lg:text-center'>Bridging Rwandan Youth with Diaspora Professionals for Mentorship, 
