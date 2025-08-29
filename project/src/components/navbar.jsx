@@ -49,6 +49,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-6">
+          <Link to ={"/home"}>
           <a
             href="#home"
             onClick={() => onNavigate('home')}
@@ -56,6 +57,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
           >
             Home
           </a>
+          </Link>
+
+          <Link to={"/mentors"}>
           <a
             href="#find-mentors"
             onClick={() => onNavigate('find-mentors')}
@@ -63,7 +67,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
           >
             Find Mentors
           </a>
-          <Link to={"/about"}>
+          </Link>
+
+          <Link to={"/events"}>
             <a
               href="#events"
               onClick={() => onNavigate('events')}
@@ -72,13 +78,18 @@ const Navbar = ({ onNavigate, currentPage }) => {
               Events
             </a>
           </Link>
+
+          <Link to={"/jobs"}>
           <a
             href="#jobs"
-            onClick={navigate('/jobs') }
+            onClick={() => onNavigate('jobs') }
             className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'jobs' ? 'font-semibold text-blue-600' : ''}`}
           >
             Jobs
           </a>
+          </Link>
+
+          <Link to ={"/resources"}>
           <a
             href="#resources"
             onClick={() => onNavigate('resources')}
@@ -86,6 +97,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
           >
             Resources
           </a>
+          </Link>
         </div>
         
         {/* Desktop Auth Buttons */}
