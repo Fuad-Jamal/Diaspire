@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import Navbar from './components/navbar.jsx'
+
 import Home from './pages/home.jsx'
-import StatCounter from './StatCounter.jsx'
+
 import { Routes, Route } from 'react-router-dom'
 import Events from './pages/Events.jsx'
 import Jobs from './pages/Jobs.jsx'
@@ -17,7 +17,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path='/home' element={<Home/>} />
+        <Route path='/' element={<Home/>} />
         <Route path='/events' element={<Events/>} />
         <Route path='/jobs' element={<Jobs/>} />
         <Route path='/resources' element={<Resources/>} />
