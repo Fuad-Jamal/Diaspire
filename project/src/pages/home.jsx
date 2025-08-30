@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../components/navbar';
+import ImpactSection from '../ImpactSection';
 
 
 
@@ -229,7 +230,7 @@ const Home = ()=>{
 
         </div>
 
-       
+       <ImpactSection/>
         
         </>
     )

@@ -74,7 +74,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
           </Link>
           <a
             href="#jobs"
-            onClick={navigate('/jobs') }
+            onClick={navigateavigate('/jobs') }
             className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'jobs' ? 'font-semibold text-blue-600' : ''}`}
           >
             Jobs
