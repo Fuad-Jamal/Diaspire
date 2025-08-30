@@ -1,0 +1,52 @@
+[
+    {
+      "type": "Webinar",
+      "title": "Tech Interview Prep",
+      "description": "Master the art of technical interviews with insights from a seasoned software engineer.",
+      "hostedBy": "Samuel Byusa",
+      "date": "2025-08-28"
+    },
+    {
+      "type": "Workshop",
+      "title": "React for Beginners",
+      "description": "Kickstart your React journey by building your first interactive application step by step.",
+      "hostedBy": "Alice Mukamana",
+      "date": "2025-09-02"
+    },
+    {
+      "type": "Seminar",
+      "title": "AI in Everyday Life",
+      "description": "Explore how artificial intelligence is transforming industries and daily experiences.",
+      "hostedBy": "Jean Claude Ndayisenga",
+      "date": "2025-09-10"
+    },
+    {
+      "type": "Webinar",
+      "title": "Cybersecurity Essentials",
+      "description": "Learn the core principles of cybersecurity and how to stay safe online.",
+      "hostedBy": "Maria Uwase",
+      "date": "2025-09-15"
+    },
+    {
+      "type": "Panel Discussion",
+      "title": "The Future of Remote Work",
+      "description": "Industry leaders share insights on productivity, collaboration, and the evolving workplace.",
+      "hostedBy": "Eric Hakizimana",
+      "date": "2025-09-20"
+    },
+    {
+      "type": "Workshop",
+      "title": "Building Scalable APIs",
+      "description": "A hands-on session on designing and deploying scalable RESTful APIs.",
+      "hostedBy": "Christine Umutoni",
+      "date": "2025-09-25"
+    },
+    {
+      "type": "Seminar",
+      "title": "Design Thinking in Product Development",
+      "description": "Understand the design thinking process and apply it to real-world product challenges.",
+      "hostedBy": "David Mugisha",
+      "date": "2025-10-01"
+    }
+  ]
+  
