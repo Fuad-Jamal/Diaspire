@@ -1,25 +1,10 @@
 import { useState } from 'react';
 import Navbar from '../components/navbar';
 import ImpactSection from '../ImpactSection';
+import Footer from '../components/footer';
 
 
 
-// const Home = ({onNavigate , currentPage}) => {
-//     const [isHome, setHome] = useState (false)
-
-//     const homePage = () => {
-//         setHome(!isHome);
-//     }
-
-//     returnn(
-//         <>
-//             <div>
-//                 <p>anifa</p>
-//             </div>
-        
-//         </>
-//     )
-// }
 const Home = ()=>{
     return(
         <>
@@ -230,6 +215,7 @@ const Home = ()=>{
 
         </div>
         <ImpactSection/>
+         <Footer/>
         </>
     )
 }

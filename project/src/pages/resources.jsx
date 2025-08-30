@@ -1,4 +1,5 @@
 import Navbar from "../components/navbar"
+import Footer from "../components/footer"
 
 
 function Resources (){
@@ -65,6 +66,7 @@ return <div>
             </div>
         </div>
     </div>
+     <Footer/>
 
 </div>
 }

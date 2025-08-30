@@ -1,5 +1,6 @@
 import { useEffect, useState, React } from "react";
 import Navbar from "../components/navbar"
+import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 
 export default function Events() {
@@ -62,7 +63,7 @@ export default function Events() {
             disabledClassName="opacity-50 cursor-not-allowed"
             activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
     />
-
+    <Footer/>
     </div>
   )
 }
