@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navbar from '../components/navbar';
 import ImpactSection from '../ImpactSection';
+import Testimonies from '../components/testimonies';
 
 
 
@@ -230,6 +231,7 @@ const Home = ()=>{
 
         </div>
         <ImpactSection/>
+        <Testimonies/>
         </>
     )
 }
