@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Navbar from '../components/navbar';
 import ImpactSection from '../ImpactSection';
 import Footer from '../components/footer';
+import Testimonies from '../components/testimonies';
 
 
 
@@ -215,8 +216,10 @@ const Home = ()=>{
 
         </div>
         <ImpactSection/>
-         <Footer/>
+        <Testimonies/>
+        <Footer/>
+       
         </>
     )
 }
-export default Home ;
+export default Home;
