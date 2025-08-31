@@ -2,6 +2,11 @@ import { useEffect, useState, React } from "react";
 import Navbar from "../components/navbar"
 import ReactPaginate from "react-paginate";
 import Footer from "../components/footer";
+import AddJobForm from "../data/job-form";
+import UploadJobs from "../data/jobs-upload";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import AddJob from "../components/add-job";
 
 export default function Jobs() {
 
@@ -36,23 +41,36 @@ export default function Jobs() {
 
     }
 
-    useEffect(()=>{
-        const fetchJobs = async()=>{
-            const results = await fetch('/src/data/jobs.json');
-        const data = await results.json();
-        setJobs(data);
-        };
-        fetchJobs();
-    },[]);
+    useEffect(() => {
+  const fetchJobs = async () => {
+    const jobsCollection = collection(db, "jobs");
+    const jobsSnapshot = await getDocs(jobsCollection);
+    const jobsList = jobsSnapshot.docs.map(doc => doc.data());
+    setJobs(jobsList);
+  };
+  fetchJobs();
+}, []);
 
+const [showModal, setShowModal] = useState(false);
   return (
     <div className="bg-[url(/src/assets/jobsBG.png)]">
       <Navbar/>
       {/* Job board */}
       <div className="text-white font-bold text-3xl text-center m-auto my-4">
-        <h1 >Job Board</h1>
+                  <h1 >Job Board</h1>
         <p className="font-normal text-lg">Discover your next career opportunity.</p>
+      
       </div>
+      <button
+  className="absolute top-36 right-8 bg-blue-600 hover:bg-green-500 text-white rounded-full shadow-lg p-4 flex items-center justify-center z-50"
+  onClick={() => setShowModal(true)}
+  
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+  </svg>
+  <span className="mr-2 font-bold text-lg">Add Job</span>
+</button>
       {currentJobs}
       <ReactPaginate
             previousLabel={'Previous'}
@@ -68,6 +86,21 @@ export default function Jobs() {
             activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
     />
       <Footer/>
+      {/* <AddJobForm/> */}
+      {showModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg shadow-lg p-8 relative w-full max-w-md">
+      <button
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
+        onClick={() => setShowModal(false)}
+        aria-label="Close"
+      >
+        &times;
+      </button>
+      <AddJob onClose={() => setShowModal(false)} />
+    </div>
+  </div>
+)}
     </div>
   )
 }
