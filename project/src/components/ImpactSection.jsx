@@ -1,5 +1,5 @@
 import React from 'react'
-import StatCounter from './StatCounter.jsx'
+import StatCounter from './StatCounter';
 
 export default function ImpactSection() {
   return (

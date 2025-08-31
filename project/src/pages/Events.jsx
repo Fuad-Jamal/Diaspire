@@ -46,7 +46,7 @@ export default function Events() {
     },[]);
 
   return (
-    <div className="bg-[url(/src/assets/eventsBG.svg)]">
+    <div className="bg-[url(/src/assets/eventsBG.svg)] bg-no-repeat bg-cover">
       <Navbar/>
     
       {currentEvents}

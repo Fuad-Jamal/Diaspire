@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth, provider} from './firebase';
+import { auth, provider} from '../firebase';
 import { signInWithPopup,signOut } from 'firebase/auth'; // Import directly from SDK
 
 function GoogleSignIn() {

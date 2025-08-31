@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../components/navbar';
-import ImpactSection from '../ImpactSection';
+import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
 
@@ -26,7 +26,7 @@ const Home = ()=>{
         {/* Who we are */}
             <div className='lg:flex gap-24 mt-24'>
                 <div className='lg:w-[607px] ml-44'>
-                    <p className='text-purple-700 text-3xl font-semibold mb-8'>Who We Are?</p>
+                    <p className='text-purple-700 text-3xl font-bold mb-8'>Who We Are?</p>
                     <p className='pb-4 text-lg'>
                         Diaspire is a youth empowerment platform designed to connect ambitious African
                          youth with experienced diaspora professionals through meaningful mentorship,

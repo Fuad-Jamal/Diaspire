@@ -44,7 +44,7 @@ const changePage = ({selected})=>{
 
 
   return (
-    <div className="bg-[url(/src/assets/testimonyBG.png)] bg-no-repeat py-8 ">
+    <div className="bg-[url(/src/assets/testimonyBG.png)] bg-no-repeat py-8 mt-14">
       <h1 className="text-2xl font-bold text-center m-8 mb-10 text-white">What Our Community Say About Us</h1>
       <ReactPaginate
   previousLabel={"<"}
