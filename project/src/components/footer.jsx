@@ -1,42 +1,65 @@
-function Footer() {
+import React from 'react';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+
+export default function Footer() {
   return (
-    <div>
-      <div className="bg-gray-200 py-12">
-        <div className="flex flex-col gap-8 lg:flex-row lg:gap-28 lg:ml-44 lg:pr-44 mx-8">
-          <div className="lg:ml-0">
-            <img src="./src/assets/flogo.webp" alt="" className="pb-8 w-32" />
-            <p>DIASPIRE is an independent mentoring platform</p>
-          </div>
-          <div className="flex flex-col gap-8 lg:flex-row lg:gap-28 lg:justify-between">
-            <div>
-              <p className="font-bold pb-2">Quick links</p>
-              <p>FAQ</p>
-            </div>
-            <div>
-              <p className="font-bold pb-2">Support</p>
-              <p>Contact us</p>
-            </div>
-            <div>
-              <p className="font-bold pb-2">Address</p>
-              <p>info@diaspire.com</p>
-              <p>Kigali-Rwanda</p>
-            </div>
-          </div>
+    <footer className="bg-gray-900 text-white py-12 px-4 md:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Main Info */}
+        <div className="text-center md:text-left">
+          {/* Using text for the logo is cleaner and more scalable */}
+          <h2 className="text-3xl font-extrabold text-blue-400">DIASPIRE</h2>
+          <p className="mt-4 text-gray-300 max-w-sm mx-auto md:mx-0">
+            DIASPIRE is an independent mentoring platform bridging Rwandan youth with diaspora professionals.
+          </p>
         </div>
 
-        <div className="lg:mt-12 lg:ml-48 lg:mb-4 mx-8 mt-8 ">
-          <div className="flex gap-4 w-4 rounded-full lg:ml-24 ">
-            <img src="./src/assets/linkedin.png" alt="" />
-            <img src="./src/assets/inst.png" alt="" />
-            <img src="./src/assets/facebook.jpeg" alt="" />
+        {/* Quick Links */}
+        <div className="text-center md:text-left">
+          <p className="font-bold pb-2 text-xl">Quick links</p>
+          <ul className="space-y-2 text-gray-300">
+            <li><a href="#" className="hover:text-blue-400 transition-colors duration-300">FAQ</a></li>
+            <li><a href="#" className="hover:text-blue-400 transition-colors duration-300">Events</a></li>
+            <li><a href="#" className="hover:text-blue-400 transition-colors duration-300">Jobs</a></li>
+          </ul>
+        </div>
+
+        {/* Support & Address */}
+        <div className="text-center md:text-left">
+          <p className="font-bold pb-2 text-xl">Support</p>
+          <ul className="space-y-2 text-gray-300">
+            <li><a href="#" className="hover:text-blue-400 transition-colors duration-300">Contact us</a></li>
+          </ul>
+          <p className="font-bold mt-4 pb-2 text-xl">Address</p>
+          <p className="text-gray-300">info@diaspire.com</p>
+          <p className="text-gray-300">Kigali-Rwanda</p>
+        </div>
+
+        {/* Socials & Legal */}
+        <div className="text-center md:text-left">
+          <h3 className="text-xl font-bold mb-4">Join Our Tribe</h3>
+          <div className="flex justify-center md:justify-start space-x-6">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-blue-400 transition-transform transform hover:scale-110">
+              <FaLinkedin size={28} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-blue-400 transition-transform transform hover:scale-110">
+              <FaInstagram size={28} />
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-blue-400 transition-transform transform hover:scale-110">
+              <FaFacebook size={28} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-blue-400 transition-transform transform hover:scale-110">
+              <FaTwitter size={28} />
+            </a>
           </div>
-          <div className="flex flex-col lg:flex-row pt-4 lg:mr-24 lg:pl-12 lg:ml-4 lg:gap-12 border-t-2 border-black mt-4">
-            <p className="font-bold">Copyright@2025 DIASPIRE.com - All right reserved.</p>
-            <p className="font-bold mt-2 lg:mt-0">Legal information and Privacy policy</p>
-          </div>
+          <p className="mt-8 text-sm text-gray-500">
+            Copyright &copy; {new Date().getFullYear()} DIASPIRE.com - All rights reserved.
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            Legal information and Privacy policy
+          </p>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
-export default Footer;
