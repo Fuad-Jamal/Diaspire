@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
+import ProgressCard from "../components/progressSection";
+import Dashboard from "../components/dashBoard";
 
 export default function MenteeWithMentors() {
   const [mentees, setMentees] = useState([]);
@@ -51,11 +53,14 @@ export default function MenteeWithMentors() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
     {/* Parent division */}
-    <div className="bg-orange-300 m-0">
-      
+    <div className="bg-orange-300 m-0 flex justify-center pl-0">
+    {/* Dashboard import */}
+    <Dashboard/>
+    
      {/* Mentee and recommended mentors parent */}
      <div className="bg-green-400 w-[40%] mx-auto">
        {/* Mentee Card */}
+       <h1>Welcome {firstMentee.fullName.split(' ')[0]}</h1>
        <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg text-center">
         <h2 className="text-xl font-bold text-gray-800 mb-2">
           Mentee Information
@@ -71,6 +76,7 @@ export default function MenteeWithMentors() {
       {/* Recommended Mentors */}
       <h2 className="text-center text-2xl font-bold mt-10 text-gray-800">
         Recommended Mentors
+        
       </h2>
 
       <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-blue-700">
@@ -113,6 +119,8 @@ export default function MenteeWithMentors() {
         activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
       />
      </div>
+     {/* progress import */}
+     <ProgressCard/>
 
       {/* Mentor Popup */}
       {selectedMentor && (
