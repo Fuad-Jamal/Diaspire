@@ -9,7 +9,13 @@ import Events from './pages/Events.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Resources from './pages/resources.jsx'
 import Mentors from './pages/mentors.jsx'
+<<<<<<< HEAD
 import MenteesHomepage from './pages/menteesHomepage.jsx'
+=======
+import Mentorhome from './pages/DashboardM.jsx'
+import CreatePasswordForm from './pages/profile.jsx'
+import CreateMenteeProfileForm from './pages/mprofile.jsx'
+>>>>>>> ft/mentorDashboard
 
 
 
@@ -25,7 +31,13 @@ function App() {
         <Route path='/jobs' element={<Jobs/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/mentors' element={<Mentors/>} />
+<<<<<<< HEAD
         <Route path='/mentees' element={<MenteesHomepage/>} />
+=======
+        <Route path='/career' element={<Mentorhome/>} />
+        <Route path='/profile' element={<CreatePasswordForm/>} />
+        <Route path='/mprofile' element={<CreateMenteeProfileForm/>} />
+>>>>>>> ft/mentorDashboard
       </Routes>
       
 

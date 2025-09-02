@@ -103,6 +103,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
         id="mobile-menu"
         className={`md:hidden px-6 pt-2 pb-4 space-y-2 ${isMobileMenuOpen ? 'block' : 'hidden'}`}
       >
+        <Link to ={"/"}>
         <a
           href="#home"
           onClick={() => { onNavigate('home'); toggleMobileMenu(); }}
@@ -110,6 +111,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
         >
           Home
         </a>
+        </Link>
+
+        <Link to ={"/mentors"}>
         <a
           href="#find-mentors"
           onClick={() => { onNavigate('find-mentors'); toggleMobileMenu(); }}
@@ -117,6 +121,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
         >
           Find Mentors
         </a>
+        </Link>
+
+        <Link to ={"/events"}>
         <a
           href="#events"
           onClick={() => { onNavigate('events'); toggleMobileMenu(); }}
@@ -124,6 +131,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
         >
           Events
         </a>
+        </Link>
+
+        <Link to ={"/jobs"}>
         <a
           href="#jobs"
           onClick={() => { onNavigate('jobs'); toggleMobileMenu(); }}
@@ -131,6 +141,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
         >
           Jobs
         </a>
+        </Link>
+
+        <Link to ={"/resources"}>
         <a
           href="#resources"
           onClick={() => { onNavigate('resources'); toggleMobileMenu(); }}
@@ -138,6 +151,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
         >
           Resources
         </a>
+        </Link>
         <div className="border-t border-neutral-200 pt-4 space-y-2">
           <button className="w-full text-left px-4 py-2 text-neutral-600 font-medium rounded-lg hover:bg-neutral-100">Login</button>
           <button className="w-full text-left px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">Sign Up</button>
