@@ -1,0 +1,38 @@
+[
+    {
+      "fullName": "Alice Johnson",
+      "email": "alice.johnson@example.com",
+      "password": "alicePass123!",
+      "educationLevel": "Bachelor's in Computer Science",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Brian Smith",
+      "email": "brian.smith@example.com",
+      "password": "brianSecure456@",
+      "educationLevel": "Master's in Finance",
+      "careerInterest": "Finance"
+    },
+    {
+      "fullName": "Cynthia Lee",
+      "email": "cynthia.lee@example.com",
+      "password": "cynthiaPass789#",
+      "educationLevel": "Bachelor's in Nursing",
+      "careerInterest": "Healthcare"
+    },
+    {
+      "fullName": "David Kim",
+      "email": "david.kim@example.com",
+      "password": "davidSecure321$",
+      "educationLevel": "PhD in Artificial Intelligence",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Elena Martinez",
+      "email": "elena.martinez@example.com",
+      "password": "elenaPass654%",
+      "educationLevel": "Bachelor's in Business Administration",
+      "careerInterest": "Business"
+    }
+  ]
+  

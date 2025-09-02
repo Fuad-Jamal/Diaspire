@@ -7,6 +7,7 @@ import Events from './pages/Events.jsx'
 import Jobs from './pages/Jobs.jsx'
 import Resources from './pages/resources.jsx'
 import Mentors from './pages/mentors.jsx'
+import MenteesHomepage from './pages/menteesHomepage.jsx'
 
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path='/jobs' element={<Jobs/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/mentors' element={<Mentors/>} />
+        <Route path='/mentees' element={<MenteesHomepage/>} />
       </Routes>
       
 

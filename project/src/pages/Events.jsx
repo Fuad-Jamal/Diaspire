@@ -48,6 +48,7 @@ export default function Events() {
   return (
     <div className="bg-[url(/src/assets/eventsBG.svg)] bg-no-repeat bg-cover">
       <Navbar/>
+      <PopUp/>
     
       {currentEvents}
       <ReactPaginate
