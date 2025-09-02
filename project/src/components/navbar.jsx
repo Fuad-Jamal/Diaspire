@@ -42,62 +42,50 @@ const Navbar = ({ onNavigate, currentPage }) => {
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-            </svg>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>            </svg>
           </button>
         </div>
 
         {/* Desktop Navigation Links */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to ={"/"}>
-          <a
-            href="#home"
-            onClick={() => onNavigate('home')}
-            className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'home' ? 'font-semibold text-blue-600' : ''}`}
-          >
-            Home
-          </a>
+          <Link
+  to="/"
+  className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'home' ? 'font-semibold text-blue-600' : ''}`}
+  onClick={() => onNavigate('home')}
+>
+  Home
+</Link>
+
+           <Link
+    to="/mentors"
+    className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'find-mentors' ? 'font-semibold text-blue-600' : ''}`}
+    onClick={() => onNavigate('find-mentors')}
+  >
+    Find Mentors
+  </Link>
+
+          <Link
+    to="/events"
+    className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'events' ? 'font-semibold text-blue-600' : ''}`}
+    onClick={() => onNavigate('events')}
+  >
+    Events
+  </Link>
+
+          <Link to="/jobs"
+    className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'jobs' ? 'font-semibold text-blue-600' : ''}`}
+    onClick={() => onNavigate('jobs')}
+  >
+    Jobs
           </Link>
 
-          <Link to={"/mentors"}>
-          <a
-            href="#find-mentors"
-            onClick={() => onNavigate('find-mentors')}
-            className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'find-mentors' ? 'font-semibold text-blue-600' : ''}`}
-          >
-            Find Mentors
-          </a>
-          </Link>
-
-          <Link to={"/events"}>
-            <a
-              href="#events"
-              onClick={() => onNavigate('events')}
-              className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'events' ? 'font-semibold text-blue-600' : ''}`}
-            >
-              Events
-            </a>
-          </Link>
-
-          <Link to={"/jobs"}>
-          <a
-            href="#jobs"
-            onClick={() => onNavigate('jobs') }
-            className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'jobs' ? 'font-semibold text-blue-600' : ''}`}
-          >
-            Jobs
-          </a>
-          </Link>
-
-          <Link to ={"/resources"}>
-          <a
-            href="#resources"
-            onClick={() => onNavigate('resources')}
-            className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'resources' ? 'font-semibold text-blue-600' : ''}`}
-          >
-            Resources
-          </a>
-          </Link>
+          <Link
+    to="/resources"
+    className={`nav-link text-neutral-600 hover:text-blue-600 ${currentPage === 'resources' ? 'font-semibold text-blue-600' : ''}`}
+    onClick={() => onNavigate('resources')}
+  >
+    Resources
+  </Link>
         </div>
         
         {/* Desktop Auth Buttons */}

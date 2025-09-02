@@ -1,6 +1,8 @@
+import './utilities/i18n.jsx'
 import { useState } from 'react'
 
 import Home from './pages/home.jsx'
+import LanguageSwitcher from './utilities/translation.jsx'
 
 import { Routes, Route } from 'react-router-dom'
 import Events from './pages/Events.jsx'
@@ -26,7 +28,9 @@ function App() {
       
 
       
-    
+     <div className="fixed bottom-6 right-6 z-50">
+        <LanguageSwitcher />
+      </div>
     </div>
   )
 }
