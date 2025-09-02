@@ -56,22 +56,32 @@ export default function MenteeWithMentors() {
     {/* Parent division */}
     <div className="bg-gray-100 m-0 flex justify-center pr-2">
     {/* Dashboard import */}
-    <Dashboard/>
+    <Dashboard firstMentee ={firstMentee}/>
     
      {/* Mentee and recommended mentors parent */}
-     <div className="bg-gray-100 w-[50%] mx-auto py-3">
+     <div className="bg-gray-100 w-[50%] mx-auto py-3 ">
        {/* Mentee Card */}
        <h1 className="text-3xl font-medium">Welcome {firstMentee.fullName.split(' ')[0]}</h1>
-       <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg text-center">
+       <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg ">
         <h2 className="text-xl font-bold text-gray-800 mb-2">
-          Mentee Information
+          My Mentor
         </h2>
-        <p className="font-semibold">{firstMentee.fullName}</p>
-        <p className="text-gray-600">{firstMentee.email}</p>
-        <p className="text-gray-600">{firstMentee.educationLevel}</p>
-        <p className="text-blue-600 font-medium">
-          Career Interest: {firstMentee.careerInterest}
-        </p>
+        <span className="flex gap-4">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
+          {mentors[0]?mentors[0].fullName.split(' ')[0][0]:'Loading'}
+        </div>
+        <span>
+        <p className="font-semibold">{mentors[0]?mentors[0].fullName.split(' ')[0]:'Loading'}{" "}{mentors[0]?mentors[0].fullName.split(' ')[1]:'Loading'}</p>
+        <p className="text-gray-600 mb-4">{mentors[0]?mentors[0].profession:'Loading'}</p>
+        </span>
+        </span>
+        {/* button section */}
+        <span className="ml-12">
+        <button className="bg-green-200 rounded-lg p-1 text-blue-500 mx-2">Message</button>
+        <button className="bg-gray-200 rounded-lg p-1 mx-2">Sechedule</button>
+        </span>
+    
+        
       </div>
 
       {/* Recommended Mentors */}
