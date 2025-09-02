@@ -5,6 +5,7 @@ import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ProgressCard from "../components/progressSection";
 import Dashboard from "../components/dashBoard";
+import HelpCardSection from "../components/helpCardSection";
 
 export default function MenteeWithMentors() {
   const [mentees, setMentees] = useState([]);
@@ -53,15 +54,15 @@ export default function MenteeWithMentors() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
     {/* Parent division */}
-    <div className="bg-orange-300 m-0 flex justify-center pl-0">
+    <div className="bg-gray-100 m-0 flex justify-center pr-2">
     {/* Dashboard import */}
     <Dashboard/>
     
      {/* Mentee and recommended mentors parent */}
-     <div className="bg-green-400 w-[40%] mx-auto">
+     <div className="bg-gray-100 w-[50%] mx-auto py-3">
        {/* Mentee Card */}
-       <h1>Welcome {firstMentee.fullName.split(' ')[0]}</h1>
-       <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg text-center">
+       <h1 className="text-3xl font-medium">Welcome {firstMentee.fullName.split(' ')[0]}</h1>
+       <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg text-center">
         <h2 className="text-xl font-bold text-gray-800 mb-2">
           Mentee Information
         </h2>
@@ -74,16 +75,16 @@ export default function MenteeWithMentors() {
       </div>
 
       {/* Recommended Mentors */}
-      <h2 className="text-center text-2xl font-bold mt-10 text-gray-800">
-        Recommended Mentors
-        
-      </h2>
+      
 
-      <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-blue-700">
+      <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-white p-4 rounded-xl">
+      <h2 className=" text-2xl font-bold mt-10 text-gray-800">
+        Recommended Mentors
+      </h2>
         {currentMentors.map((mentor, idx) => (
           <div
             key={idx}
-            className="p-6 bg-white shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
+            className="p-6 bg-gray-200 shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
           >
             <span>
             <h3 className="font-bold text-lg text-gray-800">
@@ -96,7 +97,7 @@ export default function MenteeWithMentors() {
             </span>
             <button
               onClick={() => setSelectedMentor(mentor)}
-              className="my-4 bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700"
+              className="my-4 bg-gray-400 text-blue-700 px-4 py-1 rounded-lg hover:bg-blue-700 hover:text-white"
             >
               View
             </button>
@@ -119,8 +120,11 @@ export default function MenteeWithMentors() {
         activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
       />
      </div>
-     {/* progress import */}
+     {/* Progress and help card section */}
+    <section>
      <ProgressCard/>
+     <HelpCardSection/>
+    </section>
 
       {/* Mentor Popup */}
       {selectedMentor && (

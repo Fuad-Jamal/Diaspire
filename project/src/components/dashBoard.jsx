@@ -41,7 +41,7 @@ const navItems = [
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-col w-64 h-screen px-4 py-8 bg-white border-r">
+    <div className="flex flex-col w-64 h-[60%] rounded-b-lg px-8 py-8  bg-white border-r">
       {/* Profile Section */}
       <div className="flex items-center mb-8 px-2">
         <UserIcon />

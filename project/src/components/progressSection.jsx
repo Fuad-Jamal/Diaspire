@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ProgressCard() {
   return (
-    <div className="max-w-sm mx-auto bg-white shadow-md rounded-xl p-6">
+    <div className="max-w-sm  bg-white shadow-md rounded-xl p-6 mt-20">
       {/* Title */}
       <h2 className="text-lg font-semibold text-gray-800">My Progress</h2>
 
