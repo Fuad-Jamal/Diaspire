@@ -5,6 +5,7 @@ import Navbar from '../components/navbar';
 import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [inView, setInView] = useState({});
@@ -66,12 +67,18 @@ const Home = () => {
               Bridging Rwandan Youth with Diaspora Professionals for Mentorship, Skill Development and Career Success
             </p>
             <div className='mt-8 flex flex-col items-center lg:flex-row lg:justify-center lg:mt-24'>
+
+              <Link to={"/mprofile"}>
               <button className='px-6 py-3 mb-4 lg:mb-0 lg:mr-8 rounded-lg bg-blue-500 text-white font-bold transition-all hover:scale-105 hover:bg-blue-600 duration-300 shadow-lg'>
                 Start My Jounery
               </button>
+              </Link>
+
+              <Link to={'/profile'}>
               <button className='px-6 py-3 rounded-lg bg-blue-500 text-white font-bold transition-all hover:scale-105 hover:bg-blue-600 duration-300 shadow-lg'>
                 Be a Bridge
               </button>
+              </Link>
             </div>
           </div>
         </div>
