@@ -14,6 +14,7 @@ import Mentorhome from './pages/DashboardM.jsx'
 import CreatePasswordForm from './pages/profile.jsx'
 import CreateMenteeProfileForm from './pages/mprofile.jsx'
 import MenteeWithMentors from './pages/menteesHomepage.jsx'
+import FindMentors from './pages/mentors.jsx'
 
 
 
@@ -34,6 +35,7 @@ function App() {
         <Route path='/profile' element={<CreatePasswordForm/>} />
         <Route path='/mprofile' element={<CreateMenteeProfileForm/>} />
         <Route path='/home1' element={<MenteeWithMentors/>} />
+        <Route path='/mentors' element={<FindMentors/>} />
       </Routes>
       
 
