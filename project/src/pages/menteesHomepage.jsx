@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
+import ProgressCard from "../components/progressSection";
+import Dashboard from "../components/dashBoard";
+import HelpCardSection from "../components/helpCardSection";
 
 export default function MenteeWithMentors() {
   const [mentees, setMentees] = useState([]);
@@ -51,33 +54,47 @@ export default function MenteeWithMentors() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
     {/* Parent division */}
-    <div className="bg-orange-300 m-0">
-      
+    <div className="bg-gray-100 m-0 flex justify-center pr-2">
+    {/* Dashboard import */}
+    <Dashboard firstMentee ={firstMentee}/>
+    
      {/* Mentee and recommended mentors parent */}
-     <div className="bg-green-400 w-[40%] mx-auto">
+     <div className="bg-gray-100 w-[50%] mx-auto py-3 ">
        {/* Mentee Card */}
-       <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg text-center">
+       <h1 className="text-3xl font-medium">Welcome {firstMentee.fullName.split(' ')[0]}</h1>
+       <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg ">
         <h2 className="text-xl font-bold text-gray-800 mb-2">
-          Mentee Information
+          My Mentor
         </h2>
-        <p className="font-semibold">{firstMentee.fullName}</p>
-        <p className="text-gray-600">{firstMentee.email}</p>
-        <p className="text-gray-600">{firstMentee.educationLevel}</p>
-        <p className="text-blue-600 font-medium">
-          Career Interest: {firstMentee.careerInterest}
-        </p>
+        <span className="flex gap-4">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
+          {mentors[0]?mentors[0].fullName.split(' ')[0][0]:'Loading'}
+        </div>
+        <span>
+        <p className="font-semibold">{mentors[0]?mentors[0].fullName.split(' ')[0]:'Loading'}{" "}{mentors[0]?mentors[0].fullName.split(' ')[1]:'Loading'}</p>
+        <p className="text-gray-600 mb-4">{mentors[0]?mentors[0].profession:'Loading'}</p>
+        </span>
+        </span>
+        {/* button section */}
+        <span className="ml-12">
+        <button className="bg-green-200 rounded-lg p-1 text-blue-500 mx-2">Message</button>
+        <button className="bg-gray-200 rounded-lg p-1 mx-2">Sechedule</button>
+        </span>
+    
+        
       </div>
 
       {/* Recommended Mentors */}
-      <h2 className="text-center text-2xl font-bold mt-10 text-gray-800">
+      
+
+      <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-white p-4 rounded-xl">
+      <h2 className=" text-2xl font-bold mt-10 text-gray-800">
         Recommended Mentors
       </h2>
-
-      <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-blue-700">
         {currentMentors.map((mentor, idx) => (
           <div
             key={idx}
-            className="p-6 bg-white shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
+            className="p-6 bg-gray-200 shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
           >
             <span>
             <h3 className="font-bold text-lg text-gray-800">
@@ -90,7 +107,7 @@ export default function MenteeWithMentors() {
             </span>
             <button
               onClick={() => setSelectedMentor(mentor)}
-              className="my-4 bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700"
+              className="my-4 bg-gray-400 text-blue-700 px-4 py-1 rounded-lg hover:bg-blue-700 hover:text-white"
             >
               View
             </button>
@@ -113,6 +130,11 @@ export default function MenteeWithMentors() {
         activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
       />
      </div>
+     {/* Progress and help card section */}
+    <section>
+     <ProgressCard/>
+     <HelpCardSection/>
+    </section>
 
       {/* Mentor Popup */}
       {selectedMentor && (
