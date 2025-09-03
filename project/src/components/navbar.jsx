@@ -102,9 +102,9 @@ const Navbar = ({ onNavigate, currentPage }) => {
         
         {/* Desktop Auth Buttons */}
         <div className="hidden md:flex items-center space-x-2">
-          <Link to = {"/mentees"}>
+          
              <button className="px-4 py-2 text-neutral-600 font-medium rounded-lg hover:bg-neutral-100">Login</button>
-          </Link>
+          
           
           <button className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">Sign Up</button>
         </div>
