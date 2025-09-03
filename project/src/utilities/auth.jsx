@@ -1,51 +1,45 @@
 import React, { useState } from 'react';
 import { auth, provider } from '../firebase';
-import { signInWithPopup, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 
-function GoogleSignIn({ onSignIn, onSignOut, onClose }) {
+function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Google sign-in
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (onSignIn) onSignIn(user);
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-    }
-  };
+  const isLogin = mode === "login";
 
-  // Email/password sign-in
-  const handleEmailSignIn = async (e) => {
+  const handleEmailAuth = async (e) => {
     e.preventDefault();
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      const user = result.user;
-      if (onSignIn) onSignIn(user);
+      let result;
+      if (isLogin) {
+        result = await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        result = await createUserWithEmailAndPassword(auth, email, password);
+      }
+      onSignIn?.(result.user);
     } catch (error) {
-      console.error('Email sign-in error:', error);
       alert(error.message);
     }
   };
 
-  const handleSignOut = async () => {
+  const handleGoogleSignIn = async () => {
     try {
-      await signOut(auth);
-      if (onSignOut) onSignOut();
+      const result = await signInWithPopup(auth, provider);
+      onSignIn?.(result.user);
     } catch (error) {
-      console.error('Sign out error:', error);
+      alert(error.message);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-[400px]">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign in to Diaspire</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          {isLogin ? "Login to Diaspire" : "Sign up to Diaspire"}
+        </h2>
 
-        {/* Email/Password form */}
-        <form onSubmit={handleEmailSignIn} className="flex flex-col gap-4 mb-6">
+        <form onSubmit={handleEmailAuth} className="flex flex-col gap-4 mb-6">
           <input
             type="email"
             placeholder="Email"
@@ -66,11 +60,10 @@ function GoogleSignIn({ onSignIn, onSignOut, onClose }) {
             type="submit"
             className="bg-blue-500 text-white py-2 rounded font-bold"
           >
-            Sign in with Email
+            {isLogin ? "Login with Email" : "Sign up with Email"}
           </button>
         </form>
 
-        {/* Google sign-in */}
         <button
           onClick={handleGoogleSignIn}
           className="w-full bg-red-500 text-white py-2 rounded font-bold mb-4"
@@ -78,7 +71,6 @@ function GoogleSignIn({ onSignIn, onSignOut, onClose }) {
           Continue with Google
         </button>
 
-        {/* Cancel button */}
         <button
           onClick={onClose}
           className="w-full bg-gray-300 py-2 rounded"
@@ -90,4 +82,4 @@ function GoogleSignIn({ onSignIn, onSignOut, onClose }) {
   );
 }
 
-export default GoogleSignIn;
+export default GoogleAuthPopup;
