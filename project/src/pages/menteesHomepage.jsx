@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
-// import ProgressCard from "../components/progressSection";
+import ProgressCard from "../components/progressSection";
 import Dashboard from "../components/MenteeDashBoard";
 import HelpCardSection from "../components/helpCardSection";
 
@@ -132,7 +132,7 @@ export default function MenteeWithMentors() {
      </div>
      {/* Progress and help card section */}
     <section>
-     {/* <ProgressCard/> */}
+     <ProgressCard/>
      <HelpCardSection/>
     </section>
 
