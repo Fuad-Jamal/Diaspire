@@ -4,7 +4,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ImpactChart from "../components/impactChart";
-import Dashboard from "../components/dashBoard";
+import Dashboard from "../components/MentorDashBoard";
 
 
 export default function MentorWithMentees() {
