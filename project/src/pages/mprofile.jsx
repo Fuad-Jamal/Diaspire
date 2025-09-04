@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 
 // A form component for creating a mentee profile.
 const CreateMenteeProfileForm = () => {
@@ -12,6 +13,7 @@ const CreateMenteeProfileForm = () => {
     skillsToLearn: '',
   });
 
+    const navigate = useNavigate()
   // State for form submission status, success, and errors.
   const [status, setStatus] = useState({
     message: '',
@@ -28,39 +30,57 @@ const CreateMenteeProfileForm = () => {
   };
 
   // The form submission handler.
-  const handleSubmit = (e) => {
-    e.preventDefault();
+const handleSubmit = (e) => {
+  e.preventDefault();
+  setStatus({ message: '', type: '' });
 
-    // Reset status message
-    setStatus({ message: '', type: '' });
+  if (formData.password !== formData.confirmPassword) {
+    setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
+    return;
+  }
 
-    // Validation checks
-    if (formData.password !== formData.confirmPassword) {
-      setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
-      return;
-    }
+  if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword || !formData.mentorshipGoals) {
+    setStatus({ message: 'All fields are required.', type: 'error' });
+    return;
+  }
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword || !formData.mentorshipGoals) {
-      setStatus({ message: 'All fields are required.', type: 'error' });
-      return;
-    }
+  console.log("Mentee Profile Creation Data Submitted:", formData);
 
-    // In a real application, you would send this data to an API.
-    console.log("Mentee Profile Creation Data Submitted:", formData);
+  // Send welcome email
+  fetch("http://localhost:5000/send-welcome-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: formData.name,
+      email: formData.email
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("Email sent:", data.message);
+  })
+  .catch(err => {
+    console.error("Email error:", err);
+  });
 
-    // Set submitted state to true to show a success message.
-    setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
-    // Optionally reset the form after submission
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      mentorshipGoals: '',
-      skillsToLearn: '',
-    });
-  };
+  setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
 
+  setFormData({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    mentorshipGoals: '',
+    skillsToLearn: '',
+  });
+
+  setTimeout(() => {
+    navigate("/dashboard");
+  }, 2000);
+};
+
+
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-lg p-8 bg-white rounded-xl shadow-lg">

@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Search, Linkedin, Github, Instagram, Twitter } from "lucide-react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import { useNavigate } from "react-router-dom";
+import { db } from "../firebase";
+import { collection, getDocs, addDoc } from "firebase/firestore"
+import mentorsData from "../data/mentors.json";
+import {fetchMentors} from "../utilities/mentor-service"
 
-const mentors = [
-  { id: 1, name: "Joyelene Rivera", title: "Web Developer", category: "Tech", bio: "Data analyst with 4+ yrs in machine learning & analytics.", img: "https://i.pravatar.cc/150?img=1", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-  { id: 2, name: "Marcus Lee", title: "UX Designer", category: "Tech", bio: "UX/UI designer helping students break into product design.", img: "https://i.pravatar.cc/150?img=2", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-  { id: 3, name: "Aisha Kamau", title: "Data Scientist", category: "Finance", bio: "Helping mentees transition into data careers.", img: "https://i.pravatar.cc/150?img=3", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-  { id: 4, name: "Daniel Kim", title: "Mobile Developer", category: "Tech", bio: "Loves mentoring juniors in Flutter & React Native.", img: "https://i.pravatar.cc/150?img=4", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-  { id: 5, name: "Sara Lopez", title: "AI Engineer", category: "Finance", bio: "Helping Gen-Z embrace AI and ML careers.", img: "https://i.pravatar.cc/150?img=5", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-  { id: 6, name: "Omar Hassan", title: "Cloud Engineer", category: "Tech", bio: "Focused on cloud-native career paths.", img: "https://i.pravatar.cc/150?img=6", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
-];
 
 function FindMentor() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(0);
+  const [mentors, setMentors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const mentorsPerPage = 3;
+  const mentorsPerPage = 9;
 
   const filtered = mentors.filter((m) => {
     const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase());
@@ -35,6 +35,40 @@ function FindMentor() {
     onSwipedRight: () => setPage((p) => Math.max(p - 1, 0)),
     trackMouse: true,
   });
+
+
+   const seedMentors = async () => {
+  try {
+    const mentorsCol = collection(db, "mentors");
+
+    for (const mentor of mentorsData) {
+      await addDoc(mentorsCol, mentor);
+    }
+
+    alert("🚀 Mentors uploaded successfully!");
+  } catch (err) {
+    console.error("Error seeding mentors:", err);
+    alert("❌ Failed to upload mentors. Check console.");
+  }
+};
+useEffect(() => {
+  const fetchMentorsFromFirestore = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "mentors"));
+      const mentorsList = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMentors(mentorsList);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching mentors:", err);
+      setLoading(false);
+    }
+  };
+
+  fetchMentorsFromFirestore();
+}, []);
 
   const categories = ["All", "Tech", "Finance"];
 
@@ -53,6 +87,19 @@ function FindMentor() {
           </p>
         </div>
 
+        {/* Request mentor button */}
+      <div className="flex justify-end mb-6">
+  <button
+    onClick={() => navigate("/request-mentorship")}
+    className="px-5 py-2 bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] 
+               text-white font-semibold rounded-full shadow-lg 
+               hover:from-[#4B4B4B] hover:via-[#D17C5C] hover:to-[#A3C586] 
+               transform hover:scale-105 transition duration-300"
+  >
+    Request Mentorship 🚀
+  </button>
+</div>
+
         {/* Search & Filters */}
         <div className="max-w-xl mx-auto mb-8 flex items-center space-x-2">
           <div className="flex items-center bg-white/90 rounded-full shadow-lg px-4 py-2 flex-1">
@@ -68,6 +115,9 @@ function FindMentor() {
               className="ml-3 flex-1 outline-none bg-transparent text-gray-700 placeholder-gray-400"
             />
           </div>
+
+          {/* {paginated.map((mentor) => (
+))} */}
 
           {/* Category Buttons */}
           <div className="flex space-x-2">
@@ -149,6 +199,7 @@ function FindMentor() {
         </div>
       </div>
       <Footer />
+
     </div>
   );
 }

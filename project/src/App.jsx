@@ -36,6 +36,8 @@ function App() {
         <Route path='/mprofile' element={<CreateMenteeProfileForm/>} />
         <Route path='/home1' element={<MenteeWithMentors/>} />
         <Route path='/mentors' element={<FindMentors/>} />
+        <Route path="/mprofile" element={<CreateMenteeProfileForm />} />
+        <Route path="/dashboard" element={<MenteeWithMentors />} />
       </Routes>
       
 
