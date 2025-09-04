@@ -23,7 +23,6 @@ function App() {
         <Route path='/jobs' element={<Jobs/>} />
         <Route path='/resources' element={<Resources/>} />
         <Route path='/mentors' element={<Mentors/>} />
-        <Route path='/mentor' element={<MentorWithMentees/>} />
       </Routes>
       
 
