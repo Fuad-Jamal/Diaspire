@@ -1,95 +1,65 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect, useState,React } from "react";
+import faqs  from '/src/data/faqs.json';
 
-// FAQ data stored as a JavaScript array of objects.
-// This is where you can add your questions and answers.
-const faqs = [
-  {
-    question: "What is the meaning of life?",
-    answer: "The meaning of life is a philosophical question about the purpose and significance of living."
-  },
-  {
-    question: "How do you work?",
-    answer: "I work by matching your question to a pre-written answer in my database."
-  },
-  {
-    question: "Who created you?",
-    answer: "I was created as a simple chatbot example using React and Tailwind CSS."
-  },
-  {
-    question: "What is React?",
-    answer: "React is a JavaScript library for building user interfaces."
-  },
-  {
-    question: "How are you?",
-    answer: "I'm a computer program, so I'm always doing great!"
-  },
-  {
-    question: "What is this app for?",
-    answer: "This is a simple chatbot demonstration to show how to handle conditional responses based on user input."
-  },
-];
 
-// The main App component containing all the chatbot logic and UI.
-const App = () => {
-  // State to store all the chat messages (both user and bot).
-  const [messages, setMessages] = useState([]);
-  // State to store the current text in the input box.
-  const [input, setInput] = useState('');
-  // Ref to automatically scroll to the bottom of the chat.
-  const chatEndRef = useRef(null);
+  
+  export default function ChatBot() {
+    //the state to control message
+    const [messages, setMessages] =  useState([]);
+    //the state to control input
+    const [input,setInput] =useState('');
+    //the state to scroll to the end of Chat
+    const chatEnd = useRef(null)
+    //state to check if chat is open or closed
+    const [isOpen, setIsOpen] = useState(false);
+    //useEffect to rerun to see teh updated message and call useRef to scroll to bottom
+    useEffect(()=>{
+        chatEnd.current?.scrollIntoView({behavior:'smooth'})
+    },[messages]);
 
-  // This useEffect hook is used to scroll to the most recent message.
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // Function to handle sending a message when the user clicks the button or presses Enter.
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (input.trim() === '') return;
-
-    // 1. Add the user's message to the chat.
-    setMessages(prevMessages => [...prevMessages, { text: input, from: 'user' }]);
-
-    // Find the best matching answer.
-    let foundAnswer = "I'm sorry, I don't understand that question. Try asking something like: 'What is React?'";
-    const userQuestion = input.toLowerCase();
-
-    // Loop through the FAQ to find a matching question.
-    for (const faq of faqs) {
-      if (userQuestion.includes(faq.question.toLowerCase())) {
-        foundAnswer = faq.answer;
-        break; // Stop searching once a match is found.
-      }
-    }
-
-    // 2. Add the bot's response to the chat.
-    // Use a small delay to make it feel more like a real conversation.
-    setTimeout(() => {
-      setMessages(prevMessages => [...prevMessages, { text: foundAnswer, from: 'bot' }]);
-    }, 500);
-
-    // 3. Clear the input box.
-    setInput('');
-  };
-
-  return (
-    <div className="flex flex-col h-screen bg-gray-900 text-white p-4">
+    //Button to handle send message incase it is clicked or Enter key is hit
+    const handleSendMessage =(e=>{
+        e.preventDefault();
+        if(input.trim()==='') return;
+        setMessages((prevMessage)=> [...prevMessage,{text:input,from:'user'}]);
+        let foundAnswer = 'The asked question is not in the list of frequently asked questions which are the one I answer. Remember to always end question with question mark (?) for me to know if it is question.';
+        let inputQuestion = input.toLowerCase();
+        //Looping through the FAQs to get teh matching answer
+        for (let faq of faqs){
+            if(inputQuestion.includes(faq.question.toLowerCase())){
+                foundAnswer = faq.answer;
+                break;
+            }
+        }
+        //Adding bot response to teh chat
+        setTimeout(()=>{
+            setMessages(prevMessage=>[...prevMessage,{text:foundAnswer,from:'bot'}])
+        },1000);
+        setInput('')
+    })
+    return (
+        <div className="fixed bottom-4 right-4 z-50">{isOpen?
+        (<div className="flex flex-col h-screen bg-gray-900 text-white p-4">
       {/* Chat header */}
       <header className="flex-shrink-0 mb-4">
-        <h1 className="text-3xl font-bold text-center">Simple FAQ Bot</h1>
+        <h1 className="text-3xl font-bold text-center">FAQ Bot</h1>
+        <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
         <p className="text-center text-sm text-gray-400 mt-1">
-          Ask me questions like "What is React?" or "How are you?".
+          This chatbot handle the basic questions. To get right answer, ask question with question mark (?).
         </p>
       </header>
-
-      {/* Chat messages container */}
+      
+         {/* Chat message container */}
       <div className="flex-grow overflow-y-auto p-4 rounded-lg bg-gray-800 shadow-inner">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
-          >
+       {messages.map((msg,index)=>(
+        <div key={index} className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
             <div
               className={`p-3 rounded-lg max-w-lg ${
                 msg.from === 'user'
@@ -99,31 +69,39 @@ const App = () => {
             >
               {msg.text}
             </div>
-          </div>
-        ))}
-        <div ref={chatEndRef} />
-      </div>
-
-      {/* Input form */}
-      <form onSubmit={handleSendMessage} className="flex-shrink-0 mt-4">
-        <div className="flex w-full">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your question..."
-            className="flex-grow p-3 rounded-l-full bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          />
-          <button
-            type="submit"
-            className="flex-shrink-0 p-3 bg-blue-600 text-white rounded-r-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-          >
-            Send
-          </button>
         </div>
-      </form>
-    </div>
-  );
-};
+       ))} 
+       <div ref={chatEnd}/>
+      </div>
+      {/* input form */}
+            <form onSubmit={handleSendMessage} className="flex-shrink-0 mt-4">
+                <div className="flex w-full">
+                    <input 
+                        type="text" 
+                        value={input}
+                        onChange={(e)=>setInput(e.target.value)}
+                        placeholder="Type your question..."
+                        className="flex-grow p-3 rounded-l-full bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all" 
+                        />
+                    <button
+                     type="submit"
+                     className="flex-shrink-0 p-3 bg-blue-600 text-white rounded-r-full hover:bg-blue-700 focus:outline-none focus:ring-blue-500 focus:ring-2 transition-all"
+                     >Send</button>
 
-export default App;
+                </div>
+            </form>
+      </div>
+      ):(
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 transition-all transform hover:scale-105"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
+        </button>
+      )}
+      </div>
+    );
+  };
+  

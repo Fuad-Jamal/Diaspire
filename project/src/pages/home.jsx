@@ -3,7 +3,7 @@ import Navbar from '../components/navbar';
 import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
-import ChatBot3 from '../components/chatBot3';
+import ChatBot from '../components/chatBot';
 
 
 
@@ -12,7 +12,7 @@ const Home = ()=>{
         <>
         <Navbar/>
         <div >
-        <ChatBot3/>
+        <ChatBot/>
         </div>
         {/* first upper part */}
             <div className='bg-[url("./src/assets/home.png")] w-full bg-no-repeat'>
