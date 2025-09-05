@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // A form component for creating a mentee profile.
 const CreateMenteeProfileForm = () => {
   // State to hold all form data.
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -13,7 +14,8 @@ const CreateMenteeProfileForm = () => {
     skillsToLearn: '',
   });
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+
   // State for form submission status, success, and errors.
   const [status, setStatus] = useState({
     message: '',
@@ -30,62 +32,77 @@ const CreateMenteeProfileForm = () => {
   };
 
   // The form submission handler.
-const handleSubmit = (e) => {
-  e.preventDefault();
-  setStatus({ message: '', type: '' });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setStatus({ message: '', type: '' });
 
-  if (formData.password !== formData.confirmPassword) {
-    setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
-    return;
-  }
+    if (formData.password !== formData.confirmPassword) {
+      setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
+      return;
+    }
 
-  if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword || !formData.mentorshipGoals) {
-    setStatus({ message: 'All fields are required.', type: 'error' });
-    return;
-  }
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword || !formData.mentorshipGoals) {
+      setStatus({ message: 'All fields are required.', type: 'error' });
+      return;
+    }
 
-  console.log("Mentee Profile Creation Data Submitted:", formData);
+    const capitalize = str =>
+      str
+        .trim()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 
-  // Send welcome email
-  fetch("http://localhost:5000/send-welcome-email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: formData.name,
-      email: formData.email
+    const formattedFirstName = capitalize(formData.firstName);
+const formattedLastName = capitalize(formData.lastName);
+const fullName = `${formattedFirstName} ${formattedLastName}`;
+
+localStorage.setItem("menteeFullName", fullName);
+localStorage.setItem("menteeFirstName", formattedFirstName);
+localStorage.setItem("menteeEmail", formData.email);
+localStorage.setItem("menteeGoals", formData.mentorshipGoals);
+localStorage.setItem("menteeSkills", formData.skillsToLearn);
+
+    console.log("Mentee Profile Creation Data Submitted:", { ...formData, name: fullName });
+
+    fetch("http://localhost:5000/send-welcome-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: fullName,
+        email: formData.email
+      })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log("Email sent:", data.message);
-  })
-  .catch(err => {
-    console.error("Email error:", err);
-  });
+      .then(res => res.json())
+      .then(data => {
+        console.log("Email sent:", data.message);
+      })
+      .catch(err => {
+        console.error("Email error:", err);
+      });
 
-  setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
+    setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
 
-  setFormData({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    mentorshipGoals: '',
-    skillsToLearn: '',
-  });
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      mentorshipGoals: '',
+      skillsToLearn: '',
+    });
 
-  setTimeout(() => {
-    navigate("/dashboard");
-  }, 2000);
-};
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 2000);
+  };
 
-
-  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-lg p-8 bg-white rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Your Mentee Profile</h2>
-        
+
         {/* Conditional rendering for status messages */}
         {status.message && (
           <div className={`mb-4 px-4 py-3 rounded-md text-center ${status.type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
@@ -94,16 +111,31 @@ const handleSubmit = (e) => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Input */}
+          {/* First Name Input */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          {/* Last Name Input */}
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Enter your last name"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />
@@ -185,14 +217,12 @@ const handleSubmit = (e) => {
 
           {/* Submit Button */}
           <div>
-          
             <button
               type="submit"
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
             >
               Create Mentee Profile
             </button>
-            
           </div>
         </form>
       </div>

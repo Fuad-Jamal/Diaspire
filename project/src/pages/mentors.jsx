@@ -90,7 +90,7 @@ useEffect(() => {
         {/* Request mentor button */}
       <div className="flex justify-end mb-6">
   <button
-    onClick={() => navigate("/request-mentorship")}
+    onClick={() => navigate("/request-mentor")}
     className="px-5 py-2 bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] 
                text-white font-semibold rounded-full shadow-lg 
                hover:from-[#4B4B4B] hover:via-[#D17C5C] hover:to-[#A3C586] 

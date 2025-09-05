@@ -61,7 +61,9 @@ export default function MenteeWithMentors() {
      {/* Mentee and recommended mentors parent */}
      <div className="bg-gray-100 w-[50%] mx-auto py-3 ">
        {/* Mentee Card */}
-       <h1 className="text-3xl font-medium">Welcome {firstMentee.fullName.split(' ')[0]}</h1>
+<h1 className="text-3xl font-medium">
+  Welcome {localStorage.getItem("menteeFirstName") || "Mentee"}!
+</h1>
        <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg ">
         <h2 className="text-xl font-bold text-gray-800 mb-2">
           My Mentor

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 // A simple form component for creating a user account with a password.
 const CreatePasswordForm = () => {
   // State to hold all form data.
   const [formData, setFormData] = useState({
-    name: '', // Added 'name' field
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -28,7 +29,8 @@ const CreatePasswordForm = () => {
     }));
   };
 
-  // The form submission handler.
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -41,32 +43,59 @@ const CreatePasswordForm = () => {
       return;
     }
 
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
       setStatus({ message: 'Name, email, and password are required fields.', type: 'error' });
       return;
     }
 
-    // In a real application, you would send this data to an API.
-    console.log("Profile Creation Data Submitted:", formData);
+   const capitalize = str =>
+      str
+        .trim()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 
-    // Set submitted state to true to show a success message.
+    const formattedFirstName = capitalize(formData.firstName);
+    const formattedLastName = capitalize(formData.lastName);
+    const fullName = `${formattedFirstName} ${formattedLastName}`;
+
+    localStorage.setItem("userName", fullName);
+    localStorage.setItem("userFirstName", formattedFirstName);
+    localStorage.setItem("userEmail", formData.email);
+    localStorage.setItem("userLinkedIn", formData.linkedinUrl);
+    localStorage.setItem("userBio", formData.bio);
+
+
+    console.log("Profile Creation Data Submitted:", { ...formData, name: fullName });
+
+    fetch("http://localhost:5000/send-mentor-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: fullName, email: formData.email })
+    });
+
     setStatus({ message: 'Profile created successfully!', type: 'success' });
-    // Optionally reset the form after submission
+
     setFormData({
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
       linkedinUrl: '',
       bio: '',
     });
+
+    setTimeout(() => {
+      navigate("/mentor-dashboard");
+    }, 2000);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-lg p-8 bg-white rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Your Profile</h2>
-        
+
         {/* Conditional rendering for status messages */}
         {status.message && (
           <div className={`mb-4 px-4 py-3 rounded-md text-center ${status.type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
@@ -75,16 +104,31 @@ const CreatePasswordForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Input */}
+          {/* First Name Input */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
+            />
+          </div>
+
+          {/* Last Name Input */}
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Enter your last name"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
             />

@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 
 const navItems = [
   { name: 'Dashboard', icon: (
@@ -19,25 +18,56 @@ const navItems = [
     ), isActive: false }
 ];
 
+const Dashboard = () => {
+  const [mentorName, setMentorName] = useState('');
+  const [mentorInitials, setMentorInitials] = useState('');
+  const [mentorBio, setMentorBio] = useState('');
+  const [mentorLinkedIn, setMentorLinkedIn] = useState('');
 
-const Dashboard = ({firstMentee}) => {
-    const UserIcon = () => (
-        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
-          {firstMentee.fullName.split(' ')[0][0]}{firstMentee.fullName.split(' ')[1][0]}
-        </div>
-      );
+
+  useEffect(() => {
+  const fullName = localStorage.getItem("userName");
+  const bio = localStorage.getItem("userBio");
+  const linkedin = localStorage.getItem("userLinkedIn");
+
+  if (fullName) {
+    setMentorName(fullName);
+    const parts = fullName.split(' ');
+    const initials = parts[0]?.[0] + (parts[1]?.[0] || '');
+    setMentorInitials(initials.toUpperCase());
+  }
+
+  if (bio) setMentorBio(bio);
+  if (linkedin) setMentorLinkedIn(linkedin);
+}, []);
+
+
   return (
-    <div className="flex flex-col w-auto h-[60%] rounded-b-lg px-8 py-8  bg-white border-r">
-      {/* Profile Section */}
+    <div className="flex flex-col w-auto h-[60%] rounded-b-lg px-8 py-8 bg-white border-r">
       <div className="flex items-center mb-8 px-2">
-        <UserIcon />
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
+          {mentorInitials}
+        </div>
         <div className="ml-2">
-          <p className="font-semibold text-gray-900">{firstMentee.fullName}</p>
-          <p className="text-sm text-gray-500">Mentee</p>
+          <p className="font-semibold text-gray-900">{mentorName}</p>
+          <p className="text-sm text-gray-500">Mentor</p>
+          {mentorBio && (
+  <p className="text-sm text-gray-600 mt-1 italic">{mentorBio}</p>
+)}
+{mentorLinkedIn && (
+  <a
+    href={mentorLinkedIn}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-sm text-blue-600 underline mt-1 block"
+  >
+    View LinkedIn Profile
+  </a>
+)}
+
         </div>
       </div>
 
-      {/* Navigation Links */}
       <nav className="flex-1 space-y-2">
         {navItems.map((item) => (
           <div

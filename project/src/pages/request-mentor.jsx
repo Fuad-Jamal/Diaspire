@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 function RequestMentorship() {
   const [formData, setFormData] = useState({
@@ -14,14 +16,18 @@ function RequestMentorship() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Mentorship request submitted:", formData);
-
-    // TODO: send to Firestore or backend
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, "mentorshipRequests"), formData);
     alert("Your mentorship request has been submitted!");
     setFormData({ name: "", email: "", interests: "", goals: "" });
-  };
+  } catch (err) {
+    console.error("Error submitting request:", err);
+    alert("❌ Failed to submit. Try again.");
+  }
+};
 
   return (
     <div>
@@ -63,7 +69,7 @@ function RequestMentorship() {
               name="goals"
               value={formData.goals}
               onChange={handleChange}
-              placeholder="What do you hope to achieve with mentorship?"
+              placeholder="What expectations do you hope to gain from the mentorship?"
               rows="3"
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#A3C586]"
               required

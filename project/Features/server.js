@@ -49,6 +49,40 @@ Let’s make this journey unforgettable.
   }
 });
 
+app.post('/send-mentor-email', async (req, res) => {
+  const { name, email } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: 'Diaspire <team@diaspire.org>',
+    to: email,
+    subject: 'Thank You for Registering as a Mentor!',
+    text: `Hi ${name},
+
+Thank you for registering as a mentor with Diaspire. Your application is currently under review, and you can expect a response within 1–2 weeks.
+
+We truly appreciate your willingness to support our community and share your experience with others. If you have any questions in the meantime, feel free to reach out.
+
+— The Diaspire Team`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: 'Mentor email sent successfully' });
+  } catch (error) {
+    console.error('Mentor email error:', error);
+    res.status(500).json({ message: 'Failed to send mentor email' });
+  }
+});
+
+
 app.listen(5000, () => {
   console.log('Server running on http://localhost:5000');
 });
