@@ -52,13 +52,19 @@ import faqs  from '/src/data/faqs.json';
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-        <p className="text-center text-sm text-gray-400 mt-1">
-          This chatbot handle the basic questions. To get right answer, ask question with question mark (?).
+        <p className="text-left text-sm text-gray-400 mt-1">
+          This chatbot handles the basic questions. To get right answer, <br /> copy the question by one and paste it chat or write it as it is with question mark (?).
+          <br /> Don't mind about textcase
         </p>
       </header>
       
          {/* Chat message container */}
       <div className="flex-grow overflow-y-auto p-4 rounded-lg bg-gray-800 shadow-inner">
+        <div className='block bg-gray-400 h-40 overflow-y-auto  whitespace-nowrap border border-gray-300 my-4'>
+          <ul>{faqs.slice(1).map((value,index)=>{
+            return <li key={index}>{index+1}{'.'}{value.question}</li>
+          })}</ul>
+        </div>
        {messages.map((msg,index)=>(
         <div key={index} className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
             <div
