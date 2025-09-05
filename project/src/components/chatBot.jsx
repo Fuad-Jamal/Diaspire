@@ -22,9 +22,10 @@ import faqs  from '/src/data/faqs.json';
         e.preventDefault();
         if(input.trim()==='') return;
         setMessages((prevMessage)=> [...prevMessage,{text:input,from:'user'}]);
-        let foundAnswer = 'The asked question is not in the list of frequently asked questions which are the one I answer. Remember to always end question with question mark (?) for me to know if it is question.';
+        let foundAnswer = "The asked question is not in the list of frequently asked questions which are the one I answer. Remember to always end question with question mark (?) for me to know if it is question. For more help, write to 'supportdesk@diaspire.ac.rw'";
         let inputQuestion = input.toLowerCase();
         //Looping through the FAQs to get teh matching answer
+        
         for (let faq of faqs){
             if(inputQuestion.includes(faq.question.toLowerCase())){
                 foundAnswer = faq.answer;

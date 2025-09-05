@@ -1,4 +1,7 @@
-[
+   [ {
+        "question": "Hello",
+        "answer": "Hello, how can I help you please? Ask question, I will try as much as possible."
+    },
     {
         "question": "What is Diaspire?",
         "answer": "Diaspire is a youth empowerment platform designed to connect ambitious Rwandan youth with experienced diaspora professionals through meaningful mentorship, career guidance, and global exposure."
