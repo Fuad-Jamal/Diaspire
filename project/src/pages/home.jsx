@@ -3,6 +3,7 @@ import Navbar from '../components/navbar';
 import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
+import ChatBot3 from '../components/chatBot3';
 
 
 
@@ -10,6 +11,9 @@ const Home = ()=>{
     return(
         <>
         <Navbar/>
+        <div >
+        <ChatBot3/>
+        </div>
         {/* first upper part */}
             <div className='bg-[url("./src/assets/home.png")] w-full bg-no-repeat'>
                 <div className='lg:pt-24 lg:ml-[440px] pb-48 font-medium'>
