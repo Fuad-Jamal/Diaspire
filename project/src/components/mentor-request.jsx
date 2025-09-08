@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
+import { setDoc } from "firebase/firestore";
 import {
   collection,
   query,
@@ -52,16 +53,25 @@ function MentorRequests() {
     fetchRequests();
   }, []);
 
-  const handleAccept = async (id) => {
-    try {
-      await updateDoc(doc(db, "requests", id), { status: "accepted" });
-      setRequests(prev =>
-        prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
-      );
-    } catch (err) {
-      console.error("Error accepting request:", err);
-    }
-  };
+  const handleAccept = async (id, menteeId) => {
+  try {
+    await updateDoc(doc(db, "requests", id), { status: "accepted" });
+
+    const connectionId = [mentorId, menteeId].sort().join("_");
+    await setDoc(doc(db, "connections", connectionId), {
+      mentorId,
+      menteeId,
+      createdAt: new Date()
+    });
+
+    setRequests(prev =>
+      prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
+    );
+  } catch (err) {
+    console.error("Error accepting request:", err);
+  }
+};
+
 
   const handleDecline = async (id) => {
     try {
@@ -92,17 +102,30 @@ function MentorRequests() {
                   Requested on: {req.timestamp?.seconds ? new Date(req.timestamp.seconds * 1000).toLocaleString() : "Unknown"}
                 </p>
                 {req.status === "accepted" && (
-                  <p className="text-green-600 text-sm mt-2 font-medium">Accepted ✅</p>
-                )}
+  <div className="flex space-x-2">
+    <p className="text-green-600 text-sm mt-2 font-medium">Accepted ✅</p>
+    <button
+      onClick={() => {
+        const conversationId = [mentorId, req.menteeId].sort().join("_");
+        window.location.href = `/chat/${conversationId}`;
+      }}
+      className="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
+    >
+      Message
+    </button>
+  </div>
+)}
+
               </div>
               {req.status !== "accepted" && (
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => handleAccept(req.id)}
-                    className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
-                  >
-                    Accept
-                  </button>
+  onClick={() => handleAccept(req.id, req.menteeId)}
+  className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
+>
+  Accept
+</button>
+
                   <button
                     onClick={() => handleDecline(req.id)}
                     className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"

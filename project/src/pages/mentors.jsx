@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore"
 import mentorsData from "../data/mentors.json";
-import {fetchMentors} from "../utilities/mentor-service"
 import sendMentorRequest from "../components/send-request.jsx";
 
 

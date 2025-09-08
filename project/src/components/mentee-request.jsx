@@ -16,7 +16,9 @@ function MenteeRequests() {
   const [requests, setRequests] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const menteeEmail = localStorage.getItem("menteeEmail");
+  const menteeId = localStorage.getItem("menteeId");
 
   const fetchRequestsWithMentorInfo = async (paginate = false) => {
     if (!menteeEmail) return;
@@ -106,13 +108,29 @@ function MenteeRequests() {
                 <p className="text-xs text-gray-500 mt-1">
                   Sent on: {req.timestamp?.seconds ? new Date(req.timestamp.seconds * 1000).toLocaleString() : "Unknown"}
                 </p>
+                {req.status === "accepted" && (
+                  <p className="text-green-600 text-sm mt-2 font-medium">Accepted ✅</p>
+                )}
               </div>
-              <button
-                onClick={() => handleCancelRequest(req.id)}
-                className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
-              >
-                Cancel Request
-              </button>
+
+              {req.status === "accepted" ? (
+                <button
+                  onClick={() => {
+                    const conversationId = [req.mentorId, menteeId].sort().join("_");
+                    window.location.href = `/chat/${conversationId}`;
+                  }}
+                  className="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition"
+                >
+                  Message
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleCancelRequest(req.id)}
+                  className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
+                >
+                  Cancel Request
+                </button>
+              )}
             </div>
           ))}
         </div>

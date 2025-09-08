@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase"; // adjust path if needed
-import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const CreateMenteeProfileForm = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,6 @@ const CreateMenteeProfileForm = () => {
     e.preventDefault();
     setStatus({ message: '', type: '' });
 
-    // Basic validation
     if (formData.password !== formData.confirmPassword) {
       setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
       return;
@@ -37,7 +37,6 @@ const CreateMenteeProfileForm = () => {
       return;
     }
 
-    // Format name
     const capitalize = str =>
       str.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
@@ -45,7 +44,15 @@ const CreateMenteeProfileForm = () => {
     const formattedLastName = capitalize(formData.lastName);
     const fullName = `${formattedFirstName} ${formattedLastName}`;
 
-    // Save to localStorage
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      setStatus({ message: 'You must be signed in to create a profile.', type: 'error' });
+      return;
+    }
+
+    localStorage.setItem("menteeId", user.uid);
     localStorage.setItem("menteeFullName", fullName);
     localStorage.setItem("menteeFirstName", formattedFirstName);
     localStorage.setItem("menteeEmail", formData.email);
@@ -53,16 +60,15 @@ const CreateMenteeProfileForm = () => {
     localStorage.setItem("menteeSkills", formData.skillsToLearn);
 
     try {
-      // Save to Firestore
       await addDoc(collection(db, "mentees"), {
+        userId: user.uid,
         name: fullName,
         email: formData.email,
         mentorshipGoals: formData.mentorshipGoals,
         skillsToLearn: formData.skillsToLearn,
-        createdAt: new Date()
+        createdAt: Timestamp.now()
       });
 
-      // Send welcome email
       await fetch("http://localhost:5000/send-welcome-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,7 +108,6 @@ const CreateMenteeProfileForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* First Name */}
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
             <input
@@ -116,7 +121,6 @@ const CreateMenteeProfileForm = () => {
             />
           </div>
 
-          {/* Last Name */}
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
             <input
@@ -130,7 +134,6 @@ const CreateMenteeProfileForm = () => {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -144,7 +147,6 @@ const CreateMenteeProfileForm = () => {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
@@ -158,7 +160,6 @@ const CreateMenteeProfileForm = () => {
             />
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input
@@ -172,7 +173,6 @@ const CreateMenteeProfileForm = () => {
             />
           </div>
 
-          {/* Mentorship Goals */}
           <div>
             <label htmlFor="mentorshipGoals" className="block text-sm font-medium text-gray-700">Mentorship Goals</label>
             <textarea
@@ -186,7 +186,6 @@ const CreateMenteeProfileForm = () => {
             ></textarea>
           </div>
 
-          {/* Skills to Learn */}
           <div>
             <label htmlFor="skillsToLearn" className="block text-sm font-medium text-gray-700">Skills to Learn</label>
             <textarea
@@ -199,7 +198,6 @@ const CreateMenteeProfileForm = () => {
             ></textarea>
           </div>
 
-          {/* Submit Button */}
           <div>
             <button
               type="submit"
