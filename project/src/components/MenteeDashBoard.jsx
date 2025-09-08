@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const navItems = [
   { name: 'Dashboard', icon: (
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const [menteeInitials, setMenteeInitials] = useState('');
   const [menteeBio, setMenteeBio] = useState('');
   const [menteeGoals, setMenteeGoals] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fullName = localStorage.getItem("menteeFullName");
@@ -56,9 +58,15 @@ const Dashboard = () => {
             <p className="text-sm text-blue-600 mt-1">Goals: {menteeGoals}</p>
           )}
         </div>
+        
       </div>
-
-      <nav className="flex-1 space-y-2">
+<button
+    onClick={() => navigate('/edit-menteeprofile')}
+    className="mt-3 px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"
+  >
+    Edit Profile
+  </button>
+      <nav className="flex-1 space-y-2 mt-4">
         {navItems.map((item) => (
           <div
             key={item.name}

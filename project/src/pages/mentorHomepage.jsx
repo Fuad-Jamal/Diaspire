@@ -53,14 +53,9 @@ export default function MentorWithMentees() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-    {/* Parent division */}
     <div className="bg-gray-100 m-0 flex justify-center pr-2">
-    {/* Dashboard import */}
     <Dashboard firstMentee ={firstMentee}/>
-    
-     {/* Mentee and recommended mentors parent */}
      <div className="bg-white px-4 w-[50%] mx-auto py-3">
-       {/* Mentee Card */}
 <h1 className="text-3xl font-medium">
   Welcome {localStorage.getItem("userFirstName") || "Mentor"} 🎉
 </h1>
@@ -116,11 +111,6 @@ export default function MentorWithMentees() {
     
         
       </div>
-
-      {/* Recommended Mentors */}
-      
-
-
       {/* Pagination */}
       <ReactPaginate
         previousLabel={"Previous"}

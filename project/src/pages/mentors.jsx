@@ -8,6 +8,7 @@ import { db } from "../firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore"
 import mentorsData from "../data/mentors.json";
 import {fetchMentors} from "../utilities/mentor-service"
+import sendMentorRequest from "../components/send-request.jsx";
 
 
 function FindMentor() {
@@ -138,18 +139,12 @@ useEffect(() => {
         </div>
 
         {/* Mentor Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 flex-1">
-          {paginated.map((mentor) => (
-            <div
-              key={mentor.id}
-              className="bg-white/95 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300"
-              style={{
-                backgroundImage: "url('C:\Users\hp\Diaspire\project\src\assets\imigongo.svg')",
-                backgroundRepeat: "repeat",
-                backgroundSize: "80px",
-                opacity: 0.95,
-              }}
-            >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {paginated.map((mentor) => (
+    <div
+      key={mentor.id}
+      className="relative bg-white/95 p-6 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:z-30 hover:shadow-2xl"
+    >
               <div className="flex flex-col items-center text-center">
                 <img
                   src={mentor.img}
@@ -176,9 +171,12 @@ useEffect(() => {
                 </a>
               </div>
 
-              <button className="mt-6 w-full bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] hover:from-[#4B4B4B] hover:via-[#D17C5C] hover:to-[#A3C586] text-white py-2 rounded-xl font-medium transition">
-                Connect with your plug 🚀
-              </button>
+              <button
+  onClick={() => sendMentorRequest(mentor.id)}
+  className="mt-6 w-full bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] hover:from-[#4B4B4B] hover:via-[#D17C5C] hover:to-[#A3C586] text-white py-2 rounded-xl font-medium transition"
+>
+  Connect with your plug 🚀
+</button>
             </div>
           ))}
         </div>

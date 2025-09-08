@@ -1,26 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {db} from "../firebase"
+import { collection, addDoc } from "firebase/firestore"
 
-// A simple form component for creating a user account with a password.
+
 const CreatePasswordForm = () => {
-  // State to hold all form data.
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    linkedinUrl: '',
-    bio: '',
-  });
 
-  // State for form submission status, success, and errors.
+  const [loading, setLoading] = useState(false);
+
+
+  const [formData, setFormData] = useState({
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  linkedinUrl: '',
+  bio: '',
+  imgUrl: '',
+  imgFile: null,
+});
+
+
   const [status, setStatus] = useState({
     message: '',
-    type: '', // 'success' or 'error'
+    type: '',
   });
 
-  // A generic change handler for all form inputs.
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -29,15 +36,20 @@ const CreatePasswordForm = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData((prev) => ({ ...prev, imgFile: e.target.files[0] }));
+    }
+  };
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Reset status message
+setLoading(true);
     setStatus({ message: '', type: '' });
 
-    // Validation checks
+    
     if (formData.password !== formData.confirmPassword) {
       setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
       return;
@@ -48,7 +60,13 @@ const CreatePasswordForm = () => {
       return;
     }
 
-   const capitalize = str =>
+    if (!formData.linkedinUrl || !formData.bio) {
+  setStatus({ message: 'Please provide your LinkedIn and a short bio.', type: 'error' });
+  return;
+}
+
+try {
+    const capitalize = str =>
       str
         .trim()
         .split(' ')
@@ -65,10 +83,23 @@ const CreatePasswordForm = () => {
     localStorage.setItem("userLinkedIn", formData.linkedinUrl);
     localStorage.setItem("userBio", formData.bio);
 
+    await addDoc(collection(db, "mentors"), {
+      name: fullName,
+      email: formData.email,
+      linkedinUrl: formData.linkedinUrl,
+      bio: formData.bio,
+      img: formData.imgUrl || "/default-avatar.png",
+      title: "Mentor",
+      category: "General",
+      socials: {
+        linkedin: formData.linkedinUrl || "",
+        twitter: "",
+        instagram: "",
+        github: "",
+      },
+    });
 
-    console.log("Profile Creation Data Submitted:", { ...formData, name: fullName });
-
-    fetch("http://localhost:5000/send-mentor-email", {
+    await fetch("http://localhost:5000/send-mentor-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: fullName, email: formData.email })
@@ -84,12 +115,21 @@ const CreatePasswordForm = () => {
       confirmPassword: '',
       linkedinUrl: '',
       bio: '',
+      imgUrl: '',
+      imgFile: null,
     });
 
     setTimeout(() => {
       navigate("/mentor-dashboard");
     }, 2000);
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    setStatus({ message: 'Something went wrong. Please try again.', type: 'error' });
+  }
+
+  setLoading(false);
+};
+ 
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -207,14 +247,38 @@ const CreatePasswordForm = () => {
             ></textarea>
           </div>
 
+          {/* Profile Image URL Input */}
+              <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Profile Image (URL or Upload)
+            </label>
+            <input
+              type="url"
+              name="imgUrl"
+              value={formData.imgUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/photo.jpg"
+              className="mt-1 block w-full px-4 py-2 border rounded-md mb-2"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="mt-1 block w-full text-sm text-gray-600"
+            />
+          </div>
+
           {/* Submit Button */}
           <div>
             <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-            >
-              Create Profile
-            </button>
+  type="submit"
+  disabled={loading}
+  className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white ${
+    loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+  } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors`}
+>
+  {loading ? 'Creating...' : 'Create Profile'}
+</button>
           </div>
         </form>
       </div>

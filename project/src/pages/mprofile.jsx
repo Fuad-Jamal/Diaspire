@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { db } from "../firebase"; // adjust path if needed
+import { collection, addDoc } from "firebase/firestore";
 
-// A form component for creating a mentee profile.
 const CreateMenteeProfileForm = () => {
-  // State to hold all form data.
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -14,28 +14,19 @@ const CreateMenteeProfileForm = () => {
     skillsToLearn: '',
   });
 
+  const [status, setStatus] = useState({ message: '', type: '' });
   const navigate = useNavigate();
 
-  // State for form submission status, success, and errors.
-  const [status, setStatus] = useState({
-    message: '',
-    type: '', // 'success' or 'error'
-  });
-
-  // A generic change handler for all form inputs.
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  // The form submission handler.
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ message: '', type: '' });
 
+    // Basic validation
     if (formData.password !== formData.confirmPassword) {
       setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
       return;
@@ -46,56 +37,57 @@ const CreateMenteeProfileForm = () => {
       return;
     }
 
+    // Format name
     const capitalize = str =>
-      str
-        .trim()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
+      str.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 
     const formattedFirstName = capitalize(formData.firstName);
-const formattedLastName = capitalize(formData.lastName);
-const fullName = `${formattedFirstName} ${formattedLastName}`;
+    const formattedLastName = capitalize(formData.lastName);
+    const fullName = `${formattedFirstName} ${formattedLastName}`;
 
-localStorage.setItem("menteeFullName", fullName);
-localStorage.setItem("menteeFirstName", formattedFirstName);
-localStorage.setItem("menteeEmail", formData.email);
-localStorage.setItem("menteeGoals", formData.mentorshipGoals);
-localStorage.setItem("menteeSkills", formData.skillsToLearn);
+    // Save to localStorage
+    localStorage.setItem("menteeFullName", fullName);
+    localStorage.setItem("menteeFirstName", formattedFirstName);
+    localStorage.setItem("menteeEmail", formData.email);
+    localStorage.setItem("menteeGoals", formData.mentorshipGoals);
+    localStorage.setItem("menteeSkills", formData.skillsToLearn);
 
-    console.log("Mentee Profile Creation Data Submitted:", { ...formData, name: fullName });
-
-    fetch("http://localhost:5000/send-welcome-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      // Save to Firestore
+      await addDoc(collection(db, "mentees"), {
         name: fullName,
-        email: formData.email
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log("Email sent:", data.message);
-      })
-      .catch(err => {
-        console.error("Email error:", err);
+        email: formData.email,
+        mentorshipGoals: formData.mentorshipGoals,
+        skillsToLearn: formData.skillsToLearn,
+        createdAt: new Date()
       });
 
-    setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
+      // Send welcome email
+      await fetch("http://localhost:5000/send-welcome-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: fullName, email: formData.email })
+      });
 
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      mentorshipGoals: '',
-      skillsToLearn: '',
-    });
+      setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
 
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 2000);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        mentorshipGoals: '',
+        skillsToLearn: '',
+      });
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
+    } catch (error) {
+      console.error("Error saving mentee:", error);
+      setStatus({ message: 'Something went wrong. Please try again.', type: 'error' });
+    }
   };
 
   return (
@@ -103,7 +95,6 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
       <div className="w-full max-w-lg p-8 bg-white rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Your Mentee Profile</h2>
 
-        {/* Conditional rendering for status messages */}
         {status.message && (
           <div className={`mb-4 px-4 py-3 rounded-md text-center ${status.type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
             <span className="block sm:inline">{status.message}</span>
@@ -111,7 +102,7 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* First Name Input */}
+          {/* First Name */}
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
             <input
@@ -120,13 +111,12 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              placeholder="Enter your first name"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Last Name Input */}
+          {/* Last Name */}
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
             <input
@@ -135,13 +125,12 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              placeholder="Enter your last name"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Email Input */}
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -150,13 +139,12 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="you@example.com"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Password Input */}
+          {/* Password */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
@@ -165,13 +153,12 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Confirm Password Input */}
+          {/* Confirm Password */}
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
             <input
@@ -180,38 +167,35 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              placeholder="Re-enter your password"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             />
           </div>
 
-          {/* Mentorship Goals Textarea */}
+          {/* Mentorship Goals */}
           <div>
-            <label htmlFor="mentorshipGoals" className="block text-sm font-medium text-gray-700">Your Mentorship Goals</label>
+            <label htmlFor="mentorshipGoals" className="block text-sm font-medium text-gray-700">Mentorship Goals</label>
             <textarea
               id="mentorshipGoals"
               name="mentorshipGoals"
               rows="4"
               value={formData.mentorshipGoals}
               onChange={handleChange}
-              placeholder="What do you hope to achieve with a mentor?"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               required
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             ></textarea>
           </div>
 
-          {/* Skills to Learn Textarea */}
+          {/* Skills to Learn */}
           <div>
-            <label htmlFor="skillsToLearn" className="block text-sm font-medium text-gray-700">Skills you want to learn</label>
+            <label htmlFor="skillsToLearn" className="block text-sm font-medium text-gray-700">Skills to Learn</label>
             <textarea
               id="skillsToLearn"
               name="skillsToLearn"
               rows="2"
               value={formData.skillsToLearn}
               onChange={handleChange}
-              placeholder="e.g., Python, Public Speaking, Leadership"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             ></textarea>
           </div>
 
@@ -219,7 +203,7 @@ localStorage.setItem("menteeSkills", formData.skillsToLearn);
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+              className="w-full py-3 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
             >
               Create Mentee Profile
             </button>

@@ -53,14 +53,9 @@ export default function MenteeWithMentors() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-    {/* Parent division */}
     <div className="bg-gray-100 m-0 flex justify-center pr-2">
-    {/* Dashboard import */}
     <Dashboard firstMentee ={firstMentee}/>
-    
-     {/* Mentee and recommended mentors parent */}
      <div className="bg-gray-100 w-[50%] mx-auto py-3 ">
-       {/* Mentee Card */}
 <h1 className="text-3xl font-medium">
   Welcome {localStorage.getItem("menteeFirstName") || "Mentee"}!
 </h1>
@@ -77,7 +72,6 @@ export default function MenteeWithMentors() {
         <p className="text-gray-600 mb-4">{mentors[0]?mentors[0].profession:'Loading'}</p>
         </span>
         </span>
-        {/* button section */}
         <span className="ml-12">
         <button className="bg-green-200 rounded-lg p-1 text-blue-500 mx-2">Message</button>
         <button className="bg-gray-200 rounded-lg p-1 mx-2">Sechedule</button>
@@ -85,10 +79,6 @@ export default function MenteeWithMentors() {
     
         
       </div>
-
-      {/* Recommended Mentors */}
-      
-
       <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-white p-4 rounded-xl">
       <h2 className=" text-2xl font-bold mt-10 text-gray-800">
         Recommended Mentors
@@ -132,7 +122,6 @@ export default function MenteeWithMentors() {
         activeClassName="bg-blue-500 text-white px-3 py-1 rounded-lg"
       />
      </div>
-     {/* Progress and help card section */}
     <section>
      <ProgressCard/>
      <HelpCardSection/>

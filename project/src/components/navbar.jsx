@@ -12,18 +12,19 @@ const Navbar = ({ onNavigate, currentPage }) => {
   const navigate = useNavigate();
 
   const handleSignIn = (user) => {
-  console.log("User signed in:", user);
-  setShowAuthPopup(false);
+    console.log("User signed in:", user);
+    setShowAuthPopup(false);
 
-  if (selectedRole === 'youth') {
-    navigate('/mprofile'); // mentee
-  } else if (selectedRole === 'professional') {
-    navigate('/profile'); // mentor
-  } else {
-    navigate('/mentees'); // fallback for login
-  }
-};
+    const role = localStorage.getItem("userRole");
 
+    if (role === 'youth') {
+      navigate('/mprofile'); // mentee
+    } else if (role === 'professional') {
+      navigate('/mentor-dashboard'); // mentor
+    } else {
+      navigate('/mentees'); // fallback
+    }
+  };
 
   const handleSignOut = () => {
     navigate('/');
@@ -50,7 +51,8 @@ const Navbar = ({ onNavigate, currentPage }) => {
             <button
               className="px-4 py-2 text-neutral-600 font-medium rounded-lg hover:bg-neutral-100"
               onClick={() => {
-                setSelectedRole(null);
+                const role = localStorage.getItem("userRole");
+                setSelectedRole(role);
                 setAuthMode("login");
                 setShowAuthPopup(true);
               }}
@@ -78,6 +80,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg"
                 onClick={() => {
+                  localStorage.setItem("userRole", "youth");
                   setSelectedRole('youth');
                   setAuthMode("signup");
                   setShowRolePopup(false);
@@ -89,6 +92,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
               <button
                 className="px-4 py-2 bg-green-500 text-white rounded-lg"
                 onClick={() => {
+                  localStorage.setItem("userRole", "professional");
                   setSelectedRole('professional');
                   setAuthMode("signup");
                   setShowRolePopup(false);

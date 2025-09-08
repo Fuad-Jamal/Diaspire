@@ -1,15 +1,64 @@
 import React, { useState } from 'react';
 import { auth, provider } from '../firebase';
-import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
+import { db } from '../firebase';
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  setDoc
+} from 'firebase/firestore';
 
 function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   const isLogin = mode === "login";
 
+  const storeMentorIdFromFirestore = async (user) => {
+    const role = localStorage.getItem("userRole"); // ✅ Get role from localStorage
+
+    if (role !== "professional") return; // Only mentors need mentorId
+
+    try {
+      const q = query(collection(db, "mentors"), where("email", "==", user.email));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        const mentorDoc = snapshot.docs[0];
+        localStorage.setItem("mentorId", mentorDoc.id);
+      } else {
+        const newMentorRef = doc(collection(db, "mentors"));
+        await setDoc(newMentorRef, {
+          name: user.displayName || "Unnamed Mentor",
+          email: user.email,
+          bio: "",
+          linkedin: "",
+          img: "",
+          title: "Mentor",
+          category: "Tech"
+        });
+        localStorage.setItem("mentorId", newMentorRef.id);
+        console.log("New mentor profile created:", newMentorRef.id);
+      }
+    } catch (err) {
+      console.error("Error fetching or creating mentor profile:", err);
+      localStorage.removeItem("mentorId");
+    }
+  };
+
   const handleEmailAuth = async (e) => {
     e.preventDefault();
+    setMessage('');
+
     try {
       let result;
       if (isLogin) {
@@ -17,18 +66,36 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
       } else {
         result = await createUserWithEmailAndPassword(auth, email, password);
       }
+
+      await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
     } catch (error) {
-      alert(error.message);
+      if (error.code === 'auth/email-already-in-use') {
+        setMessage('This email is already registered. Try logging in instead.');
+      } else if (error.code === 'auth/invalid-email') {
+        setMessage('Please enter a valid email address.');
+      } else if (error.code === 'auth/weak-password') {
+        setMessage('Password should be at least 6 characters.');
+      } else if (error.code === 'auth/user-not-found') {
+        setMessage('No account found with this email. Try signing up.');
+      } else if (error.code === 'auth/wrong-password') {
+        setMessage('Incorrect password. Please try again.');
+      } else {
+        setMessage(error.message);
+      }
+      setTimeout(() => setMessage(''), 2000);
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
+      await signOut(auth); // ✅ Clear any cached session
       const result = await signInWithPopup(auth, provider);
+      await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
     } catch (error) {
-      alert(error.message);
+      setMessage(error.message);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
@@ -38,6 +105,12 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
         <h2 className="text-2xl font-bold mb-6 text-center">
           {isLogin ? "Login to Diaspire" : "Sign up to Diaspire"}
         </h2>
+
+        {message && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-center text-sm">
+            {message}
+          </div>
+        )}
 
         <form onSubmit={handleEmailAuth} className="flex flex-col gap-4 mb-6">
           <input
