@@ -7,6 +7,8 @@ import UploadJobs from "../data/jobs-upload";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import AddJob from "../components/add-job";
+import MenteeDashBoard from '../components/MenteeDashBoard'
+import DashboardToggle from "../components/DashboardToggle";
 
 export default function Jobs() {
 
@@ -64,7 +66,7 @@ export default function Jobs() {
     return (
         <div className="bg-[url(/src/assets/jobsBG.png)] bg-cover bg-center bg-no-repeat min-h-screen">
             <Navbar/>
-            
+           
             <style jsx>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(20px); }
@@ -89,9 +91,18 @@ export default function Jobs() {
                 </svg>
                 <span className="ml-2 font-bold hidden md:inline">Add Job</span>
             </button>
+            {/* hello */}
+            <div className="">
             
-            <div className="flex flex-col items-center">
+            <div className="lg:flex ">
+            
+            <DashboardToggle prop ={<MenteeDashBoard/>}/>
+          
+                {/* job section */}
+                <section className="w-[100%] flex-col items-center">
                 {currentJobs}
+                </section>
+            </div>
             </div>
 
             <div className="my-8">
