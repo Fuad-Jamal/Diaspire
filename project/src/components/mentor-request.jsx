@@ -1,63 +1,131 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  limit,
+  startAfter
+} from "firebase/firestore";
 
 function MentorRequests() {
   const [requests, setRequests] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const mentorId = localStorage.getItem("mentorId");
+  const role = localStorage.getItem("userRole");
+
+  const fetchRequests = async (paginate = false) => {
+    if (role !== "professional" || !mentorId) return;
+    setLoading(true);
+
+    try {
+      let q = query(
+        collection(db, "requests"),
+        where("mentorId", "==", mentorId),
+        limit(5)
+      );
+
+      if (paginate && lastVisible) {
+        q = query(q, startAfter(lastVisible));
+      }
+
+      const snapshot = await getDocs(q);
+      const newLastVisible = snapshot.docs[snapshot.docs.length - 1];
+      setLastVisible(newLastVisible);
+
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setRequests(prev => paginate ? [...prev, ...data] : data);
+    } catch (err) {
+      console.error("Error fetching requests:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      const mentorId = localStorage.getItem("mentorId");
-      const role = localStorage.getItem("userRole");
-
-      console.log("Mentor ID used for query:", mentorId);
-
-      if (role !== "professional") {
-        console.warn("User is not a mentor. Skipping request fetch.");
-        return;
-      }
-
-      if (!mentorId) {
-        console.warn("No mentorId found in localStorage.");
-        return;
-      }
-
-      try {
-        const q = query(collection(db, "requests"), where("mentorId", "==", mentorId));
-        const snapshot = await getDocs(q);
-        console.log("Query snapshot size:", snapshot.size);
-        console.log("Fetched requests:", snapshot.docs.map(doc => doc.data()));
-
-        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setRequests(data);
-      } catch (err) {
-        console.error("Error fetching requests:", err);
-      }
-    };
-
     fetchRequests();
   }, []);
 
+  const handleAccept = async (id) => {
+    try {
+      await updateDoc(doc(db, "requests", id), { status: "accepted" });
+      setRequests(prev =>
+        prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
+      );
+    } catch (err) {
+      console.error("Error accepting request:", err);
+    }
+  };
+
+  const handleDecline = async (id) => {
+    try {
+      await deleteDoc(doc(db, "requests", id));
+      setRequests(prev => prev.filter(req => req.id !== id));
+    } catch (err) {
+      console.error("Error declining request:", err);
+    }
+  };
+
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Incoming Requests</h2>
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-gray-800">Incoming Mentorship Requests</h1>
+        <p className="text-gray-500 mt-2">Review and respond to mentees who want to connect with you.</p>
+      </div>
+
       {requests.length === 0 ? (
-        <p>No requests yet.</p>
+        <p className="text-center text-gray-600">No requests yet.</p>
       ) : (
-        <ul className="space-y-4">
+        <div className="space-y-6">
           {requests.map(req => (
-            <li key={req.id} className="bg-white p-4 rounded shadow">
-              <p><strong>{req.menteeName}</strong> wants to connect</p>
-              <p>Email: {req.menteeEmail}</p>
-              <p>
-                Requested on:{" "}
-                {req.timestamp?.seconds
-                  ? new Date(req.timestamp.seconds * 1000).toLocaleString()
-                  : "Unknown"}
-              </p>
-            </li>
+            <div key={req.id} className="bg-white shadow-md rounded-lg p-5 flex justify-between items-center">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800">{req.menteeName}</h2>
+                <p className="text-sm text-gray-600">{req.menteeEmail}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Requested on: {req.timestamp?.seconds ? new Date(req.timestamp.seconds * 1000).toLocaleString() : "Unknown"}
+                </p>
+                {req.status === "accepted" && (
+                  <p className="text-green-600 text-sm mt-2 font-medium">Accepted ✅</p>
+                )}
+              </div>
+              {req.status !== "accepted" && (
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleAccept(req.id)}
+                    className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleDecline(req.id)}
+                    className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition"
+                  >
+                    Decline
+                  </button>
+                </div>
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
+      )}
+
+      {lastVisible && (
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => fetchRequests(true)}
+            disabled={loading}
+            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            {loading ? "Loading..." : "Load More"}
+          </button>
+        </div>
       )}
     </div>
   );
