@@ -5,6 +5,7 @@ import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
 import GoogleSignIn from '../utilities/auth';
+import ChatBot from '../components/chatBot';
 
 
 const Home = () => {
@@ -73,7 +74,7 @@ const [showRolePopup, setShowRolePopup] = useState(false);
   return (
     <>
       <Navbar />
-
+  <ChatBot/>
       {/* Auth popup */}
       {showAuth && (
         <GoogleSignIn
