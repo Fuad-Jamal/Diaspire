@@ -12,81 +12,101 @@ import {
   getDocs,
   doc,
   getDoc,
-  addDoc
+  addDoc,
+  setDoc
 } from "firebase/firestore";
 
 export default function MentorWithMentees() {
   const [mentees, setMentees] = useState([]);
   const [mentors, setMentors] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [selectedMentor, setSelectedMentor] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [unreadCounts, setUnreadCounts] = useState({});
 
   const mentorsPerPage = 3;
   const mentorId = localStorage.getItem("mentorId");
 
   useEffect(() => {
-  const fetchAllData = async () => {
-    const mentorsRes = await fetch("/src/data/registeredMentors.json");
-    const mentorsData = await mentorsRes.json();
-    setMentors(mentorsData);
+    const fetchAllData = async () => {
+      const mentorsRes = await fetch("/src/data/registeredMentors.json");
+      const mentorsData = await mentorsRes.json();
+      setMentors(mentorsData);
 
-    if (!mentorId) return;
-    setLoading(true);
+      if (!mentorId) return;
+      setLoading(true);
 
-    const connectionsQuery = query(
-      collection(db, "connections"),
-      where("mentorId", "==", mentorId)
-    );
-
-    const connectionsSnapshot = await getDocs(connectionsQuery);
-    const menteeIds = connectionsSnapshot.docs.map(doc => doc.data().menteeId);
-
-    const menteeProfiles = await Promise.all(
-      menteeIds.map(async (menteeId) => {
-        const menteeDoc = await getDoc(doc(db, "mentees", menteeId));
-        if (menteeDoc.exists()) {
-          const data = menteeDoc.data();
-          return {
-            id: menteeId,
-            name: data.name || "—",
-            profession: data.profession || "Mentee",
-            careerInterest: data.careerInterest || "Student"
-          };
-        } else {
-          return null;
-        }
-      })
-    );
-
-    const filteredMentees = menteeProfiles.filter(Boolean);
-    setMentees(filteredMentees);
-
-    const unreadMap = {};
-    for (const mentee of filteredMentees) {
-      const conversationId = [mentorId, mentee.id].sort().join("_");
-      const unreadQuery = query(
-        collection(db, "messages"),
-        where("conversationId", "==", conversationId),
-        where("receiverId", "==", mentorId)
+      const connectionsQuery = query(
+        collection(db, "connections"),
+        where("mentorId", "==", mentorId)
       );
 
-      const snapshot = await getDocs(unreadQuery);
-      const unread = snapshot.docs.filter(
-        doc => !(doc.data().readBy || []).includes(mentorId)
+      const connectionsSnapshot = await getDocs(connectionsQuery);
+      const menteeIds = connectionsSnapshot.docs.map(doc => doc.data().menteeId);
+
+      const menteeProfiles = await Promise.all(
+        menteeIds.map(async (menteeId) => {
+          const menteeDoc = await getDoc(doc(db, "mentees", menteeId));
+          if (menteeDoc.exists()) {
+            const data = menteeDoc.data();
+            return {
+              id: menteeId,
+              name: data.name || "—",
+              profession: data.profession || "Mentee",
+              careerInterest: data.careerInterest || "Student"
+            };
+          } else {
+            return null;
+          }
+        })
       );
-      unreadMap[mentee.id] = unread.length;
-    }
 
-    setUnreadCounts(unreadMap);
-    setLoading(false);
-  };
+      const filteredMentees = menteeProfiles.filter(Boolean);
+      setMentees(filteredMentees);
 
-  fetchAllData();
-}, []);
+      const unreadMap = {};
+      for (const mentee of filteredMentees) {
+        const conversationId = [mentorId, mentee.id].sort().join("_");
+        const unreadQuery = query(
+          collection(db, "messages"),
+          where("conversationId", "==", conversationId),
+          where("receiverId", "==", mentorId)
+        );
+
+        const snapshot = await getDocs(unreadQuery);
+        const unread = snapshot.docs.filter(
+          doc => !(doc.data().readBy || []).includes(mentorId)
+        );
+        unreadMap[mentee.id] = unread.length;
+      }
+
+      setUnreadCounts(unreadMap);
+      setLoading(false);
+    };
+
+    const fetchRequests = async () => {
+  if (!mentorId) return;
+
+  const q = query(
+    collection(db, "requests"),
+    where("mentorId", "==", mentorId),
+    where("status", "==", "pending")
+  );
+
+  const snapshot = await getDocs(q);
+  const requestsList = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  setRequests(requestsList);
+};
 
 
+    fetchAllData();
+    fetchRequests();
+  }, []);
 
   const firstMentee = mentees[0];
 
@@ -99,32 +119,31 @@ export default function MentorWithMentees() {
   };
 
   const handleAcceptRequest = async (menteeId) => {
-  try {
-    await addDoc(collection(db, "connections"), {
-      mentorId,
-      menteeId,
-      acceptedAt: new Date()
-    });
-
-    const menteeRef = doc(db, "mentees", menteeId);
-    const menteeSnap = await getDoc(menteeRef);
-
-    if (!menteeSnap.exists()) {
-      await setDoc(menteeRef, {
-        name: "Unnamed",
-        profession: "Student",
-        careerInterest: "Undeclared"
+    try {
+      await addDoc(collection(db, "connections"), {
+        mentorId,
+        menteeId,
+        acceptedAt: new Date()
       });
+
+      const menteeRef = doc(db, "mentees", menteeId);
+      const menteeSnap = await getDoc(menteeRef);
+
+      if (!menteeSnap.exists()) {
+        await setDoc(menteeRef, {
+          name: "Unnamed",
+          profession: "Student",
+          careerInterest: "Undeclared"
+        });
+      }
+
+      alert("Mentee accepted!");
+      window.location.reload();
+    } catch (err) {
+      console.error("Error accepting mentee:", err);
+      alert("Failed to accept mentee.");
     }
-
-    alert("Mentee accepted!");
-    window.location.reload();
-  } catch (err) {
-    console.error("Error accepting mentee:", err);
-    alert("Failed to accept mentee.");
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -141,67 +160,64 @@ export default function MentorWithMentees() {
               My mentees
             </h2>
             {loading ? (
-  <p className="text-gray-500">Loading mentees...</p>
-) : mentees.length === 0 ? (
-  <p className="text-gray-600">You haven’t accepted any mentees yet.</p>
-) : (
-  mentees.map((mentee, idx) => (
-    <div
-      key={idx}
-      className="p-6 bg-gray-200 shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
-    >
-      <span>
-        <h3 className="font-bold text-lg text-gray-800">{mentee.name}</h3>
-        <p className="text-gray-600">{mentee.profession}</p>
-        <p className="text-blue-600 font-medium">
-          Career: {mentee.careerInterest}
-        </p>
-      </span>
-      <button
-  onClick={() => {
-    const conversationId = [mentorId, mentee.id].sort().join("_");
-    window.location.href = `/chat/${conversationId}`;
-  }}
-  className="relative my-4 bg-green-200 text-green-700 px-4 py-1 rounded-lg hover:bg-green-700 hover:text-white"
->
-  Message
-  {unreadCounts[mentee.id] > 0 && (
-    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-      {unreadCounts[mentee.id]}</span>
-)}
-</button>
-
-    </div>
-  ))
-)}
-
+              <p className="text-gray-500">Loading mentees...</p>
+            ) : mentees.length === 0 ? (
+              <p className="text-gray-600">You haven’t accepted any mentees yet.</p>
+            ) : (
+              mentees.map((mentee, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 bg-gray-200 shadow-lg rounded-xl hover:scale-105 transition-transform flex justify-between"
+                >
+                  <span>
+                    <h3 className="font-bold text-lg text-gray-800">{mentee.name}</h3>
+                    <p className="text-gray-600">{mentee.profession}</p>
+                    <p className="text-blue-600 font-medium">
+                      Career: {mentee.careerInterest}
+                    </p>
+                  </span>
+                  <button
+                    onClick={() => {
+                      const conversationId = [mentorId, mentee.id].sort().join("_");
+                      window.location.href = `/chat/${conversationId}`;
+                    }}
+                    className="relative my-4 bg-green-200 text-green-700 px-4 py-1 rounded-lg hover:bg-green-700 hover:text-white"
+                  >
+                    Message
+                    {unreadCounts[mentee.id] > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        {unreadCounts[mentee.id]}
+                      </span>
+                    )}
+                  </button>
+                </div>
+              ))
+            )}
           </div>
 
-          <p className="text-lg font-bold ml-4 mt-4">Mentorship requests</p>
-          <div className="mx-auto mt-8 p-6 bg-gray-300 rounded-xl shadow-lg">
-            <span className="flex gap-4">
-              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
-                {mentors[0] ? mentors[0].fullName.split(" ")[0][0] : "Loading"}
-              </div>
-              <span>
-                <p className="font-semibold">
-                  {mentors[0] ? mentors[0].fullName.split(" ")[0] : "Loading"}{" "}
-                  {mentors[0] ? mentors[0].fullName.split(" ")[1] : "Loading"}
-                </p>
-                <p className="text-gray-600 mb-4">
-                  {mentors[0] ? mentors[0].profession : "Loading"}
-                </p>
-              </span>
-            </span>
-            <span className="ml-12">
-              <button
-                onClick={() => handleAcceptRequest(mentors[0]?.id)}
-                className="bg-green-200 rounded-lg p-1 text-blue-500 mx-2"
-              >
-                Accept
-              </button>
-              <button className="bg-gray-200 rounded-lg p-1 mx-2">Decline</button>
-            </span>
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">Mentorship Requests</h2>
+            {requests.length === 0 ? (
+              <p className="text-gray-600">No mentorship requests yet.</p>
+            ) : (
+              requests.map((req) => (
+                <div key={req.id} className="bg-white p-4 rounded-xl shadow mb-4">
+                  <p><strong>Mentee ID:</strong> {req.menteeId}</p>
+                  <p><strong>Requested At:</strong> {req.requestedAt.toDate().toLocaleString()}</p>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      onClick={() => handleAcceptRequest(req.menteeId)}
+                      className="bg-green-500 text-white px-4 py-1 rounded"
+                    >
+                      Accept
+                    </button>
+                    <button className="bg-gray-300 text-gray-800 px-4 py-1 rounded">
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           <ReactPaginate
@@ -225,7 +241,7 @@ export default function MentorWithMentees() {
 
         {selectedMentor && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
+                        <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
               <button
                 onClick={() => setSelectedMentor(null)}
                 className="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-lg font-bold"

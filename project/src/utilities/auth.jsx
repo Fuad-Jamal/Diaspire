@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth, provider } from '../firebase';
 import {
   signInWithPopup,
@@ -13,45 +14,64 @@ import {
   where,
   getDocs,
   doc,
-  setDoc
+  setDoc,
+  getDoc
 } from 'firebase/firestore';
 
-function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
+function GoogleAuthPopup({ mode = "signup", onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const isLogin = mode === "login";
 
-  const storeMentorIdFromFirestore = async (user) => {
-    const role = localStorage.getItem("userRole"); // ✅ Get role from localStorage
+  const storeUserProfile = async (user) => {
+    const role = localStorage.getItem("userRole");
 
-    if (role !== "professional") return; // Only mentors need mentorId
+    if (!role) {
+      console.warn("Missing user role");
+      return;
+    }
+
+    const collectionName = role === "student" ? "mentees" : "mentors";
+    const idKey = role === "student" ? "menteeId" : "mentorId";
 
     try {
-      const q = query(collection(db, "mentors"), where("email", "==", user.email));
+      const q = query(collection(db, collectionName), where("email", "==", user.email));
       const snapshot = await getDocs(q);
 
+      let profileDoc;
       if (!snapshot.empty) {
-        const mentorDoc = snapshot.docs[0];
-        localStorage.setItem("mentorId", mentorDoc.id);
+        profileDoc = snapshot.docs[0];
       } else {
-        const newMentorRef = doc(collection(db, "mentors"));
-        await setDoc(newMentorRef, {
-          name: user.displayName || "Unnamed Mentor",
+        const newRef = doc(collection(db, collectionName));
+        await setDoc(newRef, {
+          name: user.displayName || "Unnamed",
           email: user.email,
           bio: "",
-          linkedin: "",
-          img: "",
-          title: "Mentor",
-          category: "Tech"
+          title: role === "student" ? "Student" : "Mentor",
+          careerInterest: "",
+          profession: role === "student" ? "Student" : "Professional",
+          img: ""
         });
-        localStorage.setItem("mentorId", newMentorRef.id);
-        console.log("New mentor profile created:", newMentorRef.id);
+        profileDoc = await getDoc(newRef);
+      }
+
+      localStorage.setItem(idKey, profileDoc.id);
+
+      const profileData = profileDoc.data();
+      const isIncomplete = !profileData?.bio || !profileData?.careerInterest;
+
+      if (isIncomplete) {
+        navigate("/profile");
+      } else {
+        navigate("/dashboard");
       }
     } catch (err) {
-      console.error("Error fetching or creating mentor profile:", err);
-      localStorage.removeItem("mentorId");
+      console.error("Error handling user profile:", err);
+      localStorage.removeItem(idKey);
+      setMessage("Something went wrong. Please try again.");
     }
   };
 
@@ -60,39 +80,29 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
     setMessage('');
 
     try {
-      let result;
-      if (isLogin) {
-        result = await signInWithEmailAndPassword(auth, email, password);
-      } else {
-        result = await createUserWithEmailAndPassword(auth, email, password);
-      }
+      const result = isLogin
+        ? await signInWithEmailAndPassword(auth, email, password)
+        : await createUserWithEmailAndPassword(auth, email, password);
 
-      await storeMentorIdFromFirestore(result.user);
-      onSignIn?.(result.user);
+      await storeUserProfile(result.user);
     } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        setMessage('This email is already registered. Try logging in instead.');
-      } else if (error.code === 'auth/invalid-email') {
-        setMessage('Please enter a valid email address.');
-      } else if (error.code === 'auth/weak-password') {
-        setMessage('Password should be at least 6 characters.');
-      } else if (error.code === 'auth/user-not-found') {
-        setMessage('No account found with this email. Try signing up.');
-      } else if (error.code === 'auth/wrong-password') {
-        setMessage('Incorrect password. Please try again.');
-      } else {
-        setMessage(error.message);
-      }
-      setTimeout(() => setMessage(''), 2000);
+      const errorMap = {
+        'auth/email-already-in-use': 'This email is already registered. Try logging in instead.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/weak-password': 'Password should be at least 6 characters.',
+        'auth/user-not-found': 'No account found with this email. Try signing up.',
+        'auth/wrong-password': 'Incorrect password. Please try again.'
+      };
+      setMessage(errorMap[error.code] || error.message);
+      setTimeout(() => setMessage(''), 3000);
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
-      await signOut(auth); // ✅ Clear any cached session
+      await signOut(auth);
       const result = await signInWithPopup(auth, provider);
-      await storeMentorIdFromFirestore(result.user);
-      onSignIn?.(result.user);
+      await storeUserProfile(result.user);
     } catch (error) {
       setMessage(error.message);
       setTimeout(() => setMessage(''), 5000);

@@ -5,7 +5,7 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
 import airplaneImage from "../assets/air.jpeg";
 
 function FindMentor() {
@@ -53,6 +53,27 @@ function FindMentor() {
   }, []);
 
   const categories = ["All", "Tech", "Finance"];
+
+  const handleSendRequest = async (mentorId) => {
+    const menteeId = localStorage.getItem("menteeId");
+    if (!menteeId || !mentorId) {
+      alert("Missing mentee or mentor ID.");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "requests"), {
+        menteeId,
+        mentorId,
+        requestedAt: Timestamp.now(),
+        status: "pending"
+      });
+      alert("Mentorship request sent!");
+    } catch (err) {
+      console.error("Error sending request:", err);
+      alert("Failed to send request. Please try again.");
+    }
+  };
 
   return (
     <>
@@ -153,15 +174,7 @@ function FindMentor() {
                 </div>
 
                 <button
-                  onClick={() => {
-                    const menteeId = localStorage.getItem("menteeId");
-                    if (!menteeId || !mentor.id) {
-                      console.warn("Missing menteeId or mentorId");
-                      return;
-                    }
-                    const conversationId = [mentor.id, menteeId].sort().join("_");
-                    navigate(`/chat/${conversationId}`);
-                  }}
+                  onClick={() => handleSendRequest(mentor.id)}
                   className="relative z-10 mt-6 w-full py-2 rounded-xl font-semibold bg-[#FDCB58] text-[#002F6C] hover:brightness-110"
                 >
                   Connect with your plug

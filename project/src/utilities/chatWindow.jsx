@@ -65,7 +65,7 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
       receiverId: currentUserId === mentorId ? menteeId : mentorId,
       text,
       timestamp: Timestamp.now(),
-      readBy: [currentUserId] // ✅ ensures sender marks it as read
+      readBy: [currentUserId]
     };
 
     try {
@@ -81,12 +81,20 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
         <span className="text-lg font-semibold">
           Chat with {currentUserId === mentorId ? "Mentee" : "Mentor"}
         </span>
-        <button
-          onClick={() => window.history.back()}
-          className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100 font-medium"
-        >
-          ← Back
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => window.history.back()}
+            className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100 font-medium"
+          >
+            ← Back
+          </button>
+          <button
+            onClick={() => window.location.href = "/mentor-dashboard"}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 font-medium"
+          >
+            ❌
+          </button>
+        </div>
       </div>
 
       <div

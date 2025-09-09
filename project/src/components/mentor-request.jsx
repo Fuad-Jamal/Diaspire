@@ -55,17 +55,14 @@ function MentorRequests() {
 
   const handleAccept = async (requestId, menteeId) => {
     try {
-      // Update request status
       await updateDoc(doc(db, "requests", requestId), { status: "accepted" });
 
-      // Create connection document
       await setDoc(doc(db, "connections", `${mentorId}_${menteeId}`), {
         mentorId,
         menteeId,
         acceptedAt: new Date()
       });
 
-      // Update local state
       setRequests(prev =>
         prev.map(req =>
           req.id === requestId ? { ...req, status: "accepted" } : req
@@ -99,10 +96,10 @@ function MentorRequests() {
           {requests.map(req => (
             <div key={req.id} className="bg-white shadow-md rounded-lg p-5 flex justify-between items-center">
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">{req.menteeName}</h2>
-                <p className="text-sm text-gray-600">{req.menteeEmail}</p>
+                <h2 className="text-lg font-semibold text-gray-800">{req.menteeName || "Unnamed Mentee"}</h2>
+                <p className="text-sm text-gray-600">{req.menteeEmail || "No email provided"}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Requested on: {req.timestamp?.seconds ? new Date(req.timestamp.seconds * 1000).toLocaleString() : "Unknown"}
+                  Requested on: {req.requestedAt?.toDate().toLocaleString() || "Unknown"}
                 </p>
 
                 {req.status === "accepted" && (
