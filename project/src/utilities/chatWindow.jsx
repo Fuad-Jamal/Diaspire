@@ -7,10 +7,13 @@ import {
   orderBy,
   onSnapshot,
   addDoc,
-  Timestamp
+  updateDoc,
+  doc,
+  Timestamp,
+  arrayUnion
 } from "firebase/firestore";
-import MessageBubble from "./utilities/messageBubble";
-import MessageInput from "./utilities/messageInput";
+import MessageBubble from "../utilities/messageBubble";
+import MessageInput from "../utilities/messageInput";
 
 function ChatWindow({ mentorId, menteeId, currentUserId }) {
   const [messages, setMessages] = useState([]);
@@ -28,18 +31,24 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
       orderBy("timestamp", "asc")
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      if (snapshot.empty) {
-        console.warn("No messages found for:", conversationId);
-      }
-
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
       const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setMessages(msgs);
       setLoading(false);
+
+      const unread = snapshot.docs.filter(
+        doc => !(doc.data().readBy || []).includes(currentUserId)
+      );
+
+      for (const msg of unread) {
+        await updateDoc(doc(db, "messages", msg.id), {
+          readBy: arrayUnion(currentUserId)
+        });
+      }
     });
 
     return () => unsubscribe();
-  }, [conversationId]);
+  }, [conversationId, currentUserId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -55,12 +64,12 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
       senderId: currentUserId,
       receiverId: currentUserId === mentorId ? menteeId : mentorId,
       text,
-      timestamp: Timestamp.now()
+      timestamp: Timestamp.now(),
+      readBy: [currentUserId] // ✅ ensures sender marks it as read
     };
 
     try {
       await addDoc(collection(db, "messages"), messageData);
-      console.log("Message sent:", messageData);
     } catch (err) {
       console.error("Error sending message:", err);
     }
@@ -68,8 +77,16 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
 
   return (
     <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="bg-blue-600 text-white px-6 py-4 text-lg font-semibold">
-        Chat with {currentUserId === mentorId ? "Mentee" : "Mentor"}
+      <div className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
+        <span className="text-lg font-semibold">
+          Chat with {currentUserId === mentorId ? "Mentee" : "Mentor"}
+        </span>
+        <button
+          onClick={() => window.history.back()}
+          className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-blue-100 font-medium"
+        >
+          ← Back
+        </button>
       </div>
 
       <div

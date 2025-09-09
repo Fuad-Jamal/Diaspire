@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, setDoc, doc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+
 
 const CreateMenteeProfileForm = () => {
   const [formData, setFormData] = useState({
@@ -60,10 +61,9 @@ const CreateMenteeProfileForm = () => {
     localStorage.setItem("menteeSkills", formData.skillsToLearn);
 
     try {
-      await addDoc(collection(db, "mentees"), {
-        userId: user.uid,
-        name: fullName,
-        email: formData.email,
+      await setDoc(doc(db, "mentees", user.uid), {
+  name: fullName,
+  email: formData.email,
         mentorshipGoals: formData.mentorshipGoals,
         skillsToLearn: formData.skillsToLearn,
         createdAt: Timestamp.now()
