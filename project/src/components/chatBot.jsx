@@ -39,8 +39,8 @@ import faqs  from '/src/data/faqs.json';
         setInput('')
     })
     return (
-        <div className="fixed bottom-16 right-4 z-50">{isOpen?
-        (<div className="flex flex-col h-screen bg-gray-900 text-white p-4">
+        <div className="fixed bottom-16 lg:right-4 right-2 z-50 ">{isOpen?
+        (<div className=" rounded-lg flex flex-col w-[70%] lg:w-[100%] lg:h-[550px] ml-[25%] mr-[30%] lg:ml-0 bg-gray-900 text-white p-4">
       {/* Chat header */}
       <header className="flex-shrink-0 mb-4">
         <h1 className="text-3xl font-bold text-center">FAQ Bot</h1>
@@ -59,7 +59,7 @@ import faqs  from '/src/data/faqs.json';
       </header>
       
          {/* Chat message container */}
-      <div className="flex-grow overflow-y-auto p-4 rounded-lg bg-gray-800 shadow-inner">
+      <div className="flex-grow overflow-y-auto lg:overflow-y-auto p-4 rounded-lg bg-gray-800 shadow-inner">
         <div className='block bg-gray-400 h-40 overflow-y-auto  whitespace-nowrap border border-gray-300 my-4'>
           <ul>{faqs.slice(1).map((value,index)=>{
             return <li key={index}>{index+1}{'.'}{value.question}</li>
