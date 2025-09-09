@@ -17,6 +17,11 @@ import MenteeWithMentors from './pages/menteesHomepage.jsx'
 import FindMentors from './pages/mentors.jsx'
 import MentorWithMentees from "./pages/mentorHomepage.jsx";
 import RequestMentorship from './pages/request-mentor.jsx'
+import EditProfile from './pages/mentor-editPage.jsx'
+import EditMenteeProfile from './pages/mentee-editPage.jsx'
+import MentorRequests from './components/mentor-request.jsx'
+import MenteeRequests from './components/mentee-request.jsx'
+import ChatWrapper from './utilities/chatWrapper.jsx';
 
 
 
@@ -40,6 +45,11 @@ function App() {
         <Route path="/dashboard" element={<MenteeWithMentors />} />
         <Route path="/mentor-dashboard" element={<MentorWithMentees />} />
         <Route path="/request-mentor" element={<RequestMentorship />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/edit-menteeprofile" element={<EditMenteeProfile />} />
+        <Route path="/mentor-requests" element={<MentorRequests />} />
+        <Route path="/mentee-requests" element={<MenteeRequests />} />
+        <Route path="/chat/:conversationId" element={<ChatWrapper />} />
       </Routes>
 
       <div className="fixed bottom-6 right-6 z-50">
