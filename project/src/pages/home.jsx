@@ -247,10 +247,12 @@ const [showRolePopup, setShowRolePopup] = useState(false);
         className={`bg-[#002F6C] mt-24 pb-16 animate-on-scroll ${animationClass('why-choose')}`}
       >
         {/* Section Header */}
+        
         <div className="text-center px-6">
           <h2 className="text-white text-3xl lg:text-4xl font-bold font-poppins pt-12 pb-4">
             Why Choose Diaspire?
           </h2>
+          
           <p className="text-lg font-inter text-white max-w-3xl mx-auto">
             Diaspire connects African youth with diaspora professionals through tech-driven mentorship, career guidance, and global insight—empowering the next generation of confident changemakers.
           </p>
