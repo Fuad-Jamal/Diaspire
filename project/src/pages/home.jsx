@@ -6,6 +6,7 @@ import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
 import GoogleSignIn from '../utilities/auth';
 
+
 const Home = () => {
   const [inView, setInView] = useState({});
 const [selectedRole, setSelectedRole] = useState(null);
@@ -13,6 +14,10 @@ const [selectedRole, setSelectedRole] = useState(null);
   const [scrollY, setScrollY] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
   const navigate = useNavigate();
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+const [showSignUpPopup, setShowSignUpPopup] = useState(false);
+const [authMode, setAuthMode] = useState("signup"); // force signup
+const [showRolePopup, setShowRolePopup] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -79,44 +84,129 @@ const [selectedRole, setSelectedRole] = useState(null);
       )}
 
       {/* Hero Section with Parallax */}
-      <div className="relative overflow-hidden w-full h-screen flex items-center justify-center text-center">
-        <div
-          className="absolute inset-0 bg-[url('./src/assets/home.png')] bg-cover bg-center transition-transform duration-500"
-          style={parallaxStyle}
-        ></div>
-        <div className="relative z-10 p-4 lg:p-0">
-          <div className="max-w-xl mx-auto">
-            <p className="lg:font-bold lg:text-3xl font-bold text-2xl animate-pulse">
-              Unlock Your Potential: Connect With Global Rwandan Expertise
-            </p>
-            <p className="mt-6 lg:mt-12 lg:text-lg text-black">
-              Bridging Rwandan Youth with Diaspora Professionals for Mentorship, Skill Development and Career Success
-            </p>
-            <div className="mt-8 flex flex-col items-center lg:flex-row lg:justify-center lg:mt-12">
-              <button
-  className="px-6 py-3 mb-4 lg:mb-0 lg:mr-8 rounded-lg bg-blue-500 text-white font-bold"
-  onClick={() => {
-    setSelectedRole('youth'); // remember user chose youth
-    setShowAuth(true); // show auth popup
-  }}
+     <section
+  className="relative w-full h-[90vh] overflow-hidden bg-gradient-to-r from-[#002F6C] to-[#FDCB58] flex items-center justify-between px-6 lg:px-24"
 >
-  Join As Youth
-</button>
+  {/* Text Content */}
+  <div className="relative z-20 max-w-xl text-white mx-auto ml-20 lg:text-left">
+    <h1 className="text-sm uppercase tracking-wide font-semibold mb-2">Unlock Your Potential</h1>
+    <h2 className="text-4xl lg:text-5xl font-bold font-poppins mb-4">
+      Connect With Global Rwandan Expertise
+    </h2>
+    <p className="text-lg font-inter mb-6 max-w-md mx-auto lg:mx-0 text-white/90">
+      Bridging Rwandan Youth with Diaspora Professionals for Mentorship, Skill Development and Career Success
+    </p>
 
-<button
-  className="px-6 py-3 rounded-lg bg-blue-500 text-white font-bold"
-  onClick={() => {
-    setSelectedRole('professional'); // remember user chose professional
-    setShowAuth(true); // show auth popup
-  }}
->
-  Join As Professional
-</button>
+    <div className="mt-8 flex flex-col lg:flex-row lg:justify-start gap-4 max-w-md mx-auto lg:mx-0">
+      <button
+        className="px-6 py-3 rounded-lg bg-[#FDCB58] text-[#002F6C] font-bold hover:brightness-110 transition-transform duration-300"
+        onClick={() => {
+          setSelectedRole("youth");
+          setShowAuth(true);
+        }}
+      >
+        Join As Youth
+      </button>
 
-            </div>
-          </div>
+      <button
+        className="px-6 py-3 rounded-lg bg-[#FDCB58] text-[#002F6C] font-bold hover:brightness-110 transition-transform duration-300"
+        onClick={() => {
+          setSelectedRole("professional");
+          setShowAuth(true);
+        }}
+      >
+        Join As Professional
+      </button>
+    </div>
+  </div>
+
+  {/* Background Image - no black overlay, use blend mode to show gradient behind */}
+  <div className="absolute bottom-0 right-0 w-full lg:w-1/2 h-full z-10 overflow-hidden">
+    <img
+      src="./src/assets/background2.jpg"
+      alt="Diaspire Hero"
+      className="object-cover w-full h-full opacity-70 mix-blend-screen relative z-10"
+      style={{ willChange: "transform" }}
+    />
+  </div>
+
+  {/* Popups (unchanged) */}
+  {showRolePopup && (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white p-6 rounded-2xl shadow-lg w-[350px]">
+        <h2 className="text-xl font-bold text-center mb-4 text-[#002F6C]">Select Your Role</h2>
+        <div className="flex flex-col gap-4">
+          <button
+            className="px-4 py-2 bg-[#FDCB58] text-[#002F6C] rounded-full font-bold hover:scale-105 transition-transform"
+            onClick={() => {
+              setSelectedRole("youth");
+              setAuthMode("signup");
+              setShowRolePopup(false);
+              setShowAuthPopup(true);
+            }}
+          >
+            Join as Youth
+          </button>
+          <button
+            className="px-4 py-2 bg-[#002F6C] text-white rounded-full font-semibold hover:bg-[#001a3d] transition"
+            onClick={() => {
+              setSelectedRole("professional");
+              setAuthMode("signup");
+              setShowRolePopup(false);
+              setShowAuthPopup(true);
+            }}
+          >
+            Join as Professional
+          </button>
         </div>
+        <button
+          className="mt-4 w-full bg-gray-200 py-2 rounded hover:bg-gray-300 transition"
+          onClick={() => setShowRolePopup(false)}
+        >
+          Cancel
+        </button>
       </div>
+    </div>
+  )}
+
+  {showSignUpPopup && (
+    <SignUpPopup
+      onClose={() => setShowSignUpPopup(false)}
+      onSelect={(role) => {
+        setSelectedRole(role);
+        setShowSignUpPopup(false);
+        setShowAuthPopup(true);
+      }}
+    />
+  )}
+
+  {showAuthPopup && (
+    <GoogleAuthPopup
+      mode={authMode}
+      onClose={() => setShowAuthPopup(false)}
+      onSignIn={handleSignIn}
+      onSignOut={handleSignOut}
+    />
+  )}
+
+  {/* Custom Animation */}
+  <style jsx>{`
+    @keyframes riseFade {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-riseFade {
+      animation: riseFade 1.2s ease-out forwards;
+    }
+  `}</style>
+</section>
+
 
       {/* Who We Are */}
       <div
