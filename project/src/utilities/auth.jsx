@@ -13,20 +13,54 @@ import {
   where,
   getDocs,
   doc,
-  setDoc
+  setDoc,
+  getDoc
 } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const isLogin = mode === "login";
 
-  const storeMentorIdFromFirestore = async (user) => {
-    const role = localStorage.getItem("userRole"); // ✅ Get role from localStorage
+  const handleRedirectAfterAuth = async (user) => {
+  const role = localStorage.getItem("userRole");
 
-    if (role !== "professional") return; // Only mentors need mentorId
+  if (!role || !user?.email) {
+    setMessage("Missing role or user email. Please try again.");
+    return;
+  }
+
+  const collectionName = role === "professional" ? "mentors" : "mentees";
+  const q = query(collection(db, collectionName), where("email", "==", user.email));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const docId = snapshot.docs[0].id;
+
+    if (role === "professional") {
+      localStorage.setItem("mentorId", docId);
+      navigate("/mentor-dashboard");
+    } else {
+      localStorage.setItem("menteeId", docId);
+      navigate("/dashboard");
+    }
+  } else {
+    if (role === "professional") {
+      navigate("/profile");
+    } else {
+      navigate("/mprofile");
+    }
+  }
+};
+
+
+  const storeMentorIdFromFirestore = async (user) => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "professional") return;
 
     try {
       const q = query(collection(db, "mentors"), where("email", "==", user.email));
@@ -36,18 +70,17 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
         const mentorDoc = snapshot.docs[0];
         localStorage.setItem("mentorId", mentorDoc.id);
       } else {
-        const newMentorRef = doc(collection(db, "mentors"));
+        const newMentorRef = doc(db, "mentors", user.uid);
         await setDoc(newMentorRef, {
           name: user.displayName || "Unnamed Mentor",
           email: user.email,
           bio: "",
-          linkedin: "",
+          linkedinUrl: "",
           img: "",
           title: "Mentor",
           category: "Tech"
         });
-        localStorage.setItem("mentorId", newMentorRef.id);
-        console.log("New mentor profile created:", newMentorRef.id);
+        localStorage.setItem("mentorId", user.uid);
       }
     } catch (err) {
       console.error("Error fetching or creating mentor profile:", err);
@@ -69,6 +102,7 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
 
       await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
+      await handleRedirectAfterAuth(result.user);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         setMessage('This email is already registered. Try logging in instead.');
@@ -89,10 +123,11 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signOut(auth); // ✅ Clear any cached session
+      await signOut(auth);
       const result = await signInWithPopup(auth, provider);
       await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
+      await handleRedirectAfterAuth(result.user);
     } catch (error) {
       setMessage(error.message);
       setTimeout(() => setMessage(''), 5000);

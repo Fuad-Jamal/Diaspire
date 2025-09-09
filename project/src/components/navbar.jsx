@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleAuthPopup from '../utilities/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const Navbar = ({ onNavigate, currentPage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,20 +13,37 @@ const Navbar = ({ onNavigate, currentPage }) => {
 
   const navigate = useNavigate();
 
-  const handleSignIn = (user) => {
-    console.log("User signed in:", user);
-    setShowAuthPopup(false);
+  const handleSignIn = async (user) => {
+  console.log("User signed in:", user);
+  setShowAuthPopup(false);
 
-    const role = localStorage.getItem("userRole");
+  const role = localStorage.getItem("userRole");
+  if (!role || !user?.email) {
+    navigate('/mentees');
+    return;
+  }
 
-    if (role === 'youth') {
-      navigate('/mprofile'); // mentee
-    } else if (role === 'professional') {
-      navigate('/mentor-dashboard'); // mentor
+  const collectionName = role === "professional" ? "mentors" : "mentees";
+  const q = query(collection(db, collectionName), where("email", "==", user.email));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const docId = snapshot.docs[0].id;
+    if (role === "professional") {
+      localStorage.setItem("mentorId", docId);
+      navigate("/mentor-dashboard");
     } else {
-      navigate('/mentees'); // fallback
+      localStorage.setItem("menteeId", docId);
+      navigate("/dashboard");
     }
-  };
+  } else {
+    if (role === "professional") {
+      navigate("/profile");
+    } else {
+      navigate("/mprofile");
+    }
+  }
+}
 
   const handleSignOut = () => {
     navigate('/');
@@ -47,7 +66,6 @@ const Navbar = ({ onNavigate, currentPage }) => {
           </div>
 
           <div className="hidden md:flex items-center space-x-2">
-            {/* LOGIN button */}
             <button
               className="px-4 py-2 text-neutral-600 font-medium rounded-lg hover:bg-neutral-100"
               onClick={() => {
@@ -60,7 +78,6 @@ const Navbar = ({ onNavigate, currentPage }) => {
               Login
             </button>
 
-            {/* SIGNUP button */}
             <button
               className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
               onClick={() => setShowRolePopup(true)}
@@ -71,7 +88,6 @@ const Navbar = ({ onNavigate, currentPage }) => {
         </nav>
       </header>
 
-      {/* Role selector popup for signup */}
       {showRolePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[350px]">
@@ -112,7 +128,6 @@ const Navbar = ({ onNavigate, currentPage }) => {
         </div>
       )}
 
-      {/* Auth popup */}
       {showAuthPopup && (
         <GoogleAuthPopup
           mode={authMode}

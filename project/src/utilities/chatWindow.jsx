@@ -9,8 +9,8 @@ import {
   addDoc,
   Timestamp
 } from "firebase/firestore";
-import MessageBubble from "./utilities/messageBubble";
-import MessageInput from "./utilities/messageInput";
+import MessageBubble from "../utilities/messageBubble";
+import MessageInput from "../utilities/messageInput";
 
 function ChatWindow({ mentorId, menteeId, currentUserId }) {
   const [messages, setMessages] = useState([]);

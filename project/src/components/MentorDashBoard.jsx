@@ -12,49 +12,33 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const role = localStorage.getItem("userRole");
     const mentorId = localStorage.getItem("mentorId");
-
+    const role = localStorage.getItem("userRole");
     if (role !== "professional" || !mentorId) return;
 
-    const fetchMentorProfile = async () => {
-      try {
-        const docRef = doc(db, "mentors", mentorId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setMentorName(data.name || "");
-          setMentorBio(data.bio || "");
-          setMentorLinkedIn(data.linkedin || "");
-          const parts = data.name?.split(" ") || [];
-          const initials = parts[0]?.[0] + (parts[1]?.[0] || '');
-          setMentorInitials(initials.toUpperCase());
-        }
-      } catch (err) {
-        console.error("Error fetching mentor profile:", err);
+    const fetchData = async () => {
+      const docRef = doc(db, "mentors", mentorId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setMentorName(data.name || "");
+        setMentorBio(data.bio || "");
+        setMentorLinkedIn(data.linkedinUrl || "");
+        const parts = data.name?.split(" ") || [];
+        const initials = parts[0]?.[0] + (parts[1]?.[0] || '');
+        setMentorInitials(initials.toUpperCase());
       }
+
+      const q = query(
+        collection(db, "requests"),
+        where("mentorId", "==", mentorId),
+        where("status", "==", "pending")
+      );
+      const snapshot = await getDocs(q);
+      setRequestCount(snapshot.size);
     };
 
-    fetchMentorProfile();
-  }, []);
-
-  useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    const mentorId = localStorage.getItem("mentorId");
-
-    if (role !== "professional" || !mentorId) return;
-
-    const fetchRequestCount = async () => {
-      try {
-        const q = query(collection(db, "requests"), where("mentorId", "==", mentorId));
-        const snapshot = await getDocs(q);
-        setRequestCount(snapshot.size);
-      } catch (err) {
-        console.error("Error fetching request count:", err);
-      }
-    };
-
-    fetchRequestCount();
+    fetchData();
   }, []);
 
   const navItems = [
@@ -65,7 +49,7 @@ const Dashboard = () => {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           strokeWidth={2} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round"
-            d="M2.25 12l8.954-8.955c.422-.422 1.1-.422 1.522 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125h9.75a1.125 1.125 0 001.125-1.125V9.75m-7.5-3v5.625m-3-1.5h.007v.008H7.5v-.008z" />
+            d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6" />
         </svg>
       )
     },
@@ -76,7 +60,7 @@ const Dashboard = () => {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           strokeWidth={2} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round"
-            d="M6.75 3v-2.25c0-.414.336-.75.75-.75h.75a.75.75 0 01.75.75v2.25H16.5m3.75 0V3h-4.5m-9 9h6m-9 9h12a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v14.25c0 .621.504 1.125 1.125 1.125h12.75A2.25 2.25 0 0021 21v-3" />
+            d="M8 7V3m8 4V3m-9 10h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       )
     },
@@ -87,7 +71,7 @@ const Dashboard = () => {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           strokeWidth={2} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round"
-            d="M12 21.75c-1.573 0-3.13-.306-4.556-.917M12 21.75a1.5 1.5 0 002.25-1.5v-7.5a1.5 1.5 0 00-1.5-1.5h-3a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 002.25 1.5m-6.75-2.25c1.426-.611 2.983-.917 4.556-.917H12m0 1.5v-7.5a1.5 1.5 0 011.5-1.5h3a1.5 1.5 0 011.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5h-3m3.75-1.5c-1.426-.611-2.983-.917-4.556-.917M12 21.75a1.5 1.5 0 00-1.5-1.5v-7.5a1.5 1.5 0 01-1.5-1.5h-3a1.5 1.5 0 01-1.5 1.5v7.5a1.5 1.5 0 01-1.5 1.5H5.25m-1.5-1.5v-7.5a1.5 1.5 0 011.5-1.5h3a1.5 1.5 0 011.5 1.5v7.5" />
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
         </svg>
       )
     },
@@ -133,7 +117,8 @@ const Dashboard = () => {
           )}
           <button
             onClick={() => navigate('/edit-profile')}
-            className="mt-3 px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"          >
+            className="mt-3 px-4 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"
+          >
             Edit Profile
           </button>
         </div>
@@ -146,12 +131,8 @@ const Dashboard = () => {
             onClick={() => navigate(item.route)}
             className="flex items-center p-3 rounded-lg cursor-pointer transition-colors duration-200 text-gray-700 hover:bg-gray-100"
           >
-            <span className="w-6 h-6 mr-3 text-gray-500">
-              {item.icon}
-            </span>
-            <span className="font-medium">
-              {item.name}
-            </span>
+            <span className="mr-3 text-gray-500">{item.icon}</span>
+            <span className="font-medium">{item.name}</span>
           </div>
         ))}
       </nav>

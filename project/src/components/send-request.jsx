@@ -1,4 +1,4 @@
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 const sendMentorRequest = async (mentorId) => {
@@ -12,6 +12,19 @@ const sendMentorRequest = async (mentorId) => {
   }
 
   try {
+    // Check if a request already exists
+    const existingQuery = query(
+      collection(db, "requests"),
+      where("mentorId", "==", mentorId),
+      where("menteeId", "==", menteeId)
+    );
+    const existingSnapshot = await getDocs(existingQuery);
+
+    if (!existingSnapshot.empty) {
+      alert("You've already sent a request to this mentor.");
+      return;
+    }
+
     const requestData = {
       mentorId: String(mentorId),
       menteeId: String(menteeId),
@@ -23,10 +36,10 @@ const sendMentorRequest = async (mentorId) => {
 
     await addDoc(collection(db, "requests"), requestData);
     console.log("Request sent:", requestData);
-    alert("Request sent successfully!");
+    alert("✅ Connection request sent!");
   } catch (err) {
     console.error("Error sending request:", err);
-    alert("Failed to send request.");
+    alert("❌ Failed to send request. Please try again.");
   }
 };
 
