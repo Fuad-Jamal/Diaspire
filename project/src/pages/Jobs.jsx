@@ -19,12 +19,12 @@ export default function Jobs() {
         return (
             <div 
                 key={index} 
-                className="bg-white p-6 rounded-xl w-[95%] md:w-[80%] lg:w-[70%] mx-auto my-4 shadow-lg transform transition-all duration-300 ease-in-out hover:scale-[1.01] hover:shadow-xl animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className=" p-6 rounded-xl w-[95%] md:w-[80%] lg:w-[70%] mx-auto my-4 shadow-lg transform transition-all duration-300 ease-in-out hover:scale-[1.01] hover:shadow-xl animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms`,background:'linear-gradient(to right, #002F6C, #FDCB58)' }} 
             >
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
                     <div className="flex-1">
-                        <h1 className="font-extrabold text-2xl text-gray-900">{job.jobTitle}</h1>
+                        <h1 className="font-extrabold text-2xl text-white">{job.jobTitle}</h1>
                         <p className="mt-2 text-gray-700"><span className="text-blue-600 font-bold">Company/Org: </span>{job.companyName}</p>
                         <p className="text-gray-700"><span className="text-blue-600 font-bold">Work Mode: </span>{job.workMode}</p>
                         <p className="font-bold text-gray-500 mt-2">Deadline: {job.deadline}</p>
@@ -62,7 +62,7 @@ export default function Jobs() {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className="bg-[url(/src/assets/jobsBG.png)] bg-cover bg-center bg-no-repeat min-h-screen">
+        <div className=" bg-blue-800  bg-cover bg-center bg-no-repeat min-h-screen">
             <Navbar/>
             
             <style jsx>{`
