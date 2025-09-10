@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Logoutnavbar from "../components/logoutnavbar";
+import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ProgressCard from "../components/progressSection";

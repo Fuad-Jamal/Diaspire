@@ -6,7 +6,6 @@ import {
   where,
   getDocs,
   doc,
-  setDoc,
   updateDoc,
   deleteDoc,
   setDoc,
@@ -23,10 +22,6 @@ function MentorRequests() {
 
   const mentorId = localStorage.getItem("mentorId");
   const role = localStorage.getItem("userRole");
-
-  useEffect(() => {
-    fetchRequests();
-  }, []);
 
   const fetchRequests = async (paginate = false) => {
     if (role !== "professional" || !mentorId) return;
@@ -84,8 +79,8 @@ await setDoc(doc(db, "connections", connectionId), {
 
   const handleDecline = async (id) => {
     try {
-      await deleteDoc(doc(db, "requests", requestId));
-      setRequests(prev => prev.filter(req => req.id !== requestId));
+      await deleteDoc(doc(db, "requests", id));
+      setRequests(prev => prev.filter(req => req.id !== id));
     } catch (err) {
       console.error("Error declining request:", err);
     }
@@ -112,12 +107,11 @@ await setDoc(doc(db, "connections", connectionId), {
           {requests.map(req => (
             <div key={req.id} className="bg-white shadow-md rounded-lg p-5 flex justify-between items-center">
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">{req.menteeName || "Unnamed Mentee"}</h2>
-                <p className="text-sm text-gray-600">{req.menteeEmail || "No email provided"}</p>
+                <h2 className="text-lg font-semibold text-gray-800">{req.menteeName}</h2>
+                <p className="text-sm text-gray-600">{req.menteeEmail}</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Requested on: {req.requestedAt?.toDate().toLocaleString() || "Unknown"}
+                  Requested on: {req.timestamp?.seconds ? new Date(req.timestamp.seconds * 1000).toLocaleString() : "Unknown"}
                 </p>
-
                 {req.status === "accepted" && (
                   <div className="flex space-x-2">
                     <p className="text-green-600 text-sm mt-2 font-medium">Accepted ✅</p>
@@ -133,7 +127,6 @@ await setDoc(doc(db, "connections", connectionId), {
                   </div>
                 )}
               </div>
-
               {req.status !== "accepted" && (
                 <div className="flex space-x-2">
                   <button

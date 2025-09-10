@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Logoutnavbar from "../components/logoutnavbar";
+import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ImpactChart from "../components/impactChart";
@@ -11,15 +11,12 @@ import {
   where,
   getDocs,
   doc,
-  getDoc,
-  addDoc,
-  setDoc
+  getDoc
 } from "firebase/firestore";
 
 export default function MentorWithMentees() {
   const [mentees, setMentees] = useState([]);
   const [mentors, setMentors] = useState([]);
-  const [requests, setRequests] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [selectedMentor, setSelectedMentor] = useState(null);
   const [mentorName, setMentorName] = useState("");

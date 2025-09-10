@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { auth, provider } from '../firebase';
 import {
   signInWithPopup,
@@ -19,7 +18,7 @@ import {
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
-function GoogleAuthPopup({ mode = "signup", onClose }) {
+function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -64,12 +63,12 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
     if (role !== "professional") return;
 
     try {
-      const q = query(collection(db, collectionName), where("email", "==", user.email));
+      const q = query(collection(db, "mentors"), where("email", "==", user.email));
       const snapshot = await getDocs(q);
 
-      let profileDoc;
       if (!snapshot.empty) {
-        profileDoc = snapshot.docs[0];
+        const mentorDoc = snapshot.docs[0];
+        localStorage.setItem("mentorId", mentorDoc.id);
       } else {
         const newMentorRef = doc(db, "mentors", user.uid);
         await setDoc(newMentorRef, {
@@ -84,9 +83,8 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
         localStorage.setItem("mentorId", user.uid);
       }
     } catch (err) {
-      console.error("Error handling user profile:", err);
-      localStorage.removeItem(idKey);
-      setMessage("Something went wrong. Please try again.");
+      console.error("Error fetching or creating mentor profile:", err);
+      localStorage.removeItem("mentorId");
     }
   };
 
@@ -95,23 +93,31 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
     setMessage('');
 
     try {
-      const result = isLogin
-        ? await signInWithEmailAndPassword(auth, email, password)
-        : await createUserWithEmailAndPassword(auth, email, password);
+      let result;
+      if (isLogin) {
+        result = await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        result = await createUserWithEmailAndPassword(auth, email, password);
+      }
 
       await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
       await handleRedirectAfterAuth(result.user);
     } catch (error) {
-      const errorMap = {
-        'auth/email-already-in-use': 'This email is already registered. Try logging in instead.',
-        'auth/invalid-email': 'Please enter a valid email address.',
-        'auth/weak-password': 'Password should be at least 6 characters.',
-        'auth/user-not-found': 'No account found with this email. Try signing up.',
-        'auth/wrong-password': 'Incorrect password. Please try again.'
-      };
-      setMessage(errorMap[error.code] || error.message);
-      setTimeout(() => setMessage(''), 3000);
+      if (error.code === 'auth/email-already-in-use') {
+        setMessage('This email is already registered. Try logging in instead.');
+      } else if (error.code === 'auth/invalid-email') {
+        setMessage('Please enter a valid email address.');
+      } else if (error.code === 'auth/weak-password') {
+        setMessage('Password should be at least 6 characters.');
+      } else if (error.code === 'auth/user-not-found') {
+        setMessage('No account found with this email. Try signing up.');
+      } else if (error.code === 'auth/wrong-password') {
+        setMessage('Incorrect password. Please try again.');
+      } else {
+        setMessage(error.message);
+      }
+      setTimeout(() => setMessage(''), 2000);
     }
   };
 
