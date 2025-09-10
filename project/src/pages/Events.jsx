@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 
@@ -73,7 +73,7 @@ export default function Events() {
 
   return (
     <div className="bg-[url(/src/assets/eventsBG.svg)] bg-no-repeat bg-cover">
-      <Navbar/>
+      <Logoutnavbar/>
       {/* <PopUp/> */}
     
       {currentEvents}

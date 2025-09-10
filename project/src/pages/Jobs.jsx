@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import ReactPaginate from "react-paginate";
 import Footer from "../components/footer";
 import AddJobForm from "../data/job-form";
@@ -63,7 +63,7 @@ export default function Jobs() {
 
     return (
         <div className=" bg-blue-800  bg-cover bg-center bg-no-repeat min-h-screen">
-            <Navbar/>
+            <Logoutnavbar/>
             
             <style jsx>{`
                 @keyframes fadeIn {

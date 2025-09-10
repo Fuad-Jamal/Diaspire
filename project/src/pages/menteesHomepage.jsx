@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ProgressCard from "../components/progressSection";
@@ -52,7 +52,7 @@ export default function MenteeWithMentors() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
+      <Logoutnavbar />
     {/* Parent division */}
     <div className="bg-gray-100 m-0 flex justify-center pr-2">
     {/* Dashboard import */}

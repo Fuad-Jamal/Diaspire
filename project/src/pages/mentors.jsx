@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Search, Linkedin, Github, Instagram, Twitter } from "lucide-react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
@@ -56,7 +56,7 @@ function FindMentor() {
 
   return (
     <>
-    <Navbar/>
+    <Logoutnavbar/>
     <div
       className="min-h-screen text-white"
       style={{

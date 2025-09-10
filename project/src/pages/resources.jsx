@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 
 const allResources = [
@@ -146,7 +146,7 @@ function Resources() {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Navbar />
+      <Logoutnavbar />
       <div className="py-12 px-4 md:px-8 lg:px-16">
         <h1 className="text-3xl lg:text-4xl font-bold text-center text-gray-800">Resource Library</h1>
         <p className="text-center text-lg md:text-xl text-gray-600 mt-2">Curated content to help you succeed.</p>
