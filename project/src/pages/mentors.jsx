@@ -20,8 +20,9 @@ function FindMentor() {
   const mentorsPerPage = 9;
 
   const filtered = mentors.filter((m) => {
-    const name = m.name || "";
-    const matchesSearch = name.toLowerCase().includes(search.toLowerCase());
+    const name = m.name || '';
+const matchesSearch = name.toLowerCase().includes(search.toLowerCase());
+
     const matchesCategory = category === "All" || m.category === category;
     return matchesSearch && matchesCategory;
   });

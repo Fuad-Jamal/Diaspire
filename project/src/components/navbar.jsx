@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import GoogleAuthPopup from '../utilities/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const Navbar = ({ onNavigate, currentPage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

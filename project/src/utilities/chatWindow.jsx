@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
 import {
   collection,
@@ -16,6 +17,7 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
+  const navigate = useNavigate();
 
   const conversationId = [mentorId, menteeId].sort().join("_");
 
@@ -29,10 +31,6 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      if (snapshot.empty) {
-        console.warn("No messages found for:", conversationId);
-      }
-
       const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setMessages(msgs);
       setLoading(false);
@@ -60,40 +58,53 @@ function ChatWindow({ mentorId, menteeId, currentUserId }) {
 
     try {
       await addDoc(collection(db, "messages"), messageData);
-      console.log("Message sent:", messageData);
     } catch (err) {
       console.error("Error sending message:", err);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="bg-blue-600 text-white px-6 py-4 text-lg font-semibold">
-        Chat with {currentUserId === mentorId ? "Mentee" : "Mentor"}
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 text-black flex flex-col items-center justify-center px-4 py-6">
+      <div className="w-full max-w-3xl bg-gray-950 rounded-2xl shadow-2xl border border-indigo-700 overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 bg-indigo-800 border-b border-indigo-600">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-white hover:text-indigo-300 transition duration-200"
+          >
+            ← Back
+          </button>
+          <h2 className="text-xl font-bold tracking-wide">
+            Chat with {currentUserId === mentorId ? "Mentee" : "Mentor"}
+          </h2>
+          <div className="w-6" /> {/* Spacer to balance layout */}
+        </div>
 
-      <div
-        ref={scrollRef}
-        className="h-[400px] overflow-y-auto px-6 py-4 space-y-4 bg-gray-50"
-      >
-        {loading ? (
-          <p className="text-center text-gray-500">Loading messages...</p>
-        ) : messages.length === 0 ? (
-          <p className="text-center text-gray-500">No messages yet.</p>
-        ) : (
-          messages.map(msg => (
-            <MessageBubble
-              key={msg.id}
-              text={msg.text}
-              isSender={msg.senderId === currentUserId}
-              timestamp={msg.timestamp}
-            />
-          ))
-        )}
-      </div>
+        {/* Messages */}
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-gradient-to-b from-gray-900 to-gray-800"
+        >
+          {loading ? (
+            <p className="text-center text-indigo-300 animate-pulse">Loading messages...</p>
+          ) : messages.length === 0 ? (
+            <p className="text-center text-indigo-300">No messages yet. Start the conversation!</p>
+          ) : (
+            messages.map(msg => (
+              <MessageBubble
+                key={msg.id}
+                text={msg.text}
+                isSender={msg.senderId === currentUserId}
+                timestamp={msg.timestamp}
+              />
+            ))
+          )}
+        </div>
 
-      <div className="border-t px-6 py-4 bg-white">
-        <MessageInput onSend={sendMessage} />
+        {/* Input */}
+        <div className="border-t border-indigo-700 px-6 py-4 bg-gray-950">
+          <MessageInput onSend={sendMessage} />
+        </div>
       </div>
     </div>
   );

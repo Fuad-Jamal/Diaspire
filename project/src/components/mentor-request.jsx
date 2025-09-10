@@ -12,11 +12,13 @@ import {
   limit,
   startAfter
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function MentorRequests() {
   const [requests, setRequests] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const mentorId = localStorage.getItem("mentorId");
   const role = localStorage.getItem("userRole");
@@ -53,16 +55,19 @@ function MentorRequests() {
     fetchRequests();
   }, []);
 
-  const handleAccept = async (id, menteeId) => {
+  const handleAccept = async (id, menteeId, menteeEmail) => {
     try {
       await updateDoc(doc(db, "requests", id), { status: "accepted" });
 
-      const connectionId = [mentorId, menteeId].sort().join("_");
-      await setDoc(doc(db, "connections", connectionId), {
-        mentorId,
-        menteeId,
-        createdAt: new Date()
-      });
+const connectionId = [mentorId, menteeId].sort().join("_");
+await setDoc(doc(db, "connections", connectionId), {
+  mentorId,
+  menteeId,
+  menteeEmail,
+  createdAt: new Date()
+});
+
+
 
       setRequests(prev =>
         prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
@@ -83,6 +88,13 @@ function MentorRequests() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+    <button
+  onClick={() => navigate(-1)}
+  className="text-sm px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+>
+  ← Go Back
+</button>
+
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-800">Incoming Mentorship Requests</h1>
         <p className="text-gray-500 mt-2">Review and respond to mentees who want to connect with you.</p>
@@ -118,7 +130,7 @@ function MentorRequests() {
               {req.status !== "accepted" && (
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => handleAccept(req.id, req.menteeId)}
+                    onClick={() => handleAccept(req.id, req.menteeId, req.menteeEmail)}
                     className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition"
                   >
                     Accept

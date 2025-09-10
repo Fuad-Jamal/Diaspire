@@ -18,47 +18,76 @@ export default function MentorWithMentees() {
   const [mentees, setMentees] = useState([]);
   const [mentors, setMentors] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
-  const [selectedMentor, setSelectedMentor] = useState(null); // for popup
+  const [selectedMentor, setSelectedMentor] = useState(null);
+  const [mentorName, setMentorName] = useState("");
 
   const mentorsPerPage = 3;
   const mentorId = localStorage.getItem("mentorId");
 
   useEffect(() => {
     const fetchData = async () => {
-      let mentorsRes = await fetch("/src/data/registeredMentors.json");
-      let mentorsData = await mentorsRes.json();
-      setMentors(mentorsData);
+      try {
+        const mentorsRes = await fetch("/src/data/registeredMentors.json");
+        const mentorsData = await mentorsRes.json();
+        setMentors(mentorsData);
+      } catch (err) {
+        console.error("Error loading mentors data:", err);
+      }
+    };
+
+    const fetchMentorName = async () => {
+      if (!mentorId) return;
+
+      try {
+        const docRef = doc(db, "mentors", mentorId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const fullName = docSnap.data().fullName || docSnap.data().name || "Mentor";
+          const firstName = fullName.split(" ")[0];
+          setMentorName(firstName);
+        }
+      } catch (err) {
+        console.error("Error fetching mentor name:", err);
+      }
     };
 
     const fetchAcceptedMentees = async () => {
       if (!mentorId) return;
 
-      const q = query(
-        collection(db, "connections"),
-        where("mentorId", "==", mentorId)
-      );
+      try {
+        const q = query(collection(db, "connections"), where("mentorId", "==", mentorId));
+        const snapshot = await getDocs(q);
 
-      const snapshot = await getDocs(q);
-      const menteeIds = snapshot.docs.map(doc => doc.data().menteeId);
+        const menteeProfiles = await Promise.all(
+          snapshot.docs.map(async (connectionDoc) => {
+  const menteeId = connectionDoc.data().menteeId;
+  const menteeRef = doc(db, "mentees", menteeId);
+            const menteeSnap = await getDoc(menteeRef);
 
-      const menteeProfiles = await Promise.all(
-        menteeIds.map(async (id) => {
-          const menteeRef = doc(db, "mentees", id);
-          const menteeSnap = await getDoc(menteeRef);
-          return menteeSnap.exists() ? { id, ...menteeSnap.data() } : null;
-        })
-      );
+            if (menteeSnap.exists()) {
+              return { id: menteeId, ...menteeSnap.data() };
+            } else {
+              console.warn(`No mentee found with ID: ${menteeId}`);
+              return null;
+            }
+          })
+        );
 
-      setMentees(menteeProfiles.filter(Boolean));
+        setMentees(menteeProfiles.filter(Boolean));
+        console.log("Fetched mentees:", menteeProfiles);
+      } catch (err) {
+        console.error("Error fetching accepted mentees:", err);
+      }
     };
 
     fetchData();
+    fetchMentorName();
     fetchAcceptedMentees();
   }, []);
 
   const firstMentee = mentees[0];
 
-  // pagination calculations
   const currentPage = pageNumber * mentorsPerPage;
   const currentMentors = mentors.slice(currentPage, currentPage + mentorsPerPage);
   const mentorsCount = Math.ceil(mentors.length / mentorsPerPage);
@@ -67,6 +96,7 @@ export default function MentorWithMentees() {
     setPageNumber(selected);
   };
 
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -74,7 +104,7 @@ export default function MentorWithMentees() {
         <Dashboard firstMentee={firstMentee} />
         <div className="bg-white px-4 w-[50%] mx-auto py-3">
           <h1 className="text-3xl font-medium">
-            Welcome {localStorage.getItem("userFirstName") || "Mentor"} 🎉
+            Welcome {mentorName || "Mentor"} 🎉
           </h1>
 
           {/* My mentees section */}
@@ -92,8 +122,15 @@ export default function MentorWithMentees() {
                 >
                   <span>
                     <h3 className="font-bold text-lg text-gray-800">
-                      {mentee.fullName}
-                    </h3>
+  {mentee.name || "Unnamed Mentee"}
+</h3>
+<p className="text-gray-600">
+  Mentorship Goals: {mentee.mentorshipGoals || "Not provided"}
+</p>
+<p className="text-blue-600 font-medium">
+  Skills to Learn: {mentee.skillsToLearn || "Not specified"}
+</p>
+
                     <p className="text-gray-600">{mentee.profession}</p>
                     <p className="text-blue-600 font-medium">
                       Career: {mentee.careerInterest}
