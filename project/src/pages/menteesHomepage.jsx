@@ -40,7 +40,12 @@ export default function MenteeWithMentors() {
     const fetchAcceptedMentor = async () => {
   if (!menteeId) return;
   try {
-    const q = query(collection(db, "connections"), where("menteeId", "==", menteeId));
+    const q = query(
+  collection(db, "connections"),
+  where("menteeId", "==", menteeId),
+  where("status", "==", "accepted") 
+);
+
     const snapshot = await getDocs(q);
     if (!snapshot.empty) {
       const mentorId = snapshot.docs[0].data().mentorId;

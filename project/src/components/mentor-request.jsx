@@ -64,8 +64,10 @@ await setDoc(doc(db, "connections", connectionId), {
   mentorId,
   menteeId,
   menteeEmail,
+  status: "pending",
   createdAt: new Date()
 });
+
 
 
 

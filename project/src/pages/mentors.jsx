@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Search, Linkedin, Github, Instagram, Twitter } from "lucide-react";
 import Logoutnavbar from "../components/logoutnavbar";
@@ -8,13 +8,17 @@ import { db, auth } from "../firebase";
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import mentorsData from "../data/mentors.json";
 import sendMentorRequest from "../components/send-request.jsx";
+import Navbar from "../components/navbar.jsx";
 
 function FindMentor() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(0);
+const [mentors, setMentors] = useState([]);
+const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const mentorsPerPage = 3;
+  const mentorsPerPage = 9;
 
   const filtered = mentors.filter((m) => {
     const name = m.name || '';

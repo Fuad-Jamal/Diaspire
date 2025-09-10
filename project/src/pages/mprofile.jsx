@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-
 
 const CreateMenteeProfileForm = () => {
   const [formData, setFormData] = useState({
@@ -18,32 +16,43 @@ const CreateMenteeProfileForm = () => {
   });
 
   const [status, setStatus] = useState({ message: '', type: '' });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setStatus({ message: '', type: '' });
 
-    if (formData.password !== formData.confirmPassword) {
-      setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
+    const {
+      firstName, lastName, email, password, confirmPassword,
+      mentorshipGoals, skillsToLearn
+    } = formData;
+
+    if (password !== confirmPassword) {
+      setStatus({ message: 'Passwords do not match.', type: 'error' });
+      setLoading(false);
       return;
     }
 
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword || !formData.mentorshipGoals) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !mentorshipGoals) {
       setStatus({ message: 'All fields are required.', type: 'error' });
+      setLoading(false);
       return;
     }
 
     const capitalize = str =>
-      str.trim().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+      str.trim().split(' ').map(word =>
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      ).join(' ');
 
-    const formattedFirstName = capitalize(formData.firstName);
-    const formattedLastName = capitalize(formData.lastName);
+    const formattedFirstName = capitalize(firstName);
+    const formattedLastName = capitalize(lastName);
     const fullName = `${formattedFirstName} ${formattedLastName}`;
 
     const auth = getAuth();
@@ -51,48 +60,52 @@ const CreateMenteeProfileForm = () => {
 
     if (!user) {
       setStatus({ message: 'You must be signed in to create a profile.', type: 'error' });
+      setLoading(false);
       return;
     }
 
     localStorage.setItem("menteeId", user.uid);
     localStorage.setItem("menteeFullName", fullName);
     localStorage.setItem("menteeFirstName", formattedFirstName);
-    localStorage.setItem("menteeEmail", formData.email);
-    localStorage.setItem("menteeGoals", formData.mentorshipGoals);
-    localStorage.setItem("menteeSkills", formData.skillsToLearn);
+    localStorage.setItem("menteeEmail", email);
+    localStorage.setItem("menteeGoals", mentorshipGoals);
+    localStorage.setItem("menteeSkills", skillsToLearn);
 
     try {
-      const existingProfileRef = doc(db, "mentees", user.uid);
-const existingProfileSnap = await getDoc(existingProfileRef);
+      const profileRef = doc(db, "mentees", user.uid);
+      const profileSnap = await getDoc(profileRef);
 
-if (existingProfileSnap.exists()) {
-  setStatus({ message: 'Profile already exists. Redirecting to dashboard...', type: 'success' });
-  setTimeout(() => {
-    navigate("/dashboard");
-  }, 2000);
-  return;
-}
-      await setDoc(doc(db, "mentees", user.uid), {
-  userId: user.uid,
-  name: fullName,
-  email: formData.email,
-  mentorshipGoals: formData.mentorshipGoals,
-  skillsToLearn: formData.skillsToLearn,
-  createdAt: Timestamp.now()
-});
-const mentorId = localStorage.getItem("mentorId"); // or fetch it from context/auth
-const connectionId = [mentorId, user.uid].sort().join("_");
+      if (profileSnap.exists()) {
+        setStatus({ message: 'Profile already exists. Redirecting to dashboard...', type: 'success' });
+        setTimeout(() => navigate("/dashboard"), 2000);
+        return;
+      }
 
-await setDoc(doc(db, "connections", connectionId), {
+      await setDoc(profileRef, {
+        userId: user.uid,
+        name: fullName,
+        email,
+        mentorshipGoals,
+        skillsToLearn,
+        createdAt: Timestamp.now()
+      });
+
+      const mentorId = localStorage.getItem("mentorId");
+      const connectionId = [mentorId, user.uid].sort().join("_");
+
+      await setDoc(doc(db, "connections", connectionId), {
   mentorId,
   menteeId: user.uid,
-  menteeEmail: formData.email,
+  menteeEmail: email,
+  status: "pending", 
   createdAt: Timestamp.now()
 });
+
+
       await fetch("http://localhost:5000/send-welcome-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: fullName, email: formData.email })
+        body: JSON.stringify({ name: fullName, email })
       });
 
       setStatus({ message: 'Mentee profile created successfully!', type: 'success' });
@@ -107,13 +120,13 @@ await setDoc(doc(db, "connections", connectionId), {
         skillsToLearn: '',
       });
 
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+      setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       console.error("Error saving mentee:", error);
       setStatus({ message: 'Something went wrong. Please try again.', type: 'error' });
     }
+
+    setLoading(false);
   };
 
   return (
@@ -122,76 +135,32 @@ await setDoc(doc(db, "connections", connectionId), {
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Your Mentee Profile</h2>
 
         {status.message && (
-          <div className={`mb-4 px-4 py-3 rounded-md text-center ${status.type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
-            <span className="block sm:inline">{status.message}</span>
+          <div className={`mb-4 px-4 py-3 rounded-md text-center ${
+            status.type === 'success'
+              ? 'bg-green-100 border border-green-400 text-green-700'
+              : 'bg-red-100 border border-red-400 text-red-700'
+          }`}>
+            <span>{status.message}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Last Name</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
-            />
-          </div>
+          {["firstName", "lastName", "email", "password", "confirmPassword"].map(field => (
+            <div key={field}>
+              <label htmlFor={field} className="block text-sm font-medium text-gray-700">
+                {field === "confirmPassword" ? "Confirm Password" : field.replace(/([A-Z])/g, ' $1')}
+              </label>
+              <input
+                type={field.includes("password") ? "password" : field === "email" ? "email" : "text"}
+                id={field}
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
+              />
+            </div>
+          ))}
 
           <div>
             <label htmlFor="mentorshipGoals" className="block text-sm font-medium text-gray-700">Mentorship Goals</label>
@@ -221,9 +190,12 @@ await setDoc(doc(db, "connections", connectionId), {
           <div>
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+              disabled={loading}
+              className={`w-full py-3 px-4 text-white rounded-md transition ${
+                loading ? 'bg-green-300 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+              }`}
             >
-              Create Mentee Profile
+              {loading ? 'Creating...' : 'Create Mentee Profile'}
             </button>
           </div>
         </form>
