@@ -12,6 +12,7 @@ const CreatePasswordForm = () => {
     confirmPassword: '',
     linkedinUrl: '',
     bio: '',
+    schedule: ''
   });
 
   // State for form submission status, success, and errors.
@@ -64,6 +65,7 @@ const CreatePasswordForm = () => {
     localStorage.setItem("userEmail", formData.email);
     localStorage.setItem("userLinkedIn", formData.linkedinUrl);
     localStorage.setItem("userBio", formData.bio);
+    localStorage.setItem("userSchedule", formData.schedule);
 
 
     console.log("Profile Creation Data Submitted:", { ...formData, name: fullName });
@@ -84,6 +86,7 @@ const CreatePasswordForm = () => {
       confirmPassword: '',
       linkedinUrl: '',
       bio: '',
+      schedule: ''
     });
 
     setTimeout(() => {
@@ -203,6 +206,19 @@ const CreatePasswordForm = () => {
               value={formData.bio}
               onChange={handleChange}
               placeholder="Tell us a little about yourself..."
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            ></textarea>
+          </div>
+
+          <div>
+            <label htmlFor="schedule" className="block text-sm font-medium text-gray-700">My Availability</label>
+            <textarea
+              id="schedule"
+              name="schedule"
+              rows="4"
+              value={formData.schedule}
+              onChange={handleChange}
+              placeholder="e.g: 2 hours a week"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             ></textarea>
           </div>

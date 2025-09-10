@@ -59,7 +59,7 @@ function FindMentor() {
             <Search className="text-[#6BB7C9]" />
             <input
               type="text"
-              placeholder="Who's your next plug? 🔍"
+              placeholder="Who's your next plug?"
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
