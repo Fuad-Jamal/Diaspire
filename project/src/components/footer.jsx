@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#002F6C] text-white py-12 px-6 md:px-12">
+    <footer className="relative bg-[#002F6C] text-white py-12 px-6 md:px-12 z-[9999]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Logo & Mission */}
         <div className="text-center md:text-left">
@@ -38,16 +38,40 @@ export default function Footer() {
         <div className="text-center md:text-left">
           <h3 className="text-xl font-bold mb-4 text-[#FDCB58] font-poppins">Join Our Tribe</h3>
           <div className="flex justify-center md:justify-start space-x-6">
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-[#FDCB58] transition-transform transform hover:scale-110">
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="hover:text-[#FDCB58] transition-transform transform hover:scale-110"
+            >
               <FaLinkedin size={28} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-[#FDCB58] transition-transform transform hover:scale-110">
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hover:text-[#FDCB58] transition-transform transform hover:scale-110"
+            >
               <FaInstagram size={28} />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-[#FDCB58] transition-transform transform hover:scale-110">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="hover:text-[#FDCB58] transition-transform transform hover:scale-110"
+            >
               <FaFacebook size={28} />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:text-[#FDCB58] transition-transform transform hover:scale-110">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter"
+              className="hover:text-[#FDCB58] transition-transform transform hover:scale-110"
+            >
               <FaTwitter size={28} />
             </a>
           </div>

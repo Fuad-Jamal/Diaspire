@@ -51,10 +51,10 @@ export default function MentorWithMentees() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Logoutnavbar />
+    <div className="min-h-screen bg-gray-100">
+     <div className="sticky top-0"> <Logoutnavbar /></div>
     {/* Parent division */}
-    <div className="bg-gray-100 m-0 flex justify-center pr-2">
+    <div className="bg-blue-100 m-0 flex justify-center gap-4 ml-80">
     {/* Dashboard import */}
     <Dashboard firstMentee ={firstMentee}/>
     

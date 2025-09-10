@@ -1,88 +1,122 @@
 [
-    {
-      "fullName": "Michael Carter",
-      "email": "michael.carter@example.com",
-      "password": "michaelMentor123!",
-      "profession": "Software Engineer",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "Sophia Williams",
-      "email": "sophia.williams@example.com",
-      "password": "sophiaMentor456@",
-      "profession": "Financial Analyst",
-      "careerInterest": "Finance"
-    },
-    {
-      "fullName": "James Thompson",
-      "email": "james.thompson@example.com",
-      "password": "jamesMentor789#",
-      "profession": "Medical Doctor",
-      "careerInterest": "Healthcare"
-    },
-    {
-      "fullName": "Olivia Davis",
-      "email": "olivia.davis@example.com",
-      "password": "oliviaMentor321$",
-      "profession": "AI Research Scientist",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "William Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    
-    {
-      "fullName": "3William Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "William Kozy",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "William Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "Gedeon Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "Abdul Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "thriver Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    },
-    {
-      "fullName": "Conquer Hernandez",
-      "email": "william.hernandez@example.com",
-      "password": "williamMentor654%",
-      "profession": "Business Consultant",
-      "careerInterest": "Tech"
-    }
-  ]
-  
+  {
+    "fullName": "Michael Aubman",
+    "email": "michael.carter@example.com",
+    "password": "michaelMentor123!",
+    "profession": "Software Engineer",
+    "careerInterest": "Tech",
+    "bio": "Passionate software engineer with 10+ years of experience building scalable web applications.",
+    "picture": "https://randomuser.me/api/portraits/men/11.jpg",
+    "country": "USA"
+  },
+  {
+    "fullName": "Sophia Williams",
+    "email": "sophia.williams@example.com",
+    "password": "sophiaMentor456@",
+    "profession": "Financial Analyst",
+    "careerInterest": "Finance",
+    "bio": "Dedicated financial analyst helping businesses make data-driven investment decisions.",
+    "picture": "https://randomuser.me/api/portraits/women/21.jpg",
+    "country": "UK"
+  },
+  {
+    "fullName": "James Thompson",
+    "email": "james.thompson@example.com",
+    "password": "jamesMentor789#",
+    "profession": "Medical Doctor",
+    "careerInterest": "Healthcare",
+    "bio": "Medical doctor passionate about improving patient care through research and mentorship.",
+    "picture": "https://randomuser.me/api/portraits/men/31.jpg",
+    "country": "Canada"
+  },
+  {
+    "fullName": "Olivia Davis",
+    "email": "olivia.davis@example.com",
+    "password": "oliviaMentor321$",
+    "profession": "AI Research Scientist",
+    "careerInterest": "Tech",
+    "bio": "AI researcher exploring cutting-edge machine learning solutions for global challenges.",
+    "picture": "https://randomuser.me/api/portraits/women/41.jpg",
+    "country": "Germany"
+  },
+  {
+    "fullName": "William Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Business consultant focused on guiding startups and enterprises through digital transformation.",
+    "picture": "https://randomuser.me/api/portraits/men/51.jpg",
+    "country": "USA"
+  },
+  {
+    "fullName": "3William Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Consultant supporting entrepreneurs with strategy and growth opportunities.",
+    "picture": "https://randomuser.me/api/portraits/men/52.jpg",
+    "country": "USA"
+  },
+  {
+    "fullName": "William Kozy",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Advisor to businesses seeking to expand operations and maximize efficiency.",
+    "picture": "https://randomuser.me/api/portraits/men/53.jpg",
+    "country": "USA"
+  },
+  {
+    "fullName": "William Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Mentor with experience in global business development and consulting.",
+    "picture": "https://randomuser.me/api/portraits/men/54.jpg",
+    "country": "USA"
+  },
+  {
+    "fullName": "Gedeon Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Consultant passionate about bridging tech and business for impactful solutions.",
+    "picture": "https://randomuser.me/api/portraits/men/55.jpg",
+    "country": "Rwanda"
+  },
+  {
+    "fullName": "Abdul Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Helping organizations adapt to modern business challenges through mentorship.",
+    "picture": "https://randomuser.me/api/portraits/men/56.jpg",
+    "country": "Nigeria"
+  },
+  {
+    "fullName": "thriver Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Believes in thriving businesses through innovation and mentorship.",
+    "picture": "https://randomuser.me/api/portraits/men/57.jpg",
+    "country": "Kenya"
+  },
+  {
+    "fullName": "Conquer Hernandez",
+    "email": "william.hernandez@example.com",
+    "password": "williamMentor654%",
+    "profession": "Business Consultant",
+    "careerInterest": "Tech",
+    "bio": "Dedicated to conquering complex business challenges with smart strategies.",
+    "picture": "https://randomuser.me/api/portraits/men/58.jpg",
+    "country": "South Africa"
+  }
+]
