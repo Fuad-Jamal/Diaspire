@@ -41,7 +41,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-auto h-[60%] rounded-b-lg px-8 py-8 bg-white border-r">
+    <div className="flex flex-col w-auto h-[60%] rounded-b-lg px-8 py-8 bg-white border-r mt-20">
       <div className="flex items-center mb-8 px-2">
         <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
           {menteeInitials}
@@ -58,7 +58,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-2">
+      <nav className="flex-1 space-y-2 mb-96">
         {navItems.map((item) => (
           <div
             key={item.name}
