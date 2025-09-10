@@ -92,7 +92,7 @@ function FindMentor() {
           {paginated.map((mentor) => (
             <div
               key={mentor.id}
-              className="bg-white/95 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300"
+              className="bg-[#002F6C] p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300"
               style={{
                 backgroundImage: "url('C:\Users\hp\Diaspire\project\src\assets\imigongo.svg')",
                 backgroundRepeat: "repeat",
@@ -106,9 +106,9 @@ function FindMentor() {
                   alt={mentor.name}
                   className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-[#F4A261]"
                 />
-                <h3 className="text-lg font-semibold text-gray-800">{mentor.name}</h3>
+                <h3 className="text-lg font-semibold text-white">{mentor.name}</h3>
                 <p className="text-[#6BB7C9] font-medium">{mentor.title}</p>
-                <p className="text-gray-600 mt-3 text-sm">{mentor.bio}</p>
+                <p className="text-gray-400 mt-3 text-sm">{mentor.bio}</p>
               </div>
 
               <div className="flex justify-center gap-4 mt-5 text-gray-500">
