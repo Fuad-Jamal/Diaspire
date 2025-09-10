@@ -124,7 +124,7 @@ const [showRolePopup, setShowRolePopup] = useState(false);
   {/* Background Image - no black overlay, use blend mode to show gradient behind */}
   <div className="absolute bottom-0 right-0 w-full lg:w-1/2 h-full z-10 overflow-hidden">
     <img
-      src="./src/assets/background2.jpg"
+      src="/assets/background2.jpg"
       alt="Diaspire Hero"
       className="object-cover w-full h-full opacity-70 mix-blend-screen relative z-10"
       style={{ willChange: "transform" }}
@@ -234,7 +234,7 @@ const [showRolePopup, setShowRolePopup] = useState(false);
         {/* Image */}
         <div className="flex justify-center lg:justify-end w-full lg:w-[400px]">
           <img
-            src="./src/assets/facetime.png"
+            src="/assets/facetime.png"
             alt="Mentorship illustration"
             className="w-full max-w-xs lg:max-w-md rounded-xl shadow-lg transition-transform hover:scale-105"
             loading="lazy"
@@ -301,7 +301,7 @@ const [showRolePopup, setShowRolePopup] = useState(false);
               className="bg-[#001F4D] rounded-xl shadow-lg p-6 transition-transform hover:scale-105 duration-300"
             >
               <img
-                src={`./src/assets/${card.img}`}
+                src={`/assets/${card.img}`}
                 alt={card.title}
                 className="w-16 h-16 mb-4 mx-auto"
                 loading="lazy"
@@ -353,16 +353,16 @@ const [showRolePopup, setShowRolePopup] = useState(false);
                 key={i}
                 className="flex flex-col items-center lg:items-start p-4 rounded-lg transition-transform hover:scale-105 duration-300"
               >
-                <img src="./src/assets/el1.png" alt="" />
-                <img src="./src/assets/el2.png" className="-mt-16 ml-2 pb-2 pt-1" alt="" />
-                <img src="./src/assets/el3.png" className="-mt-12 ml-6 mb-12" alt="" />
+                <img src="/assets/el1.png" alt="" />
+                <img src="/assets/el2.png" className="-mt-16 ml-2 pb-2 pt-1" alt="" />
+                <img src="/assets/el3.png" className="-mt-12 ml-6 mb-12" alt="" />
                 <p className="mb-4 font-bold">{item.title}</p>
                 <p className="w-full lg:w-[213px] text-sm text-center lg:text-left">{item.text}</p>
               </div>
             ))}
           </div>
           <img
-            src="./src/assets/business.png"
+            src="/assets/business.png"
             className="w-full h-auto lg:w-[500px] lg:h-[500px] mt-8 lg:mt-0 lg:ml-[50px] mx-auto"
             alt=""
           />

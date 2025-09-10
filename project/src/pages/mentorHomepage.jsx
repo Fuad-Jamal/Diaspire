@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ImpactChart from "../components/impactChart";
@@ -147,13 +147,18 @@ export default function MentorWithMentees() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="bg-gray-100 m-0 flex justify-center pr-2">
-        <Dashboard firstMentee={firstMentee} />
-        <div className="bg-white px-4 w-[50%] mx-auto py-3">
-          <h1 className="text-3xl font-medium">
-            Welcome {localStorage.getItem("userFirstName") || "Mentor"} 🎉
-          </h1>
+      <Logoutnavbar />
+    {/* Parent division */}
+    <div className="bg-gray-100 m-0 flex justify-center pr-2">
+    {/* Dashboard import */}
+    <Dashboard firstMentee ={firstMentee}/>
+    
+     {/* Mentee and recommended mentors parent */}
+     <div className="bg-white px-4 w-[50%] mx-auto py-3">
+       {/* Mentee Card */}
+<h1 className="text-3xl font-medium">
+  Welcome {localStorage.getItem("userFirstName") || "Mentor"} 🎉
+</h1>
 
           <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 p-4 rounded-xl">
             <h2 className="text-2xl font-bold mt-10 text-gray-800">

@@ -10,16 +10,15 @@ const CreatePasswordForm = () => {
 
 
   const [formData, setFormData] = useState({
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  linkedinUrl: '',
-  bio: '',
-  imgUrl: '',
-  imgFile: null,
-});
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    linkedinUrl: '',
+    bio: '',
+    schedule: ''
+  });
 
 
   const [status, setStatus] = useState({
@@ -82,24 +81,12 @@ try {
     localStorage.setItem("userEmail", formData.email);
     localStorage.setItem("userLinkedIn", formData.linkedinUrl);
     localStorage.setItem("userBio", formData.bio);
+    localStorage.setItem("userSchedule", formData.schedule);
 
-    await addDoc(collection(db, "mentors"), {
-      name: fullName,
-      email: formData.email,
-      linkedinUrl: formData.linkedinUrl,
-      bio: formData.bio,
-      img: formData.imgUrl || "/default-avatar.png",
-      title: "Mentor",
-      category: "General",
-      socials: {
-        linkedin: formData.linkedinUrl || "",
-        twitter: "",
-        instagram: "",
-        github: "",
-      },
-    });
 
-    await fetch("http://localhost:5000/send-mentor-email", {
+    console.log("Profile Creation Data Submitted:", { ...formData, name: fullName });
+
+    fetch("http://localhost:5000/send-mentor-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: fullName, email: formData.email })
@@ -115,8 +102,7 @@ try {
       confirmPassword: '',
       linkedinUrl: '',
       bio: '',
-      imgUrl: '',
-      imgFile: null,
+      schedule: ''
     });
 
     setTimeout(() => {
@@ -247,25 +233,17 @@ try {
             ></textarea>
           </div>
 
-          {/* Profile Image URL Input */}
-              <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Profile Image (URL or Upload)
-            </label>
-            <input
-              type="url"
-              name="imgUrl"
-              value={formData.imgUrl}
+          <div>
+            <label htmlFor="schedule" className="block text-sm font-medium text-gray-700">My Availability</label>
+            <textarea
+              id="schedule"
+              name="schedule"
+              rows="4"
+              value={formData.schedule}
               onChange={handleChange}
-              placeholder="https://example.com/photo.jpg"
-              className="mt-1 block w-full px-4 py-2 border rounded-md mb-2"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="mt-1 block w-full text-sm text-gray-600"
-            />
+              placeholder="e.g: 2 hours a week"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            ></textarea>
           </div>
 
           {/* Submit Button */}

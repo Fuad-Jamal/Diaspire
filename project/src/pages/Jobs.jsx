@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import ReactPaginate from "react-paginate";
 import Footer from "../components/footer";
 import AddJobForm from "../data/job-form";
@@ -7,6 +7,8 @@ import UploadJobs from "../data/jobs-upload";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import AddJob from "../components/add-job";
+import MenteeDashBoard from '../components/MenteeDashBoard'
+import DashboardToggle from "../components/DashboardToggle";
 
 export default function Jobs() {
 
@@ -25,13 +27,13 @@ export default function Jobs() {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
                     <div className="flex-1">
                         <h1 className="font-extrabold text-2xl text-white">{job.jobTitle}</h1>
-                        <p className="mt-2 text-gray-700"><span className="text-blue-600 font-bold">Company/Org: </span>{job.companyName}</p>
-                        <p className="text-gray-700"><span className="text-blue-600 font-bold">Work Mode: </span>{job.workMode}</p>
-                        <p className="font-bold text-gray-500 mt-2">Deadline: {job.deadline}</p>
+                        <p className="mt-2 text-white"><span className="text-blue-600 font-bold">Company/Org: </span>{job.companyName}</p>
+                        <p className="text-white"><span className="text-blue-600 font-bold">Work Mode: </span>{job.workMode}</p>
+                        <p className="font-bold text-white mt-2">Deadline: {job.deadline}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
                         <span className="bg-gray-200 text-blue-600 font-bold py-2 px-4 rounded-full whitespace-nowrap">{job.jobType}</span>
-                        <button className="bg-blue-600 h-12 px-6 rounded-lg font-bold text-white whitespace-nowrap transition-all duration-300 hover:bg-green-500 hover:scale-105">
+                        <button className="bg-[#002F6C] h-12 px-6 rounded-lg font-bold text-white whitespace-nowrap transition-all duration-300 hover:text-[#FDCB58] hover:scale-105">
                             <a href={job.jobLink} target="_blank" rel="noopener noreferrer">View Details</a>
                         </button>
                     </div>
@@ -62,9 +64,13 @@ export default function Jobs() {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className=" bg-blue-800  bg-cover bg-center bg-no-repeat min-h-screen">
-            <Navbar/>
+        <div className=" bg-[#244c81]  bg-cover bg-center bg-no-repeat min-h-screen">
+
+            <Logoutnavbar/>
             
+
+           
+
             <style jsx>{`
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(20px); }
@@ -81,7 +87,7 @@ export default function Jobs() {
             </div>
             
             <button
-                className="absolute top-36 right-4 md:right-8 bg-blue-600 hover:bg-green-500 text-white rounded-full shadow-lg p-3 md:p-4 flex items-center justify-center z-50 transition-all duration-300 hover:scale-105"
+                className="absolute top-36 right-4 md:right-8 bg-[#002F6C] hover:text-[#FDCB58] text-white rounded-full shadow-lg p-3 md:p-4 flex items-center justify-center z-50 transition-all duration-300 hover:scale-105"
                 onClick={() => setShowModal(true)}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,9 +95,18 @@ export default function Jobs() {
                 </svg>
                 <span className="ml-2 font-bold hidden md:inline">Add Job</span>
             </button>
+            {/* hello */}
+            <div className="">
             
-            <div className="flex flex-col items-center">
+            <div className="lg:flex ">
+            
+            <DashboardToggle prop ={<MenteeDashBoard/>}/>
+          
+                {/* job section */}
+                <section className="w-[100%] flex-col items-center">
                 {currentJobs}
+                </section>
+            </div>
             </div>
 
             <div className="my-8">

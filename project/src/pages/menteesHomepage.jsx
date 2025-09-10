@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 import ReactPaginate from "react-paginate";
 import ProgressCard from "../components/progressSection";
@@ -80,49 +80,43 @@ export default function MenteeWithMentors() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="bg-gray-100 m-0 flex justify-center pr-2">
-        <Dashboard firstMentee={firstMentee} />
-        <div className="bg-gray-100 w-[50%] mx-auto py-3">
-          <h1 className="text-3xl font-medium">
-            Welcome {localStorage.getItem("menteeFirstName") || "Mentee"}!
-          </h1>
+    <div className="min-h-screen bg-gray-50 ">
+      <div className="sticky top-0"><Logoutnavbar /></div>
+    {/* Parent division */}
+    <div className="bg-gray-100 m-0 flex justify-center px-28 gap-4">
+    {/* Dashboard import */}
+    <Dashboard firstMentee ={firstMentee}/>
+    
+     {/* Mentee and recommended mentors parent */}
+     <div className="bg-gray-100 w-[50%] mx-auto py-3 ">
+       {/* Mentee Card */}
+<h1 className="text-3xl font-medium">
+  Welcome {localStorage.getItem("menteeFirstName") || "Mentee"}!
+</h1>
+       <div className=" mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg ">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">
+          My Mentor
+        </h2>
+        <span className="flex gap-4">
+        <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
+          {mentors[0]?mentors[0].fullName.split(' ')[0][0]:'Loading'}
+        </div>
+        <span>
+        <p className="font-semibold">{mentors[0]?mentors[0].fullName.split(' ')[0]:'Loading'}{" "}{mentors[0]?mentors[0].fullName.split(' ')[1]:'Loading'}</p>
+        <p className="text-gray-600 mb-4">{mentors[0]?mentors[0].profession:'Loading'}</p>
+        </span>
+        </span>
+        {/* button section */}
+        <span className="ml-12">
+        <button className="bg-green-200 rounded-lg p-1 text-blue-500 mx-2">Message</button>
+        <button className="bg-gray-200 rounded-lg p-1 mx-2">Sechedule</button>
+        </span>
+    
+        
+      </div>
 
-          <div className="mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">My Mentor</h2>
-            {assignedMentor ? (
-              <div className="flex justify-between items-center">
-                <div className="flex gap-4 items-center">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center font-bold text-white text-xl">
-                    {assignedMentor?.name?.charAt(0) || "?"}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-gray-800">
-                      {assignedMentor?.name || "Mentor Name"}
-                    </h3>
-                    <p className="text-gray-600">{assignedMentor?.profession || "Mentor"}</p>
-                    <p className="text-blue-600 font-medium">
-                      Career: {assignedMentor?.careerInterest || "Program Manager"}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <button
-                    onClick={() => {
-                      const conversationId = [assignedMentor.id, localStorage.getItem("menteeId")].sort().join("_");
-                      window.location.href = `/chat/${conversationId}`;
-                    }}
-                    className="bg-green-200 text-green-700 px-4 py-1 rounded-lg hover:bg-green-700 hover:text-white"
-                  >
-                    Message
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500">You don’t have a mentor assigned yet.</p>
-            )}
-          </div>
+      {/* Recommended Mentors */}
+      
 
           <div className="flex-col space-y-4 gap-6 max-w-5xl mx-auto mt-6 bg-white p-4 rounded-xl">
             <h2 className="text-2xl font-bold mt-10 text-gray-800">
