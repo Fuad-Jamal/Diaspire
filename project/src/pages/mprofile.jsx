@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, addDoc, Timestamp, setDoc, doc } from "firebase/firestore";
+import { collection, Timestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 
@@ -61,14 +62,33 @@ const CreateMenteeProfileForm = () => {
     localStorage.setItem("menteeSkills", formData.skillsToLearn);
 
     try {
+      const existingProfileRef = doc(db, "mentees", user.uid);
+const existingProfileSnap = await getDoc(existingProfileRef);
+
+if (existingProfileSnap.exists()) {
+  setStatus({ message: 'Profile already exists. Redirecting to dashboard...', type: 'success' });
+  setTimeout(() => {
+    navigate("/dashboard");
+  }, 2000);
+  return;
+}
       await setDoc(doc(db, "mentees", user.uid), {
+  userId: user.uid,
   name: fullName,
   email: formData.email,
-        mentorshipGoals: formData.mentorshipGoals,
-        skillsToLearn: formData.skillsToLearn,
-        createdAt: Timestamp.now()
-      });
+  mentorshipGoals: formData.mentorshipGoals,
+  skillsToLearn: formData.skillsToLearn,
+  createdAt: Timestamp.now()
+});
+const mentorId = localStorage.getItem("mentorId"); // or fetch it from context/auth
+const connectionId = [mentorId, user.uid].sort().join("_");
 
+await setDoc(doc(db, "connections", connectionId), {
+  mentorId,
+  menteeId: user.uid,
+  menteeEmail: formData.email,
+  createdAt: Timestamp.now()
+});
       await fetch("http://localhost:5000/send-welcome-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

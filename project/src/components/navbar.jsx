@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import GoogleAuthPopup from '../utilities/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 const Navbar = ({ onNavigate, currentPage }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -11,18 +14,37 @@ const Navbar = ({ onNavigate, currentPage }) => {
 
   const navigate = useNavigate();
 
-  const handleSignIn = (user) => {
-    console.log("User signed in:", user);
-    setShowAuthPopup(false);
+  const handleSignIn = async (user) => {
+  console.log("User signed in:", user);
+  setShowAuthPopup(false);
 
-    if (selectedRole === 'youth') {
-      navigate('/mprofile');
-    } else if (selectedRole === 'professional') {
-      navigate('/profile');
+  const role = localStorage.getItem("userRole");
+  if (!role || !user?.email) {
+    navigate('/mentees');
+    return;
+  }
+
+  const collectionName = role === "professional" ? "mentors" : "mentees";
+  const q = query(collection(db, collectionName), where("email", "==", user.email));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const docId = snapshot.docs[0].id;
+    if (role === "professional") {
+      localStorage.setItem("mentorId", docId);
+      navigate("/mentor-dashboard");
     } else {
-      navigate('/mentees');
+      localStorage.setItem("menteeId", docId);
+      navigate("/dashboard");
     }
-  };
+  } else {
+    if (role === "professional") {
+      navigate("/profile");
+    } else {
+      navigate("/mprofile");
+    }
+  }
+}
 
   const handleSignOut = () => {
     navigate('/');
@@ -50,8 +72,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
             <Link to="/resources" className="text-white hover:text-[#FDCB58] transition">Resources</Link>
           </div>
 
-          {/* Desktop Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-2">
             <button
               className="px-4 py-2 text-white font-medium rounded-full border border-gray-300 hover:bg-gray-100 transition"
               onClick={() => {
@@ -63,6 +84,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
             >
               Login
             </button>
+
             <button
               className="bg-[#FDCB58] text-[#002F6C] px-4 py-2 rounded-full font-bold hover:scale-105 transition-transform"
               onClick={() => setShowRolePopup(true)}
@@ -90,87 +112,46 @@ const Navbar = ({ onNavigate, currentPage }) => {
         </nav>
       </header>
 
-{/* Mobile Drawer Menu */}
-{isMobileMenuOpen && (
-  <div className="fixed top-0 left-0 w-full h-full bg-[#002F6C] z-50 flex flex-col px-6 py-8 space-y-6 shadow-lg transition-all duration-300">
-    <button
-      onClick={() => setIsMobileMenuOpen(false)}
-      className="self-end text-white text-2xl"
-    >
-      ✕
-    </button>
+      {showRolePopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[350px]">
+            <h2 className="text-xl font-bold text-center mb-4">Select Your Role</h2>
+            <div className="flex flex-col gap-4">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                onClick={() => {
+                  localStorage.setItem("userRole", "youth");
+                  setSelectedRole('youth');
+                  setAuthMode("signup");
+                  setShowRolePopup(false);
+                  setShowAuthPopup(true);
+                }}
+              >
+                Join as Youth
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded-lg"
+                onClick={() => {
+                  localStorage.setItem("userRole", "professional");
+                  setSelectedRole('professional');
+                  setAuthMode("signup");
+                  setShowRolePopup(false);
+                  setShowAuthPopup(true);
+                }}
+              >
+                Join as Professional
+              </button>
+            </div>
+            <button
+              className="mt-4 w-full bg-gray-300 py-2 rounded"
+              onClick={() => setShowRolePopup(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
-    <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-semibold hover:text-[#FDCB58]">Home</Link>
-    <Link to="/mentors" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-semibold hover:text-[#FDCB58]">Find Mentors</Link>
-    <Link to="/events" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-semibold hover:text-[#FDCB58]">Events</Link>
-    <Link to="/jobs" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-semibold hover:text-[#FDCB58]">Jobs</Link>
-    <Link to="/resources" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-semibold hover:text-[#FDCB58]">Resources</Link>
-
-    <button
-      className="px-4 py-2 bg-white text-[#002F6C] rounded-full font-semibold hover:bg-[#FDCB58] transition"
-      onClick={() => {
-        setSelectedRole(null);
-        setAuthMode("login");
-        setShowAuthPopup(true);
-        setIsMobileMenuOpen(false);
-      }}
-    >
-      Login
-    </button>
-
-    <button
-      className="px-4 py-2 bg-[#FDCB58] text-[#002F6C] rounded-full font-bold hover:scale-105 transition-transform"
-      onClick={() => {
-        setShowRolePopup(true);
-        setIsMobileMenuOpen(false);
-      }}
-    >
-      Get Started
-    </button>
-  </div>
-)}
-
-{/* Role Selector Popup */}
-{showRolePopup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="bg-white p-6 rounded-2xl shadow-lg w-[350px]">
-      <h2 className="text-xl font-bold text-center mb-4 text-[#002F6C]">Select Your Role</h2>
-      <div className="flex flex-col gap-4">
-        <button
-          className="px-4 py-2 bg-[#FDCB58] text-[#002F6C] rounded-full font-bold hover:scale-105 transition-transform"
-          onClick={() => {
-            setSelectedRole('youth');
-            setAuthMode("signup");
-            setShowRolePopup(false);
-            setShowAuthPopup(true);
-          }}
-        >
-          Join as Youth
-        </button>
-        <button
-          className="px-4 py-2 bg-[#002F6C] text-white rounded-full font-semibold hover:bg-[#001a3d] transition"
-          onClick={() => {
-            setSelectedRole('professional');
-            setAuthMode("signup");
-            setShowRolePopup(false);
-            setShowAuthPopup(true);
-          }}
-        >
-          Join as Professional
-        </button>
-      </div>
-      <button
-        className="mt-4 w-full bg-gray-200 py-2 rounded hover:bg-gray-300 transition"
-        onClick={() => setShowRolePopup(false)}
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-)}
-
-
-      {/* Auth Popup */}
       {showAuthPopup && (
         <GoogleAuthPopup
           mode={authMode}

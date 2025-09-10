@@ -11,11 +11,13 @@ import {
   limit,
   startAfter
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function MenteeRequests() {
   const [requests, setRequests] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const menteeEmail = localStorage.getItem("menteeEmail");
   const menteeId = localStorage.getItem("menteeId");
@@ -91,6 +93,14 @@ function MenteeRequests() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+        {/* Back Button */}
+    <button
+  onClick={() => navigate(-1)}
+  className="text-sm px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+>
+  ← Go Back
+</button>
+
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-gray-800">Your Mentorship Requests</h1>
         <p className="text-gray-500 mt-2">Track and manage the requests you've sent to mentors.</p>

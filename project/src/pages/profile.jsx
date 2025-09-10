@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {db} from "../firebase"
 import { collection, addDoc } from "firebase/firestore"
+import { auth } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 
 const CreatePasswordForm = () => {
 
   const [loading, setLoading] = useState(false);
+  const user = auth.currentUser;
 
 
   const [formData, setFormData] = useState({
@@ -44,52 +47,77 @@ const CreatePasswordForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-setLoading(true);
-    setStatus({ message: '', type: '' });
+  e.preventDefault();
+  setLoading(true);
+  setStatus({ message: '', type: '' });
 
-    
-    if (formData.password !== formData.confirmPassword) {
-      setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setStatus({ message: 'Passwords do not match. Please try again.', type: 'error' });
+    setLoading(false);
+    return;
+  }
 
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
-      setStatus({ message: 'Name, email, and password are required fields.', type: 'error' });
-      return;
-    }
+  if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.confirmPassword) {
+    setStatus({ message: 'Name, email, and password are required fields.', type: 'error' });
+    setLoading(false);
+    return;
+  }
 
-    if (!formData.linkedinUrl || !formData.bio) {
-  setStatus({ message: 'Please provide your LinkedIn and a short bio.', type: 'error' });
-  return;
-}
+  if (!formData.linkedinUrl || !formData.bio) {
+    setStatus({ message: 'Please provide your LinkedIn and a short bio.', type: 'error' });
+    setLoading(false);
+    return;
+  }
 
-try {
-    const capitalize = str =>
-      str
-        .trim()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
+  const capitalize = str =>
+    str
+      .trim()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
 
-    const formattedFirstName = capitalize(formData.firstName);
-    const formattedLastName = capitalize(formData.lastName);
-    const fullName = `${formattedFirstName} ${formattedLastName}`;
+  const formattedFirstName = capitalize(formData.firstName);
+  const formattedLastName = capitalize(formData.lastName);
+  const fullName = `${formattedFirstName} ${formattedLastName}`;
 
-    localStorage.setItem("userName", fullName);
-    localStorage.setItem("userFirstName", formattedFirstName);
-    localStorage.setItem("userEmail", formData.email);
-    localStorage.setItem("userLinkedIn", formData.linkedinUrl);
-    localStorage.setItem("userBio", formData.bio);
-    localStorage.setItem("userSchedule", formData.schedule);
+  const user = auth.currentUser;
 
+  if (!user) {
+    setStatus({ message: 'You must be signed in to create a profile.', type: 'error' });
+    setLoading(false);
+    return;
+  }
 
-    console.log("Profile Creation Data Submitted:", { ...formData, name: fullName });
+  localStorage.setItem("userName", fullName);
+  localStorage.setItem("userFirstName", formattedFirstName);
+  localStorage.setItem("userEmail", user.email);
+  localStorage.setItem("userLinkedIn", formData.linkedinUrl);
+  localStorage.setItem("userBio", formData.bio);
+  localStorage.setItem("mentorId", user.uid);
+  localStorage.setItem("userRole", "professional");
 
-    fetch("http://localhost:5000/send-mentor-email", {
+  try {
+    await setDoc(doc(db, "mentors", user.uid), {
+      name: fullName,
+      email: user.email,
+      linkedinUrl: formData.linkedinUrl,
+      bio: formData.bio,
+      img: formData.imgUrl || "/default-avatar.png",
+      title: "Mentor",
+      category: "General",
+      socials: {
+        linkedin: formData.linkedinUrl || "",
+        twitter: "",
+        instagram: "",
+        github: "",
+      },
+      createdAt: new Date()
+    });
+
+    await fetch("http://localhost:5000/send-mentor-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: fullName, email: formData.email })
+      body: JSON.stringify({ name: fullName, email: user.email })
     });
 
     setStatus({ message: 'Profile created successfully!', type: 'success' });
@@ -111,10 +139,12 @@ try {
   } catch (error) {
     console.error("Error:", error);
     setStatus({ message: 'Something went wrong. Please try again.', type: 'error' });
+    setLoading(false);
   }
 
   setLoading(false);
 };
+
  
 
   return (

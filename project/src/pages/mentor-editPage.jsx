@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [mentorId, setMentorId] = useState(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -18,29 +17,28 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-    const email = localStorage.getItem('userEmail');
-    const fullName = localStorage.getItem('userName') || '';
-    const [first, last] = fullName.split(' ');
+    const fetchMentorProfile = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
 
-    setFormData({
-      firstName: first || '',
-      lastName: last || '',
-      email: email || '',
-      linkedinUrl: localStorage.getItem('userLinkedIn') || '',
-      bio: localStorage.getItem('userBio') || '',
-      imgUrl: '',
-    });
+      const docRef = doc(db, 'mentors', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const [first, last] = data.name?.split(' ') || [];
 
-    // Fetch mentor document ID from Firebase
-    const fetchMentorDoc = async () => {
-      const q = query(collection(db, 'mentors'), where('email', '==', email));
-      const snapshot = await getDocs(q);
-      if (!snapshot.empty) {
-        setMentorId(snapshot.docs[0].id);
+        setFormData({
+          firstName: first || '',
+          lastName: last || '',
+          email: user.email || '',
+          linkedinUrl: data.linkedinUrl || '',
+          bio: data.bio || '',
+          imgUrl: data.img || '',
+        });
       }
     };
 
-    fetchMentorDoc();
+    fetchMentorProfile();
   }, []);
 
   const handleChange = (e) => {
@@ -52,36 +50,45 @@ const EditProfile = () => {
     e.preventDefault();
     setLoading(true);
 
-    const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
+    const user = auth.currentUser;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    const capitalize = str =>
+      str
+        .trim()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+
+    const fullName = capitalize(`${formData.firstName} ${formData.lastName}`);
 
     try {
-      if (mentorId) {
-        const docRef = collection(db, 'mentors');
-        const mentorDoc = query(docRef, where('email', '==', formData.email));
-        const snapshot = await getDocs(mentorDoc);
-        if (!snapshot.empty) {
-          const docToUpdate = snapshot.docs[0].ref;
-          await updateDoc(docToUpdate, {
-            name: fullName,
-            linkedinUrl: formData.linkedinUrl,
-            bio: formData.bio,
-            img: formData.imgUrl || '/default-avatar.png',
-          });
+      const docRef = doc(db, 'mentors', user.uid);
+      await updateDoc(docRef, {
+        name: fullName,
+        linkedinUrl: formData.linkedinUrl,
+        bio: formData.bio,
+        img: formData.imgUrl || '/default-avatar.png',
+      });
 
-          // Update localStorage
-          localStorage.setItem('userName', fullName);
-          localStorage.setItem('userFirstName', formData.firstName);
-          localStorage.setItem('userLinkedIn', formData.linkedinUrl);
-          localStorage.setItem('userBio', formData.bio);
+      localStorage.setItem('userName', fullName);
+      localStorage.setItem('userFirstName', formData.firstName);
+      localStorage.setItem('userLinkedIn', formData.linkedinUrl);
+      localStorage.setItem('userBio', formData.bio);
 
-          setLoading(false);
-          navigate('/mentor-dashboard');
-        }
-      }
+      setLoading(false);
+      navigate('/mentor-dashboard');
     } catch (error) {
       console.error('Update failed:', error);
       setLoading(false);
     }
+  };
+
+  const handleCancel = () => {
+    navigate('/mentor-dashboard');
   };
 
   return (
@@ -152,7 +159,7 @@ const EditProfile = () => {
             />
           </div>
 
-          <div>
+          <div className="flex justify-between space-x-4">
             <button
               type="submit"
               disabled={loading}
@@ -161,6 +168,14 @@ const EditProfile = () => {
               }`}
             >
               {loading ? 'Updating...' : 'Update Profile'}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="w-full py-3 px-4 rounded-md bg-gray-300 text-gray-800 font-medium hover:bg-gray-400 transition"
+            >
+              Cancel
             </button>
           </div>
         </form>

@@ -17,6 +17,7 @@ import {
   setDoc,
   getDoc
 } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 function GoogleAuthPopup({ mode = "signup", onClose }) {
   const [email, setEmail] = useState('');
@@ -26,16 +27,41 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
 
   const isLogin = mode === "login";
 
-  const storeUserProfile = async (user) => {
-    const role = localStorage.getItem("userRole");
+  const handleRedirectAfterAuth = async (user) => {
+  const role = localStorage.getItem("userRole");
 
-    if (!role) {
-      console.warn("Missing user role");
-      return;
+  if (!role || !user?.email) {
+    setMessage("Missing role or user email. Please try again.");
+    return;
+  }
+
+  const collectionName = role === "professional" ? "mentors" : "mentees";
+  const q = query(collection(db, collectionName), where("email", "==", user.email));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const docId = snapshot.docs[0].id;
+
+    if (role === "professional") {
+      localStorage.setItem("mentorId", docId);
+      navigate("/mentor-dashboard");
+    } else {
+      localStorage.setItem("menteeId", docId);
+      navigate("/dashboard");
     }
+  } else {
+    if (role === "professional") {
+      navigate("/profile");
+    } else {
+      navigate("/mprofile");
+    }
+  }
+};
 
-    const collectionName = role === "student" ? "mentees" : "mentors";
-    const idKey = role === "student" ? "menteeId" : "mentorId";
+
+  const storeMentorIdFromFirestore = async (user) => {
+    const role = localStorage.getItem("userRole");
+    if (role !== "professional") return;
 
     try {
       const q = query(collection(db, collectionName), where("email", "==", user.email));
@@ -45,28 +71,17 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
       if (!snapshot.empty) {
         profileDoc = snapshot.docs[0];
       } else {
-        const newRef = doc(collection(db, collectionName));
-        await setDoc(newRef, {
-          name: user.displayName || "Unnamed",
+        const newMentorRef = doc(db, "mentors", user.uid);
+        await setDoc(newMentorRef, {
+          name: user.displayName || "Unnamed Mentor",
           email: user.email,
           bio: "",
-          title: role === "student" ? "Student" : "Mentor",
-          careerInterest: "",
-          profession: role === "student" ? "Student" : "Professional",
-          img: ""
+          linkedinUrl: "",
+          img: "",
+          title: "Mentor",
+          category: "Tech"
         });
-        profileDoc = await getDoc(newRef);
-      }
-
-      localStorage.setItem(idKey, profileDoc.id);
-
-      const profileData = profileDoc.data();
-      const isIncomplete = !profileData?.bio || !profileData?.careerInterest;
-
-      if (isIncomplete) {
-        navigate("/profile");
-      } else {
-        navigate("/dashboard");
+        localStorage.setItem("mentorId", user.uid);
       }
     } catch (err) {
       console.error("Error handling user profile:", err);
@@ -84,7 +99,9 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
         ? await signInWithEmailAndPassword(auth, email, password)
         : await createUserWithEmailAndPassword(auth, email, password);
 
-      await storeUserProfile(result.user);
+      await storeMentorIdFromFirestore(result.user);
+      onSignIn?.(result.user);
+      await handleRedirectAfterAuth(result.user);
     } catch (error) {
       const errorMap = {
         'auth/email-already-in-use': 'This email is already registered. Try logging in instead.',
@@ -102,7 +119,9 @@ function GoogleAuthPopup({ mode = "signup", onClose }) {
     try {
       await signOut(auth);
       const result = await signInWithPopup(auth, provider);
-      await storeUserProfile(result.user);
+      await storeMentorIdFromFirestore(result.user);
+      onSignIn?.(result.user);
+      await handleRedirectAfterAuth(result.user);
     } catch (error) {
       setMessage(error.message);
       setTimeout(() => setMessage(''), 5000);
