@@ -5,6 +5,7 @@ import ImpactSection from '../components/ImpactSection';
 import Footer from '../components/footer';
 import Testimonies from '../components/testimonies';
 import GoogleSignIn from '../utilities/auth';
+import ChatBot from '../components/chatBot';
 
 
 const Home = () => {
@@ -73,7 +74,7 @@ const [showRolePopup, setShowRolePopup] = useState(false);
   return (
     <>
       <Navbar />
-
+  <ChatBot/>
       {/* Auth popup */}
       {showAuth && (
         <GoogleSignIn
@@ -208,44 +209,61 @@ const [showRolePopup, setShowRolePopup] = useState(false);
 </section>
 
 
-      {/* Who We Are */}
+ {/* Who We Are */}
       <div
         id="who-we-are"
-        className={`lg:flex gap-24 mt-24 mx-8 lg:mx-0 lg:ml-44 animate-on-scroll ${animationClass(
-          'who-we-are'
-        )}`}
+        className={`flex flex-col lg:flex-row items-center gap-12 lg:gap-24 mt-24 px-6 lg:px-24 py-16 animate-on-scroll ${animationClass('who-we-are')}`}
+        style={{ backgroundColor: '#ffffff' }}
       >
-        <div className="lg:w-[607px]">
-          <p className="text-purple-700 text-3xl font-bold mb-8 text-center lg:text-left">
-            Who We Are?
+        {/* Text Content */}
+        <div className="lg:w-[600px] text-center lg:text-left">
+          <h2 className="text-[#002F6C] text-3xl lg:text-4xl font-bold font-poppins mb-6">
+            Who We Are
+          </h2>
+          <p className="text-lg font-inter text-[#333333] mb-4">
+            <span className="text-[#FDCB58] font-semibold">Diaspire</span> is a youth empowerment platform connecting ambitious African youth with experienced diaspora professionals through mentorship, career guidance, and global exposure.
           </p>
-          <p className="pb-4 text-lg">
-            Diaspire is a youth empowerment platform designed to connect ambitious African youth with experienced diaspora professionals through meaningful mentorship, career guidance, and global exposure.
-          </p>
-          <p className="pb-4 text-lg">
+          <p className="text-lg font-inter text-[#333333] mb-4">
             Our mission is to build a sustainable, inclusive, and tech-enabled bridge between young people seeking direction and diaspora leaders eager to give back.
           </p>
-          <p className="text-lg">Together, we’re not just building careers — we’re building futures.</p>
+          <p className="text-lg font-inter text-[#333333]">
+            <span className="text-[#FDCB58] font-semibold">Together</span>, we’re not just building careers — we’re building futures.
+          </p>
         </div>
-        <div className="flex justify-center lg:block">
+
+        {/* Image */}
+        <div className="flex justify-center lg:justify-end w-full lg:w-[400px]">
           <img
-            className="pt-8 lg:pt-24 w-full h-auto max-w-xs lg:w-[345px] lg:ml-[100px]"
             src="./src/assets/facetime.png"
-            alt=""
+            alt="Mentorship illustration"
+            className="w-full max-w-xs lg:max-w-md rounded-xl shadow-lg transition-transform hover:scale-105"
+            loading="lazy"
           />
         </div>
       </div>
 
       {/* Why Choose Diaspire */}
-      <div id="why-choose" className={`bg-gray-200 mt-24 pb-12 animate-on-scroll ${animationClass('why-choose')}`}>
-        <p className="text-center pt-8 pb-8 font-bold text-2xl text-purple-800">Why Choose Diaspire?</p>
-        <p className="text-center w-full lg:w-[678px] text-lg mx-auto px-4">
-          Diaspire connects African youth with diaspora professionals through tech-driven mentorship, career guidance, and global insight empowering the next generation of confident changemakers.
-        </p>
-        <p className="border-b-2 border-black pb-8 w-[150px] mx-auto lg:w-[352px]"></p>
+      <div
+        id="why-choose"
+        className={`bg-[#002F6C] mt-24 pb-16 animate-on-scroll ${animationClass('why-choose')}`}
+      >
+        {/* Section Header */}
+        
+        <div className="text-center px-6">
+          <h2 className="text-white text-3xl lg:text-4xl font-bold font-poppins pt-12 pb-4">
+            Why Choose Diaspire?
+          </h2>
+          
+          <p className="text-lg font-inter text-white max-w-3xl mx-auto">
+            Diaspire connects African youth with diaspora professionals through tech-driven mentorship, career guidance, and global insight—empowering the next generation of confident changemakers.
+          </p>
+          <div className="mt-6 mb-12">
+            <div className="w-24 h-1 bg-[#FDCB58] mx-auto rounded-full"></div>
+          </div>
+        </div>
 
         {/* Feature Cards */}
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8 px-4 lg:px-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-6 lg:px-24">
           {[
             {
               img: 'lg1.png',
@@ -254,38 +272,46 @@ const [showRolePopup, setShowRolePopup] = useState(false);
             },
             {
               img: 'lg2.png',
-              title: 'Real skills, real growth',
+              title: 'Real Skills, Real Growth',
               text: 'We go beyond advice. Diaspire connects you to practical training, employability workshops, and mentorship that build career-ready skills aligned with global standards.',
             },
             {
               img: 'lg3.png',
-              title: 'A community that cares',
+              title: 'A Community That Cares',
               text: 'When you join Diaspire, you become part of a supportive community of diaspora professionals, youth, and change-makers all committed to Rwanda’s growth and your personal success.',
             },
             {
               img: 'lg4.png',
-              title: 'Global insights, local impact',
+              title: 'Global Insights, Local Impact',
               text: 'Diaspire harnesses the expertise of diaspora professionals to bring global knowledge home, while tailoring opportunities to Rwanda’s unique job market and development goals.',
             },
             {
               img: 'lg5.png',
-              title: 'Pathways to opportunity',
+              title: 'Pathways to Opportunity',
               text: 'Through networking, career readiness programs, and exposure to new industries, Diaspire helps youth access internships, jobs, and entrepreneurial ventures that create long-term impact.',
             },
             {
               img: 'lg6.png',
-              title: 'Built on trust and purpose',
+              title: 'Built on Trust and Purpose',
               text: 'Diaspire is more than a platform — it is a movement dedicated to sustainable mentorship, accountability, and giving back, ensuring that every connection creates measurable change.',
             },
           ].map((card, i) => (
             <div
               key={i}
-              className="bg-white py-4 px-2 rounded-lg shadow-md transition-transform hover:scale-105 duration-300"
+              className="bg-[#001F4D] rounded-xl shadow-lg p-6 transition-transform hover:scale-105 duration-300"
             >
-              <img src="./src/assets/icon1.png" className="pb-4" alt="" />
-              <img src={`./src/assets/${card.img}`} className="-mt-24 -ml-2 p-8" alt={card.title} />
-              <p className="pb-4 font-bold">{card.title}</p>
-              <p className="text-sm">{card.text}</p>
+              <img
+                src={`./src/assets/${card.img}`}
+                alt={card.title}
+                className="w-16 h-16 mb-4 mx-auto"
+                loading="lazy"
+              />
+              <h3 className="text-[#FDCB58] text-lg font-bold font-poppins text-center mb-2">
+                {card.title}
+              </h3>
+              <p className="text-white text-sm font-inter text-center">
+                {card.text}
+              </p>
             </div>
           ))}
         </div>
@@ -296,8 +322,13 @@ const [showRolePopup, setShowRolePopup] = useState(false);
         id="who-we-serve"
         className={`lg:ml-48 my-12 lg:my-20 mx-8 lg:mx-0 animate-on-scroll ${animationClass('who-we-serve')}`}
       >
-        <p className="font-bold text-2xl text-purple-800 text-center lg:text-left">Who We Serve</p>
-        <p className="border-b-8 border-blue-500 w-[34px] mt-4 mx-auto lg:mx-0"></p>
+        {/* Section Title */}
+        <p className="font-bold text-2xl lg:text-3xl text-[#6B3FA0] text-center lg:text-left font-poppins">
+          Who We Serve
+        </p>
+
+        {/* Decorative Divider */}
+        <p className="border-b-8 border-[#FDCB58] w-[34px] mt-4 mx-auto lg:mx-0 rounded-full"></p>
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 mt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20">
             {[
