@@ -44,7 +44,7 @@ const Navbar = ({ onNavigate, currentPage }) => {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6 text-[#1F1F1F] font-inter text-sm pr-40">
             <Link to="/" className="text-white hover:text-[#FDCB58] transition">Home</Link>
-            <Link to="/mentors" className="text-white hover:text-[#FDCB58] transition">Find Mentors</Link>
+            <Link to={"/mentors"} className="text-white hover:text-[#FDCB58] transition">Find Mentors</Link>
             <Link to="/events" className="text-white hover:text-[#FDCB58] transition">Events</Link>
             <Link to="/jobs" className="text-white hover:text-[#FDCB58] transition">Jobs</Link>
             <Link to="/resources" className="text-white hover:text-[#FDCB58] transition">Resources</Link>

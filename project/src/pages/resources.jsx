@@ -145,17 +145,17 @@ function Resources() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-blue-800 min-h-screen">
       <Navbar />
       <div className="py-12 px-4 md:px-8 lg:px-16">
-        <h1 className="text-3xl lg:text-4xl font-bold text-center text-gray-800">Resource Library</h1>
-        <p className="text-center text-lg md:text-xl text-gray-600 mt-2">Curated content to help you succeed.</p>
+        <h1 className="text-3xl lg:text-4xl font-bold text-center text-white">Resource Library</h1>
+        <p className="text-center text-lg md:text-xl text-white mt-2">Curated content to help you succeed.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 max-w-6xl mx-auto">
           {resourcesToShow.map((resource, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl shadow-lg p-6 text-center transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl animate-fade-in"
+              className="bg-[#FDCB58] rounded-xl shadow-lg p-6 text-center transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-xl animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <h1 className="font-bold text-xl text-gray-800">{resource.title}</h1>

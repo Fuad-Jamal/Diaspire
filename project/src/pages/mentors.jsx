@@ -1,22 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Search, Linkedin, Github, Instagram, Twitter } from "lucide-react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { useNavigate } from "react-router-dom";
-import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
-import airplaneImage from "../assets/air.jpeg"; // airplane image
+
+const mentors = [
+  { id: 1, name: "Joyelene Rivera", title: "Web Developer", category: "Tech", bio: "Data analyst with 4+ yrs in machine learning & analytics.", img: "https://i.pravatar.cc/150?img=1", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+  { id: 2, name: "Marcus Lee", title: "UX Designer", category: "Tech", bio: "UX/UI designer helping students break into product design.", img: "https://i.pravatar.cc/150?img=2", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+  { id: 3, name: "Aisha Kamau", title: "Data Scientist", category: "Finance", bio: "Helping mentees transition into data careers.", img: "https://i.pravatar.cc/150?img=3", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+  { id: 4, name: "Daniel Kim", title: "Mobile Developer", category: "Tech", bio: "Loves mentoring juniors in Flutter & React Native.", img: "https://i.pravatar.cc/150?img=4", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+  { id: 5, name: "Sara Lopez", title: "AI Engineer", category: "Finance", bio: "Helping Gen-Z embrace AI and ML careers.", img: "https://i.pravatar.cc/150?img=5", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+  { id: 6, name: "Omar Hassan", title: "Cloud Engineer", category: "Tech", bio: "Focused on cloud-native career paths.", img: "https://i.pravatar.cc/150?img=6", socials: { linkedin: "#", github: "#", twitter: "#", instagram: "#" } },
+];
 
 function FindMentor() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(0);
-  const [mentors, setMentors] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
-  const mentorsPerPage = 9;
+  const mentorsPerPage = 3;
 
   const filtered = mentors.filter((m) => {
     const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase());
@@ -34,60 +36,27 @@ function FindMentor() {
     trackMouse: true,
   });
 
-  useEffect(() => {
-    const fetchMentorsFromFirestore = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "mentors"));
-        const mentorsList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setMentors(mentorsList);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching mentors:", err);
-        setLoading(false);
-      }
-    };
-    fetchMentorsFromFirestore();
-  }, []);
-
   const categories = ["All", "Tech", "Finance"];
 
   return (
-    <>
-    <Navbar/>
-    <div
-      className="min-h-screen text-white"
-      style={{
-        background: "linear-gradient(to right, #002F6C, #FDCB58)",
-      }}
-    >
-      
-
-      <div {...handlers} className="px-6 py-10 flex flex-col">
-        {/* Header Section */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold drop-shadow">🔗 Plug into Purpose</h2>
-          <p className="text-white/80 mt-2 text-sm max-w-2xl mx-auto">
+    <div>
+      <Navbar />
+      <div
+        {...handlers}
+        className="min-h-screen bg-gradient-to-br from-[#FDCB58] via-[#4032bb] to-[#FDCB58] p-8 flex flex-col"
+      >
+        {/* Intro Banner */}
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">🔗 Plug into Purpose</h2>
+          <p className="text-gray-600 mt-2 text-sm">
             Connect with Rwandan diasporas who vibe with your goals, guide your grind, and open global doors.
           </p>
         </div>
 
-        {/* Request Button */}
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={() => navigate("/request-mentor")}
-            className="px-5 py-2 bg-[#FDCB58] text-[#002F6C] font-bold rounded-full shadow-md hover:brightness-110 transition duration-300"
-          >
-            Request Mentorship 🚀
-          </button>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="max-w-4xl mx-auto mb-10 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <div className="flex items-center bg-white/20 text-white rounded-full px-4 py-2 flex-1 border border-white/30 backdrop-blur-sm">
-            <Search className="text-white" />
+        {/* Search & Filters */}
+        <div className="max-w-xl mx-auto mb-8 flex items-center space-x-2">
+          <div className="flex items-center bg-white/90 rounded-full shadow-lg px-4 py-2 flex-1">
+            <Search className="text-[#6BB7C9]" />
             <input
               type="text"
               placeholder="Who's your next plug? 🔍"
@@ -96,22 +65,20 @@ function FindMentor() {
                 setSearch(e.target.value);
                 setPage(0);
               }}
-              className="ml-3 flex-1 outline-none bg-transparent text-white placeholder-white/70"
+              className="ml-3 flex-1 outline-none bg-transparent text-gray-700 placeholder-gray-400"
             />
           </div>
 
+          {/* Category Buttons */}
           <div className="flex space-x-2">
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => {
-                  setCategory(cat);
-                  setPage(0);
-                }}
-                className={`px-4 py-1.5 text-sm rounded-full font-semibold transition ${
+                onClick={() => { setCategory(cat); setPage(0); }}
+                className={`px-3 py-1 rounded-full font-medium transition ${
                   category === cat
-                    ? "bg-[#FDCB58] text-[#002F6C]"
-                    : "bg-white/20 text-white hover:bg-[#FDCB58] hover:text-[#002F6C]"
+                    ? "bg-[#D17C5C] text-white"
+                    : "bg-white/80 text-gray-700 hover:bg-[#F4A261]"
                 }`}
               >
                 {cat}
@@ -120,68 +87,69 @@ function FindMentor() {
           </div>
         </div>
 
-        {/* Mentor Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Mentor Grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 flex-1">
           {paginated.map((mentor) => (
             <div
               key={mentor.id}
-              className="relative group p-6 rounded-2xl overflow-hidden bg-[#1A3E6C] hover:text-white text-white transition-all duration-500 shadow-md"
+              className="bg-white/95 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300"
+              style={{
+                backgroundImage: "url('C:\Users\hp\Diaspire\project\src\assets\imigongo.svg')",
+                backgroundRepeat: "repeat",
+                backgroundSize: "80px",
+                opacity: 0.95,
+              }}
             >
-              {/* Hover Background Image */}
-              <div
-                className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-cover bg-center"
-                style={{ backgroundImage: `url(${airplaneImage})` }}
-              ></div>
-
-              <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="flex flex-col items-center text-center">
                 <img
                   src={mentor.img}
                   alt={mentor.name}
-                  className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-[#FDCB58]"
+                  className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-[#F4A261]"
                 />
-                <h3 className="text-lg font-semibold opacity-90 group-hover:opacity-100 transition">
-                  {mentor.name}
-                </h3>
-                <p className="text-yellow-300 font-medium opacity-80 group-hover:opacity-100 transition">
-                  {mentor.title}
-                </p>
-                <p className="text-sm mt-3 opacity-70 group-hover:opacity-90 transition">{mentor.bio}</p>
+                <h3 className="text-lg font-semibold text-gray-800">{mentor.name}</h3>
+                <p className="text-[#6BB7C9] font-medium">{mentor.title}</p>
+                <p className="text-gray-600 mt-3 text-sm">{mentor.bio}</p>
               </div>
 
-              <div className="relative z-10 flex justify-center gap-4 mt-5 text-white">
-                <a href={mentor.socials.twitter}><Twitter size={20} /></a>
-                <a href={mentor.socials.instagram}><Instagram size={20} /></a>
-                <a href={mentor.socials.linkedin}><Linkedin size={20} /></a>
-                <a href={mentor.socials.github}><Github size={20} /></a>
+              <div className="flex justify-center gap-4 mt-5 text-gray-500">
+                <a href={mentor.socials.twitter} className="hover:text-blue-400">
+                  <Twitter size={20} />
+                </a>
+                <a href={mentor.socials.instagram} className="hover:text-pink-500">
+                  <Instagram size={20} />
+                </a>
+                <a href={mentor.socials.linkedin} className="hover:text-blue-600">
+                  <Linkedin size={20} />
+                </a>
+                <a href={mentor.socials.github} className="hover:text-gray-800">
+                  <Github size={20} />
+                </a>
               </div>
 
-              <button
-                className="relative z-10 mt-6 w-full py-2 rounded-xl font-semibold bg-[#FDCB58] text-[#002F6C] hover:brightness-110"
-              >
-                Connect with your plug
+              <button className="mt-6 w-full bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] hover:from-[#4B4B4B] hover:via-[#D17C5C] hover:to-[#A3C586] text-white py-2 rounded-xl font-medium transition">
+                Connect with your plug 🚀
               </button>
             </div>
           ))}
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-center mt-10 space-x-3">
+        <div className="flex justify-center mt-8 space-x-3">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
               onClick={() => setPage(i)}
               className={`w-3 h-3 rounded-full transition ${
-                i === page ? "bg-white scale-125" : "bg-white/40 hover:bg-white"
+                i === page
+                  ? "bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] scale-125"
+                  : "bg-gray-300 hover:bg-gray-400"
               }`}
             ></button>
           ))}
         </div>
       </div>
-
       <Footer />
     </div>
-    </>
   );
 }
-
 export default FindMentor;
