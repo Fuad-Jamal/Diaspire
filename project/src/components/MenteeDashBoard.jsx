@@ -58,7 +58,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-2 mb-96">
+      <nav className="flex-1 space-y-2 lg:mb-96">
         {navItems.map((item) => (
           <div
             key={item.name}
