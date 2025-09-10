@@ -1,0 +1,88 @@
+[
+    {
+      "fullName": "Michael Carter",
+      "email": "michael.carter@example.com",
+      "password": "michaelMentor123!",
+      "profession": "Software Engineer",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Sophia Williams",
+      "email": "sophia.williams@example.com",
+      "password": "sophiaMentor456@",
+      "profession": "Financial Analyst",
+      "careerInterest": "Finance"
+    },
+    {
+      "fullName": "James Thompson",
+      "email": "james.thompson@example.com",
+      "password": "jamesMentor789#",
+      "profession": "Medical Doctor",
+      "careerInterest": "Healthcare"
+    },
+    {
+      "fullName": "Olivia Davis",
+      "email": "olivia.davis@example.com",
+      "password": "oliviaMentor321$",
+      "profession": "AI Research Scientist",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "William Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    
+    {
+      "fullName": "3William Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "William Kozy",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "William Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Gedeon Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Abdul Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "thriver Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    },
+    {
+      "fullName": "Conquer Hernandez",
+      "email": "william.hernandez@example.com",
+      "password": "williamMentor654%",
+      "profession": "Business Consultant",
+      "careerInterest": "Tech"
+    }
+  ]
+  
