@@ -1,0 +1,85 @@
+   [ {
+        "question": "Hello",
+        "answer": "Hello, how can I help you please? Ask question, I will try as much as possible."
+    },
+    {
+        "question": "What is Diaspire?",
+        "answer": "Diaspire is a youth empowerment platform designed to connect ambitious Rwandan youth with experienced diaspora professionals through meaningful mentorship, career guidance, and global exposure."
+    },
+    {
+        "question": "Who can join Diaspire?",
+        "answer": "Any Rwandan youth interested in career growth and mentorship can join Diaspire by creating an account."
+    },
+    {
+        "question": "How do I create an account?",
+        "answer": "You can create an account by signing up on our platform with your email and providing basic profile information."
+    },
+    {
+        "question": "How does the mentor matching work?",
+        "answer": "Our platform matches you with a mentor based on your profession or the career you want to grow into."
+    },
+    {
+        "question": "Can I choose my mentor?",
+        "answer": "Mentors are matched automatically based on your career interests, but you may have options to select from recommended mentors."
+    },
+    {
+        "question": "How do I communicate with my mentor?",
+        "answer": "Once matched, you can chat with your mentor anytime through our in-app messaging system."
+    },
+    {
+        "question": "Is there a limit on mentorship sessions?",
+        "answer": "No, you can chat with your mentor as often as needed to get guidance and support."
+    },
+    {
+        "question": "Is Diaspire only for students?",
+        "answer": "No, Diaspire is for all Rwandan youth, whether you are a student, early career professional, or someone looking to switch careers."
+    },
+    {
+        "question": "Do I need to pay to join Diaspire?",
+        "answer": "Creating an account and accessing mentorship is free for all users."
+    },
+    {
+        "question": "Can I be a mentor on Diaspire?",
+        "answer": "Yes, experienced professionals in the diaspora can sign up as mentors to guide Rwandan youth."
+    },
+    {
+        "question": "How long does it take to get matched with a mentor?",
+        "answer": "Matching usually happens quickly, within a few days after you complete your profile."
+    },
+    {
+        "question": "Can I change my mentor if I want?",
+        "answer": "Yes, the platform allows you to request a new mentor if your current match isn’t the right fit."
+    },
+    {
+        "question": "Is mentorship confidential?",
+        "answer": "Yes, all chats and interactions on Diaspire are private between you and your mentor."
+    },
+    {
+        "question": "What kinds of careers are supported?",
+        "answer": "Diaspire supports a wide range of careers, from technology and business to arts, science, and social development."
+    },
+    {
+        "question": "Can I access Diaspire from my phone?",
+        "answer": "Yes, Diaspire is accessible via both mobile and desktop devices."
+    },
+    {
+        "question": "How do I update my profile?",
+        "answer": "You can update your profile information anytime through the account settings on the platform."
+    },
+    {
+        "question": "Does Diaspire offer group mentorship?",
+        "answer": "Currently, Diaspire focuses on one-on-one mentorship, but group events may be available in the future."
+    },
+    {
+        "question": "Can I track my mentorship progress?",
+        "answer": "Yes, the platform provides tools to track your interactions and progress with your mentor."
+    },
+    {
+        "question": "Is there a code of conduct for mentors and mentees?",
+        "answer": "Yes, all users are expected to follow our guidelines to maintain a respectful and professional mentorship environment."
+    },
+    {
+        "question": "Who can I contact for support?",
+        "answer": "You can reach out to our support team via the contact form on the platform for any issues or questions."
+    }
+]

@@ -1,0 +1,83 @@
+[
+    {
+      "jobTitle": "HR Assistant.",
+      "companyName": "Save The Children",
+      "jobType": "Full-time",
+      "jobLink": "https://www.jobinrwanda.com/job/human-resource-assistant-1",
+      "deadline": "September 15, 2025",
+      "workMode": "On-site"
+    },
+    {
+      "jobTitle": "Customer Support",
+      "companyName": "HelpHub",
+      "jobType": "Part-time",
+      "jobLink": "https://helphub.com/careers/support-specialist",
+      "deadline": "September 18, 2025",
+      "workMode": "Remote"
+    },
+    {
+      "jobTitle": "Content Writer",
+      "companyName": "WordFlow Media",
+      "jobType": "Part-time",
+      "jobLink": "https://wordflowmedia.com/careers/content-writer",
+      "deadline": "September 19, 2025",
+      "workMode": "Remote"
+    },
+    {
+      "jobTitle": "Data Analyst Intern",
+      "companyName": "Insight Analytics",
+      "jobType": "Internship",
+      "jobLink": "https://careers.insightanalytics.com/data-analyst-intern",
+      "deadline": "September 20, 2025",
+      "workMode": "On-site"
+    },
+    {
+      "jobTitle": "HR Intern",
+      "companyName": "PeopleFirst",
+      "jobType": "Internship",
+      "jobLink": "https://peoplefirst.com/careers/hr-intern",
+      "deadline": "September 21, 2025",
+      "workMode": "On-site"
+    },
+    {
+      "jobTitle": "Marketing Intern",
+      "companyName": "Growthify",
+      "jobType": "Internship",
+      "jobLink": "https://growthify.com/careers/marketing-intern",
+      "deadline": "September 22, 2025",
+      "workMode": "On-site"
+    },
+    {
+      "jobTitle": "Project Manager",
+      "companyName": "BrightPath Consulting",
+      "jobType": "Full-time",
+      "jobLink": "https://brightpath.com/jobs/project-manager",
+      "deadline": "September 25, 2025",
+      "workMode": "On-site"
+    },
+    {
+      "jobTitle": "Backend Engineer",
+      "companyName": "CloudNet",
+      "jobType": "Full-time",
+      "jobLink": "https://cloudnet.com/jobs/backend-engineer",
+      "deadline": "September 28, 2025",
+      "workMode": "Remote"
+    },
+    {
+      "jobTitle": "UI/UX Designer",
+      "companyName": "PixelCraft Studios",
+      "jobType": "Full-time",
+      "jobLink": "https://pixelcraft.com/jobs/uiux-designer",
+      "deadline": "October 1, 2025",
+      "workMode": "Remote"
+    },
+    {
+      "jobTitle": "Mobile App Developer",
+      "companyName": "AppWorks",
+      "jobType": "Full-time",
+      "jobLink": "https://appworks.com/jobs/mobile-app-developer",
+      "deadline": "October 3, 2025",
+      "workMode": "On-site"
+    }
+  ]
+  
