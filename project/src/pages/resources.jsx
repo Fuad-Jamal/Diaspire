@@ -146,7 +146,7 @@ function Resources() {
 
   return (
 
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-blue-800 min-h-screen">
       <Logoutnavbar />
 
       <div className="py-12 px-4 md:px-8 lg:px-16">

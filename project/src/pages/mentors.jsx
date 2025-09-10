@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Search, Linkedin, Github, Instagram, Twitter } from "lucide-react";
-import Navbar from "../components/navbar";
+import Logoutnavbar from "../components/logoutnavbar";
 import Footer from "../components/footer";
 
 const mentors = [
@@ -40,7 +40,7 @@ function FindMentor() {
 
   return (
     <div>
-      <Navbar />
+      <Logoutnavbar  />
       <div
         {...handlers}
         className="min-h-screen bg-gradient-to-br from-[#FDCB58] via-[#4032bb] to-[#FDCB58] p-8 flex flex-col"
