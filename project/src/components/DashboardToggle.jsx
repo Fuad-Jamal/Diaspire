@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DashboardHumburger from "/public/assets/DashboardToggleHumburger.png"
 
 function DashboardToggle({prop}) {
   // state: true = visible, false = hidden
@@ -10,10 +11,10 @@ function DashboardToggle({prop}) {
   };
 
   return (
-    <div className=" pl-2 overflow-visible lg:-mt-20">
+    <div className=" pl-2 overflow-visible lg:-mt-20 ">
       {/* clickable image */}
       <img
-        src="/src/assets/DashboardToggleHumburger.png" // replace with your image
+        src={DashboardHumburger } // replace with your image
         alt="Toggle dashboard"
         onClick={toggleDashboard}
         className="cursor-pointer w-12 h-12 hover:opacity-80"
@@ -21,7 +22,7 @@ function DashboardToggle({prop}) {
 
       {/* conditional rendering of the dashboard */}
       {isOpen && (
-        <div className="mt-12 bg-gray-100 border rounded-lg shadow-lg lg:w-80">
+        <div className="mt-12 bg-white z-50 border rounded-lg shadow-lg lg:w-80">
           {prop}
         </div>
       )}

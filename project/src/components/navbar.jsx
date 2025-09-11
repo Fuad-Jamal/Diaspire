@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center px-6 lg:px-24 py-6 bg-[#002F6C]">
+      <header className="flex justify-between items-center px-6 lg:px-24 py-6 bg-[#002F6C] sticky top-0 z-50">
         <nav className="flex items-center space-x-6 text-sm font-medium">
           <h1 className="text-white text-2xl font-bold tracking-wide pr-48">DIASPIRE</h1>
 

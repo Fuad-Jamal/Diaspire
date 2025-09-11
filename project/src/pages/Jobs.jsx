@@ -64,7 +64,7 @@ export default function Jobs() {
     const [showModal, setShowModal] = useState(false);
 
     return (
-        <div className=" bg-[#244c81]  bg-cover bg-center bg-no-repeat min-h-screen">
+        <div className=" bg-[#244c81]  bg-cover bg-center bg-no-repeat min-h-screen z-0">
 
             <Logoutnavbar/>
             
@@ -100,7 +100,7 @@ export default function Jobs() {
             
             <div className="lg:flex ">
             
-            <DashboardToggle prop ={<MenteeDashBoard/>}/>
+            <div><DashboardToggle prop ={<MenteeDashBoard/>}/></div>
           
                 {/* job section */}
                 <section className="w-[100%] flex-col items-center">

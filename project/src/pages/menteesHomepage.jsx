@@ -97,7 +97,7 @@ setAcceptedMentor({
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="bg-gray-100 m-0 flex justify-center pr-2">
+      <div className="bg-gray-100 m-0 flex justify-center pr-2 gap-6 ml-64">
         <Dashboard firstMentee={firstMentee} />
         <div className="bg-gray-100 w-[50%] mx-auto py-3">
           <h1 className="text-3xl font-medium">
@@ -193,21 +193,96 @@ setAcceptedMentor({
 
         {/* Mentor Popup */}
         {selectedMentor && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6 relative">
-              <button
-                onClick={() => setSelectedMentor(null)}
-                className="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-lg font-bold"
-              >
-                ❌
-              </button>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Mentor Details</h2>
-              <p><span className="font-semibold">Name:</span> {selectedMentor.fullName}</p>
-              <p><span className="font-semibold">Email:</span> {selectedMentor.email}</p>
-              <p><span className="font-semibold">Profession:</span> {selectedMentor.profession}</p>
-              <p><span className="font-semibold">Career Interest:</span> {selectedMentor.careerInterest}</p>
+          <div className=" bg-gradient-to-br from-white via-gray-50 to-blue-50 rounded-3xl shadow-2xl z-0 h-[70%] w-[40%] ml-96 mt-20 absolute overflow-y-auto border border-gray-200">
+          {/* Decorative header gradient */}
+          <div className="h-2 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600"></div>
+          
+          {/* Close Button */}
+          <button
+            onClick={() => setSelectedMentor(null)}
+            className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-lg text-gray-400 hover:text-red-500 hover:bg-red-50 text-lg transition-all duration-300 hover:scale-110 z-10"
+          >
+            ✕
+          </button>
+          
+          <div className="p-8 pt-6">
+            {/* Profile Picture */}
+            <div className="flex justify-center mb-8 relative">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-lg opacity-30 scale-110"></div>
+                <img
+                  className="relative rounded-full w-28 h-28 object-cover border-4 border-white shadow-xl ring-4 ring-blue-100"
+                  src={selectedMentor.picture}
+                  alt={selectedMentor.fullName}
+                />
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg"></div>
+              </div>
+            </div>
+            
+            {/* Title */}
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent mb-2">
+                Mentor Profile
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto"></div>
+            </div>
+            
+            {/* Mentor Info */}
+            <div className="space-y-2">
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Name</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5">{selectedMentor.fullName}</p>
+              </div>
+              
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Email</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5">{selectedMentor.email}</p>
+              </div>
+              
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Profession</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5">{selectedMentor.profession}</p>
+              </div>
+              
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Career Interest</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5">{selectedMentor.careerInterest}</p>
+              </div>
+              
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Bio</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5 leading-relaxed">{selectedMentor.bio}</p>
+              </div>
+              
+              <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-xl p-2 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                  <span className="font-semibold text-gray-800 text-sm uppercase tracking-wide">Current Country</span>
+                </div>
+                <p className="text-gray-900 font-medium mt-1 ml-5">{selectedMentor.country}</p>
+              </div>
             </div>
           </div>
+          
+          {/* Footer decoration */}
+          <div className="h-1 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 opacity-50"></div>
+          <button className="bg-blue-800 p-4 rounded-3xl ml-8 my-6 text-white text-lg hover:bg-green-500">Send Request</button>
+        </div>
         )}
       </div>
       <Footer />
