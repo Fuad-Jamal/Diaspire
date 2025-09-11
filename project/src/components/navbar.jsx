@@ -48,6 +48,7 @@ const Navbar = () => {
   }
 }
 
+
   };
 
   const handleSignOut = () => {

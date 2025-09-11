@@ -56,28 +56,26 @@ function MentorRequests() {
   }, []);
 
   const handleAccept = async (id, menteeId, menteeEmail) => {
-    try {
-      await updateDoc(doc(db, "requests", id), { status: "accepted" });
+  try {
+    await updateDoc(doc(db, "requests", id), { status: "accepted" });
 
-const connectionId = [mentorId, menteeId].sort().join("_");
-await setDoc(doc(db, "connections", connectionId), {
-  mentorId,
-  menteeId,
-  menteeEmail,
-  status: "pending",
-  createdAt: new Date()
-});
+    const connectionId = [mentorId, menteeId].sort().join("_");
+    await setDoc(doc(db, "connections", connectionId), {
+      mentorId,
+      menteeId,
+      menteeEmail,
+      status: "accepted",
+      createdAt: new Date()
+    }, { merge: true });
 
+    setRequests(prev =>
+      prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
+    );
+  } catch (err) {
+    console.error("Error accepting request:", err);
+  }
+};
 
-
-
-      setRequests(prev =>
-        prev.map(req => req.id === id ? { ...req, status: "accepted" } : req)
-      );
-    } catch (err) {
-      console.error("Error accepting request:", err);
-    }
-  };
 
   const handleDecline = async (id) => {
     try {

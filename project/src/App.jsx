@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import Home from './pages/home.jsx'
 import LanguageSwitcher from './utilities/translation.jsx'
-
+import ChatBot from './components/chatBot.jsx'
 import { Routes, Route } from 'react-router-dom'
 import Events from './pages/Events.jsx'
 import Jobs from './pages/Jobs.jsx'
@@ -48,10 +48,12 @@ function App() {
         <Route path="/mentor-requests" element={<MentorRequests />} />
         <Route path="/mentee-requests" element={<MenteeRequests />} />
         <Route path="/chat/:conversationId" element={<ChatWrapper />} />
+        <Route path="/ai" element={<ChatBot />} /> 
       </Routes>
 
       <div className="fixed bottom-6 right-6 z-50">
         <LanguageSwitcher />
+        <ChatBot />
       </div>
     </div>
   );

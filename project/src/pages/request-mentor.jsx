@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import { db } from "../firebase";
@@ -12,22 +13,27 @@ function RequestMentorship() {
     goals: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    await addDoc(collection(db, "mentorshipRequests"), formData);
-    alert("Your mentorship request has been submitted!");
-    setFormData({ name: "", email: "", interests: "", goals: "" });
-  } catch (err) {
-    console.error("Error submitting request:", err);
-    alert("❌ Failed to submit. Try again.");
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "mentorshipRequests"), formData);
+      alert("✅ Your mentorship request has been submitted!");
+      setFormData({ name: "", email: "", interests: "", goals: "" });
+    } catch (err) {
+      console.error("Error submitting request:", err);
+      alert("❌ Failed to submit. Try again.");
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(-1); // Go back to previous page
+  };
 
   return (
     <div>
@@ -75,13 +81,22 @@ const handleSubmit = async (e) => {
               required
             />
 
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] 
-                         text-white py-2 rounded-lg font-semibold hover:opacity-90 transition"
-            >
-              Submit Request 🚀
-            </button>
+            <div className="flex gap-4 mt-6">
+              <button
+                type="submit"
+                className="flex-1 bg-gradient-to-r from-[#6BB7C9] via-[#F4A261] to-[#A3C586] 
+                           text-white py-2 rounded-lg font-semibold hover:opacity-90 transition"
+              >
+                Submit Request 🚀
+              </button>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="flex-1 bg-gray-300 text-gray-800 py-2 rounded-lg font-semibold hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
       </div>

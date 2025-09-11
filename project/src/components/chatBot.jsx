@@ -39,7 +39,8 @@ import faqs  from '/src/data/faqs.json';
         setInput('')
     })
     return (
-        <div className="fixed bottom-16 lg:right-4 right-2 z-50 ">{isOpen?
+        <div className="fixed bottom-4 left-4 z-50">
+{isOpen?
         (<div className=" rounded-lg flex flex-col w-[70%] lg:w-[100%] lg:h-[550px] ml-[25%] mr-[30%] lg:ml-0 bg-gray-900 text-white p-4">
       {/* Chat header */}
       <header className="flex-shrink-0 mb-4">

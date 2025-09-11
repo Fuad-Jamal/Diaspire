@@ -13,7 +13,6 @@ import {
   where,
   getDocs,
   doc,
-  setDoc,
   getDoc
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -27,64 +26,39 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
   const isLogin = mode === "login";
 
   const handleRedirectAfterAuth = async (user) => {
-  const role = localStorage.getItem("userRole");
-
-  if (!role || !user?.email) {
-    setMessage("Missing role or user email. Please try again.");
-    return;
-  }
-
-  const collectionName = role === "professional" ? "mentors" : "mentees";
-  const q = query(collection(db, collectionName), where("email", "==", user.email));
-  const snapshot = await getDocs(q);
-
-  if (!snapshot.empty) {
-    const docId = snapshot.docs[0].id;
-
-    if (role === "professional") {
-      localStorage.setItem("mentorId", docId);
-      navigate("/mentor-dashboard");
-    } else {
-      localStorage.setItem("menteeId", docId);
-      navigate("/dashboard");
-    }
-  } else {
-    if (role === "professional") {
-      navigate("/profile");
-    } else {
-      navigate("/mprofile");
-    }
-  }
-};
-
-
-  const storeMentorIdFromFirestore = async (user) => {
     const role = localStorage.getItem("userRole");
-    if (role !== "professional") return;
 
-    try {
-      const q = query(collection(db, "mentors"), where("email", "==", user.email));
-      const snapshot = await getDocs(q);
+    if (!role || !user?.email) {
+      setMessage("Missing role or user email. Please try again.");
+      return;
+    }
 
-      if (!snapshot.empty) {
-        const mentorDoc = snapshot.docs[0];
-        localStorage.setItem("mentorId", mentorDoc.id);
+    const collectionName = role === "professional" ? "mentors" : "mentees";
+    const q = query(collection(db, collectionName), where("email", "==", user.email));
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty) {
+      const docId = snapshot.docs[0].id;
+      const docData = snapshot.docs[0].data();
+
+      if (role === "professional") {
+        localStorage.setItem("mentorId", docId);
+        const hasProfile = docData.bio && docData.linkedinUrl;
+        navigate(hasProfile ? "/mentor-dashboard" : "/profile");
       } else {
-        const newMentorRef = doc(db, "mentors", user.uid);
-        await setDoc(newMentorRef, {
-          name: user.displayName || "Unnamed Mentor",
-          email: user.email,
-          bio: "",
-          linkedinUrl: "",
-          img: "",
-          title: "Mentor",
-          category: "Tech"
-        });
-        localStorage.setItem("mentorId", user.uid);
+        localStorage.setItem("menteeId", docId);
+        const hasProfile = docData.mentorshipGoals && docData.skillsToLearn;
+        navigate(hasProfile ? "/dashboard" : "/mprofile");
       }
-    } catch (err) {
-      console.error("Error fetching or creating mentor profile:", err);
-      localStorage.removeItem("mentorId");
+    } else {
+      // New user — route to profile creation
+      if (role === "professional") {
+        localStorage.setItem("mentorId", user.uid);
+        navigate("/profile");
+      } else {
+        localStorage.setItem("menteeId", user.uid);
+        navigate("/mprofile");
+      }
     }
   };
 
@@ -100,7 +74,6 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
         result = await createUserWithEmailAndPassword(auth, email, password);
       }
 
-      await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
       await handleRedirectAfterAuth(result.user);
     } catch (error) {
@@ -123,9 +96,8 @@ function GoogleAuthPopup({ mode = "signup", onSignIn, onSignOut, onClose }) {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth); // Ensure clean session
       const result = await signInWithPopup(auth, provider);
-      await storeMentorIdFromFirestore(result.user);
       onSignIn?.(result.user);
       await handleRedirectAfterAuth(result.user);
     } catch (error) {
