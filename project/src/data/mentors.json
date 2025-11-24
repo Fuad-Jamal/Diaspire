@@ -1,0 +1,379 @@
+[
+  {
+    "name": "Joyelene Rivera",
+    "title": "Web Developer",
+    "category": "Tech",
+    "bio": "Data analyst with 4+ yrs in machine learning & analytics.",
+    "img": "https://i.pravatar.cc/150?img=1",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/joyelene",
+      "github": "https://github.com/joyelene",
+      "twitter": "https://twitter.com/joyelene",
+      "instagram": "https://instagram.com/joyelene"
+    }
+  },
+  {
+    "name": "Marcus Lee",
+    "title": "UX Designer",
+    "category": "Tech",
+    "bio": "UX/UI designer helping students break into product design.",
+    "img": "https://i.pravatar.cc/150?img=2",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/marcus",
+      "github": "https://github.com/marcus",
+      "twitter": "https://twitter.com/marcus",
+      "instagram": "https://instagram.com/marcus"
+    }
+  },
+  {
+    "name": "Aisha Kamau",
+    "title": "Data Scientist",
+    "category": "Finance",
+    "bio": "Helping mentees transition into data careers.",
+    "img": "https://i.pravatar.cc/150?img=3",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/aisha",
+      "github": "https://github.com/aisha",
+      "twitter": "https://twitter.com/aisha",
+      "instagram": "https://instagram.com/aisha"
+    }
+  },
+  {
+    "name": "Daniel Kim",
+    "title": "Mobile Developer",
+    "category": "Tech",
+    "bio": "Loves mentoring juniors in Flutter & React Native.",
+    "img": "https://i.pravatar.cc/150?img=4",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/daniel",
+      "github": "https://github.com/daniel",
+      "twitter": "https://twitter.com/daniel",
+      "instagram": "https://instagram.com/daniel"
+    }
+  },
+  {
+    "name": "Sara Lopez",
+    "title": "AI Engineer",
+    "category": "Finance",
+    "bio": "Helping Gen-Z embrace AI and ML careers.",
+    "img": "https://i.pravatar.cc/150?img=5",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/sara",
+      "github": "https://github.com/sara",
+      "twitter": "https://twitter.com/sara",
+      "instagram": "https://instagram.com/sara"
+    }
+  },
+  {
+    "name": "Omar Hassan",
+    "title": "Cloud Engineer",
+    "category": "Tech",
+    "bio": "Focused on cloud-native career paths.",
+    "img": "https://i.pravatar.cc/150?img=6",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/omar",
+      "github": "https://github.com/omar",
+      "twitter": "https://twitter.com/omar",
+      "instagram": "https://instagram.com/omar"
+    }
+  },
+  {
+    "name": "Grace Niyonsaba",
+    "title": "Product Manager",
+    "category": "Tech",
+    "bio": "Passionate about building impactful digital products.",
+    "img": "https://i.pravatar.cc/150?img=7",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/grace",
+      "github": "#",
+      "twitter": "#",
+      "instagram": "#"
+    }
+  },
+  {
+    "name": "Kwame Mensah",
+    "title": "Entrepreneur",
+    "category": "Finance",
+    "bio": "Founder of multiple startups mentoring youth entrepreneurs.",
+    "img": "https://i.pravatar.cc/150?img=8",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/kwame",
+      "github": "#",
+      "twitter": "https://twitter.com/kwame",
+      "instagram": "#"
+    }
+  },
+  {
+    "name": "Linda Okafor",
+    "title": "HR Specialist",
+    "category": "Finance",
+    "bio": "Helping mentees build strong careers in HR and leadership.",
+    "img": "https://i.pravatar.cc/150?img=9",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/linda",
+      "github": "#",
+      "twitter": "#",
+      "instagram": "https://instagram.com/linda"
+    }
+  },
+  {
+    "name": "Hiro Tanaka",
+    "title": "Blockchain Developer",
+    "category": "Tech",
+    "bio": "Guiding mentees in blockchain and web3 development.",
+    "img": "https://i.pravatar.cc/150?img=10",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/hiro",
+      "github": "https://github.com/hiro",
+      "twitter": "https://twitter.com/hiro",
+      "instagram": "#"
+    }
+  },
+  {
+    "name": "Fatou Diallo",
+    "title": "Marketing Specialist",
+    "category": "Finance",
+    "bio": "Empowering mentees to master branding & social media marketing.",
+    "img": "https://i.pravatar.cc/150?img=11",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/fatou",
+      "github": "#",
+      "twitter": "https://twitter.com/fatou",
+      "instagram": "https://instagram.com/fatou"
+    }
+  },
+  {
+    "name": "Michael Johnson",
+    "title": "Cybersecurity Engineer",
+    "category": "Tech",
+    "bio": "Mentoring future experts in cyber defense and ethical hacking.",
+    "img": "https://i.pravatar.cc/150?img=12",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/michael",
+      "github": "https://github.com/michael",
+      "twitter": "https://twitter.com/michael",
+      "instagram": "#"
+    }
+  }, 
+  {
+    "name": "Amina Yusuf",
+    "title": "Data Analyst",
+    "category": "Tech",
+    "bio": "Helping nonprofits make data-driven decisions for greater impact.",
+    "img": "https://i.pravatar.cc/150?img=3",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/amina",
+      "github": "https://github.com/amina",
+      "twitter": "https://twitter.com/amina",
+      "instagram": "https://instagram.com/amina"
+    }
+  },
+  {
+    "name": "David Okello",
+    "title": "Mobile Developer",
+    "category": "Tech",
+    "bio": "Building intuitive mobile apps for African startups.",
+    "img": "https://i.pravatar.cc/150?img=4",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/david",
+      "github": "https://github.com/david",
+      "twitter": "https://twitter.com/david",
+      "instagram": "https://instagram.com/david"
+    }
+  },
+  {
+    "name": "Chloe Mutesi",
+    "title": "Graphic Designer",
+    "category": "Design",
+    "bio": "Creating bold visuals that tell unforgettable stories.",
+    "img": "https://i.pravatar.cc/150?img=5",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/chloe",
+      "github": "https://github.com/chloe",
+      "twitter": "https://twitter.com/chloe",
+      "instagram": "https://instagram.com/chloe"
+    }
+  },
+  {
+    "name": "Samuel Kimani",
+    "title": "Backend Engineer",
+    "category": "Tech",
+    "bio": "Optimizing systems for speed, scale, and security.",
+    "img": "https://i.pravatar.cc/150?img=6",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/samuel",
+      "github": "https://github.com/samuel",
+      "twitter": "https://twitter.com/samuel",
+      "instagram": "https://instagram.com/samuel"
+    }
+  },
+  {
+    "name": "Grace Mbabazi",
+    "title": "Digital Marketer",
+    "category": "Business",
+    "bio": "Helping brands grow through creative digital strategy.",
+    "img": "https://i.pravatar.cc/150?img=7",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/grace",
+      "github": "https://github.com/grace",
+      "twitter": "https://twitter.com/grace",
+      "instagram": "https://instagram.com/grace"
+    }
+  },
+  {
+    "name": "Brian Niyonzima",
+    "title": "AI Engineer",
+    "category": "Tech",
+    "bio": "Designing intelligent systems that learn and adapt.",
+    "img": "https://i.pravatar.cc/150?img=8",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/brian",
+      "github": "https://github.com/brian",
+      "twitter": "https://twitter.com/brian",
+      "instagram": "https://instagram.com/brian"
+    }
+  },
+  {
+    "name": "Linda Kamanzi",
+    "title": "Product Manager",
+    "category": "Tech",
+    "bio": "Leading cross-functional teams to build user-first products.",
+    "img": "https://i.pravatar.cc/150?img=9",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/linda",
+      "github": "https://github.com/linda",
+      "twitter": "https://twitter.com/linda",
+      "instagram": "https://instagram.com/linda"
+    }
+  },
+  {
+    "name": "Kevin Mugisha",
+    "title": "DevOps Specialist",
+    "category": "Tech",
+    "bio": "Automating infrastructure to keep deployments smooth.",
+    "img": "https://i.pravatar.cc/150?img=10",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/kevin",
+      "github": "https://github.com/kevin",
+      "twitter": "https://twitter.com/kevin",
+      "instagram": "https://instagram.com/kevin"
+    }
+  },
+  {
+    "name": "Tasha Uwase",
+    "title": "Content Creator",
+    "category": "Media",
+    "bio": "Telling stories that connect communities and cultures.",
+    "img": "https://i.pravatar.cc/150?img=11",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/tasha",
+      "github": "https://github.com/tasha",
+      "twitter": "https://twitter.com/tasha",
+      "instagram": "https://instagram.com/tasha"
+    }
+  },
+  {
+    "name": "Eric Tumusiime",
+    "title": "Full Stack Developer",
+    "category": "Tech",
+    "bio": "Building scalable web apps from front to back.",
+    "img": "https://i.pravatar.cc/150?img=12",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/eric",
+      "github": "https://github.com/eric",
+      "twitter": "https://twitter.com/eric",
+      "instagram": "https://instagram.com/eric"
+    }
+  },
+  {
+    "name": "Nadine Irakoze",
+    "title": "UI Designer",
+    "category": "Design",
+    "bio": "Designing interfaces that delight and engage users.",
+    "img": "https://i.pravatar.cc/150?img=13",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/nadine",
+      "github": "https://github.com/nadine",
+      "twitter": "https://twitter.com/nadine",
+      "instagram": "https://instagram.com/nadine"
+    }
+  },
+  {
+    "name": "Jean Bosco",
+    "title": "Machine Learning Engineer",
+    "category": "Tech",
+    "bio": "Training models to solve real-world problems.",
+    "img": "https://i.pravatar.cc/150?img=14",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/jeanbosco",
+      "github": "https://github.com/jeanbosco",
+      "twitter": "https://twitter.com/jeanbosco",
+      "instagram": "https://instagram.com/jeanbosco"
+    }
+  },
+  {
+    "name": "Clara Uwimana",
+    "title": "Social Entrepreneur",
+    "category": "Social Impact",
+    "bio": "Empowering youth through tech and education.",
+    "img": "https://i.pravatar.cc/150?img=15",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/clara",
+      "github": "https://github.com/clara",
+      "twitter": "https://twitter.com/clara",
+      "instagram": "https://instagram.com/clara"
+    }
+  },
+  {
+    "name": "Alex Ndikumana",
+    "title": "Cloud Architect",
+    "category": "Tech",
+    "bio": "Designing cloud-native solutions for enterprise clients.",
+    "img": "https://i.pravatar.cc/150?img=16",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/alex",
+      "github": "https://github.com/alex",
+      "twitter": "https://twitter.com/alex",
+      "instagram": "https://instagram.com/alex"
+    }
+  },
+  {
+    "name": "Diane Ishimwe",
+    "title": "Brand Strategist",
+    "category": "Business",
+    "bio": "Helping startups find their voice and grow their audience.",
+    "img": "https://i.pravatar.cc/150?img=17",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/diane",
+      "github": "https://github.com/diane",
+      "twitter": "https://twitter.com/diane",
+      "instagram": "https://instagram.com/diane"
+    }
+  },
+  {
+    "name": "Patrick Nkurunziza",
+    "title": "Security Engineer",
+    "category": "Tech",
+    "bio": "Securing systems and educating teams on best practices.",
+    "img": "https://i.pravatar.cc/150?img=18",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/patrick",
+      "github": "https://github.com/patrick",
+      "twitter": "https://twitter.com/patrick",
+      "instagram": "https://instagram.com/patrick"
+    }
+  },
+  {
+    "name": "Esther Mugiraneza",
+    "title": "Innovation Consultant",
+    "category": "Business",
+    "bio": "Helping organizations unlock creative solutions to complex problems.",
+    "img": "https://i.pravatar.cc/150?img=19",
+    "socials": {
+      "linkedin": "https://linkedin.com/in/esther",
+      "github": "https://github.com/esther",
+      "twitter": "https://twitter.com/esther",
+      "instagram": "https://instagram.com/esther"
+    }
+    }
+]
