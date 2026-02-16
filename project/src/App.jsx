@@ -1,18 +1,35 @@
 import { useState } from 'react'
-import Navbar from './components/navbar.jsx'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import Home from './pages/home.jsx'
+
+import { Routes, Route } from 'react-router-dom'
+import Events from './pages/Events.jsx'
+import Jobs from './pages/Jobs.jsx'
+import Resources from './pages/resources.jsx'
+import Mentors from './pages/mentors.jsx'
+import MentorWithMentees from './pages/mentorHomepage.jsx'
+
+
 
 
 function App() {
   
 
   return (
-    <>
-      < Navbar />
+    <div>
+      <Routes>
+        <Route path='/' element={<Home/>} />
+        <Route path='/events' element={<Events/>} />
+        <Route path='/jobs' element={<Jobs/>} />
+        <Route path='/resources' element={<Resources/>} />
+        <Route path='/mentors' element={<Mentors/>} />
+        <Route path='/mentor' element={<MentorWithMentees/>} />
+      </Routes>
+      
+
+      
     
-    </>
+    </div>
   )
 }
 
